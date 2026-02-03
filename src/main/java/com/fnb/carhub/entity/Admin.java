@@ -8,9 +8,8 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Entity
-@Table(name = "admins")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@DiscriminatorValue("ADMIN") // Giá trị để phân biệt đây là Admin
 public class Admin extends User {
 
     private String adminId; // Trường riêng của Admin trong UML

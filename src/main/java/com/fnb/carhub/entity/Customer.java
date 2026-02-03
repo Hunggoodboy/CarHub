@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Customers extends User{
+public class Customer extends User{
     private String shippingAddress;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

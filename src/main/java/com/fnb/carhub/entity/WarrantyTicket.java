@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -23,7 +22,7 @@ public class WarrantyTicket {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
-    private Customers customers;
+    private Customer customer;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "admin_id")
