@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Shop</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+</head>
+
+<body>
+    <header>
+        <div class="logo">CarShop</div>
+        <nav>
+            <a href="#">Trang chủ</a>
+            <a href="#cars">Xe</a>
+            <a href="#">Bán xe</a>
+            <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+            <a href="#">Đăng nhập</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div>
+            <h1>Khám Phá Những Mẫu Xe Mới</h1>
+            <p>Tìm chiếc xe phù hợp với bạn</p>
+        </div>
+    </section>
+
+    <form class="search-box">
+        <input list ="type-options" name = "type" placeholder="Loại xe ....">
+        <datalist id="type-options">
+            <option value="Sedan"></option>
+            <option value="SUV"></option>
+            <option value="MPV"></option>
+            <option value="Coupe"></option>
+            <option value="Pickup"></option>
+        </datalist>
+
+        <input list="brand-options" name="brand" placeholder="Hãng xe...">
+        <datalist id="brand-options">
+            <option value="Toyota"></option>
+            <option value="BMW"></option>
+            <option value="VinFast"></option>
+            <option value="Ford"></option>
+            <option value="Mercedes-Benz"></option> 
+        </datalist>
+
+        <select name="price">
+            <option value="">Khoảng giá</option>
+            <option value="0-1000000000">Dưới 1 tỷ</option>
+            <option value="1000000000-2000000000">1 - 2 tỷ</option>
+            <option value="2000000000-5000000000">2 - 5 tỷ</option>
+            <option value="5000000000-10000000000">5 - 10 tỷ</option>
+            <option value="10000000000-20000000000">10 - 20 tỷ</option>
+            <option value="20000000000-999000000000">Trên 20 tỷ</option>
+        </select>
+
+        <button type="submit">Tìm kiếm</button>
+    </form>
+
+
+    <section id="cars" class="products">
+        <h2>Danh sách xe đang bán </h2>
+
+        <div class="product-grid">
+            <div class="card" th:each="car : ${cars}">
+
+                <img th:src="@{/images/cars/{img}(img=${car.image})}"
+                    alt="Car image"> 
+
+                <div class="info">
+                    <h4 th:text="${car.name}">Tên xe</h4>
+
+                    <div class="price"
+                        th:text="${#numbers.formatDecimal(car.price,0,'COMMA',0,'POINT')} + ' đ'">
+                        Giá
+                    </div>
+
+                    <button>Xem chi tiết</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="floating">
+        <a href="tel:66668888"><i class="fa fa-phone"></i></a>
+        <a href="https://zalo.me/66668888" target="_blank">
+            <i class="fa fa-comment"></i>
+        </a>
+    </div>
+
+    <footer>
+         © 2026 CarShop |
+        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+            <i class="fab fa-facebook fa-lg"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank">
+            <i class="fab fa-instagram fa-lg"></i>
+        </a>
+        <a href="https://tiktok.com" target="_blank">
+            <i class="fab fa-tiktok fa-lg"></i>
+        </a>
+    </footer>
+</body>
+</html>
