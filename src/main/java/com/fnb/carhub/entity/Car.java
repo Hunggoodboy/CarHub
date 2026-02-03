@@ -20,6 +20,6 @@ public class Car {
     @JoinColumn(name = "brand_id")
     private Brand brand;
     //Kết nối tới OrderDetailEntity
-    @OneToMany(mappedBy = "order_detail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 }
