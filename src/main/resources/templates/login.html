@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập CarHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/auth.css}"> 
+    <link rel="stylesheet" 
+      href="../static/css/auth.css" 
+      th:href="@{/css/auth.css}">
+    </head>
+<body>
+    <div class="login-page">
+    <div class="auth-card">
+        
+        <div class="auth-card__left">  
+            <a th:href="@{/login}" class="auth-card__tab active">ĐĂNG NHẬP</a>
+            <a th:href="@{/register}" class="auth-card__tab">ĐĂNG KÍ</a>
+        </div>
+
+        <div class="auth-card__right">
+            
+            <div class="auth-card__header">
+                <i class="fa-solid fa-layer-group auth-card__logo-icon"></i> <h3 class="auth-card__title"><DIV></DIV></h3>
+            </div>
+
+            <form th:action="@{/login}" method="post" class="auth-card__form">
+                
+                <div class="auth-card__group">
+                    <i class="fa-solid fa-user auth-card__icon"></i>
+                    <input type="text" name="username" class="auth-card__input" placeholder="Email">
+                </div>
+
+                <div class="auth-card__group">
+                    <i class="fa-solid fa-lock auth-card__icon"></i>
+                    <input type="password" name="password" class="auth-card__input" placeholder="Password">
+                </div>
+
+                <div class="auth-card__actions">
+                    <a href="#" class="auth-card__forgot">Quên mật khẩu?</a>
+                    <button type="submit" class="btn btn--gradient">ĐĂNG NHẬP</button>
+                </div>
+            </form>
+
+            <div class="auth-card__social-footer">
+                <span class="auth-card__social-text">Hoặc đăng nhập với</span>
+                <div class="auth-card__social-icons">
+                    <a href="#" class="social-link"><i class="fa-brands fa-google" style="color: #db4437;"></i> Google</a>
+                    <a href="#" class="social-link"><i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i> Facebook</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,190 @@
+/* --- 1. CẤU HÌNH CHUNG --- */
+* { box-sizing: border-box; }
+
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2c2c2c; /* Nền tối màu để làm nổi bật cái card */
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* --- 2. KHUNG BAO NGOÀI (AUTH CARD) --- */
+.auth-card {
+    display: flex; /* Chia đôi trái phải */
+    width: 800px;
+    height: 500px;
+    background: white;
+    border-radius: 20px; /* Bo tròn góc to */
+    overflow: hidden;    /* Để phần màu hồng không bị tràn ra ngoài góc bo */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Đổ bóng đậm */
+}
+
+/* --- 3. BÊN TRÁI (MÀU HỒNG) --- */
+.auth-card__left {
+    width: 40%;
+    /* Tạo dải màu Gradient chéo từ hồng nhạt sang đỏ */
+    background: linear-gradient(135deg, #ff9a9e 0%, #ff5e62 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end; /* Đẩy chữ Login/Sign in sang mép phải */
+    padding-right: 0px;
+    position: relative;
+}
+
+/* Giả lập cái Tab "Login" màu trắng lồi ra */
+.auth-card__tab {
+    color: rgba(255,255,255,0.7);
+    font-weight: bold;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 10px 30px 10px 20px;
+}
+
+.auth-card__tab.active {
+    color: #ff5e62;
+    background: white;
+ 
+    border-radius: 30px 0 0 30px; /* Bo tròn đầu trái */
+    box-shadow: -5px 5px 10px rgba(0,0,0,0.1);
+}
+
+/* --- 4. BÊN PHẢI (FORM TRẮNG) --- */
+.auth-card__right {
+    width: 60%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Để căn chỉnh footer */
+}
+
+/* Header Logo */
+.auth-card__header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.auth-card__logo-icon {
+    font-size: 50px;
+    color: #ff5e62; /* Màu đỏ hồng */
+    margin-bottom: 10px;
+}
+
+.auth-card__title {
+    color: #ff5e62;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+/* Input Group (Icon + Input) */
+.auth-card__group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.auth-card__icon {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    color: #aaa;
+}
+
+/* Style Input kiểu gạch chân (Underline) */
+.auth-card__input {
+    width: 100%;
+    padding: 10px 10px 10px 30px; /* Padding trái 30px để né cái icon ra */
+    border: none;
+    border-bottom: 1px solid #ddd; /* Chỉ kẻ đường dưới */
+    outline: none;
+    font-size: 14px;
+    color: #555;
+    transition: border-color 0.3s;
+}
+
+.auth-card__input:focus {
+    border-bottom-color: #ff5e62; /* Đổi màu kẻ khi bấm vào */
+}
+
+/* Actions (Link quên pass & Nút) */
+.auth-card__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.auth-card__forgot {
+    font-size: 12px;
+    color: #ff5e62;
+    text-decoration: none;
+}
+
+/* Nút bấm Gradient hình viên thuốc */
+.btn--gradient {
+    padding: 10px 40px;
+    border: none;
+    border-radius: 50px; /* Bo tròn tuyệt đối */
+    background: linear-gradient(to right, #ff9a9e, #ff5e62);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 94, 98, 0.4); /* Bóng màu hồng */
+}
+
+/* --- 5. FOOTER SOCIAL --- */
+.auth-card__social-footer {
+    margin-top: auto; /* Tự động đẩy xuống đáy */
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth-card__social-text {
+    font-size: 12px;
+    color: #999;
+}
+
+.auth-card__social-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.social-link {
+    text-decoration: none;
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+}
+
+.social-link i {
+    margin-right: 5px;
+    font-size: 16px;
+}
+/* Thêm vào auth.css */
+
+.auth-card__tab {
+    text-decoration: none; /* Bỏ gạch chân */
+    display: block;        /* Để căn lề chuẩn như div */
+}
+
+/* Đảm bảo trạng thái chưa active vẫn có màu trắng mờ */
+a.auth-card__tab {
+    color: rgba(255,255,255,0.7);
+}
+
+a.auth-card__tab:hover {
+    color: white;
+}
+
+/* Giữ nguyên style active cũ */
+.auth-card__tab.active {
+    color: #ff5e62;
+    background: white;
+}
