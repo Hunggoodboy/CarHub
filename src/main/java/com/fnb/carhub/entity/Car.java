@@ -13,7 +13,7 @@ public class Car {
     @Column(nullable = false)
     private Long id;
     private String model, color, description, imageUrl;
-    private double price;
+    private double price, discount;
     private int manufactureYear, stockQuantity;
     //Kết nối qua BrandEntity
     @ManyToOne(fetch = FetchType.LAZY)
