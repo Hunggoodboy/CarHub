@@ -11,7 +11,7 @@ public class OrderDetail {
     @Column(nullable = false)
     private Long id;
     private Long quantity;
-    private Double priceAtPurchase;
+    private Double priceOriginal,  pricePaid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
