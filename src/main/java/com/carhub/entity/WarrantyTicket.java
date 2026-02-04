@@ -1,4 +1,4 @@
-package com.fnb.carhub.entity;
+package com.carhub.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
