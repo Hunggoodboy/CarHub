@@ -1,9 +1,7 @@
-package com.fnb.carhub.entity;
+package com.carhub.entity;
 
-import com.fnb.carhub.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 

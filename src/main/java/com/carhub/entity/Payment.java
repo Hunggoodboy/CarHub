@@ -1,9 +1,8 @@
-package com.fnb.carhub.entity;
+package com.carhub.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
