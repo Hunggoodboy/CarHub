@@ -1,9 +1,9 @@
-package com.fnb.carhub.service;
+package com.carhub.service;
 
-import com.fnb.carhub.dto.CarDTO;
-import com.fnb.carhub.entity.Car;
-import com.fnb.carhub.repository.BrandRepository;
-import com.fnb.carhub.repository.CarRepository;
+import com.carhub.dto.CarDTO;
+import com.carhub.entity.Car;
+import com.carhub.repository.BrandRepository;
+import com.carhub.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,8 +1,8 @@
-package com.fnb.carhub.controller;
+package com.carhub.controller;
 
-import com.fnb.carhub.dto.UserDTO;
-import com.fnb.carhub.entity.User;
-import com.fnb.carhub.service.UserService;
+import com.carhub.dto.UserDTO;
+import com.carhub.entity.User;
+import com.carhub.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

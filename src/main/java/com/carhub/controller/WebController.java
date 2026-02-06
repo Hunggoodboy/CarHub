@@ -1,16 +1,17 @@
-package com.fnb.carhub.controller;
+package com.carhub.controller;
 
-import com.fnb.carhub.dto.AuthResponse;
-import com.fnb.carhub.dto.CarDTO;
-import com.fnb.carhub.dto.RegisterRequest;
-import com.fnb.carhub.service.AuthService;
-import com.fnb.carhub.service.CarService;
+import com.carhub.dto.AuthResponse;
+import com.carhub.dto.CarDTO;
+import com.carhub.dto.RegisterRequest;
+import com.carhub.service.AuthService;
+import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
