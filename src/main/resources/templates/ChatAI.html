@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring AI Chat</title>
+    <link rel="stylesheet" th:href="@{/css/ChatAI.css}">
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="header">Spring AI Assistant</div>
+    <div id="messages">
+        <div class="message bot">Xin chào! Tôi có thể giúp gì cho bạn?</div>
+    </div>
+    <div id="input-area">
+        <input type="text" id="userInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()" id="sendBtn">Gửi</button>
+    </div>
+</div>
+
+<script th:src="@{js/script.js}"></script>
+
+</body>
+</html>
