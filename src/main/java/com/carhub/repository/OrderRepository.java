@@ -1,5 +1,4 @@
 package com.carhub.repository;
-
 import com.carhub.entity.Customer;
 import com.carhub.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;

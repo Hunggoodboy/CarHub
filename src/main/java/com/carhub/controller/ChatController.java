@@ -1,4 +1,4 @@
-package com.carhub.controller;
+package controller;
 
 public class ChatController {
 }

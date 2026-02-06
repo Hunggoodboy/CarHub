@@ -1,7 +1,8 @@
 package com.carhub.dto;
 
+import jakarta.persistence.Entity;
+import lombok.*;
 import com.carhub.entity.Car;
-import lombok.Data;
 
 @Data
 public class CarDTO {
@@ -20,6 +21,7 @@ public class CarDTO {
     private Long brandId;
 
     public static CarDTO fromEntity(Car car) {
+
         CarDTO dto = new CarDTO();
         dto.setId(car.getId());
         dto.setModel(car.getModel());

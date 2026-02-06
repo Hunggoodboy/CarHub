@@ -2,7 +2,7 @@ package com.carhub.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,4 +18,5 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
     private List<Car> cars = new ArrayList<>();
+
 }
