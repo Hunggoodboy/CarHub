@@ -5,31 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập CarHub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/auth.css}"> 
-    <link rel="stylesheet" 
-      href="../static/css/auth.css" 
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <link rel="stylesheet"
+      href="../static/css/auth.css"
       th:href="@{/css/auth.css}">
     </head>
 <body>
     <div class="login-page">
     <div class="auth-card">
-        
-        <div class="auth-card__left">  
+
+        <div class="auth-card__left">
             <a th:href="@{/login}" class="auth-card__tab active">ĐĂNG NHẬP</a>
             <a th:href="@{/register}" class="auth-card__tab">ĐĂNG KÍ</a>
         </div>
 
         <div class="auth-card__right">
-            
+
             <div class="auth-card__header">
                 <i class="fa-solid fa-layer-group auth-card__logo-icon"></i> <h3 class="auth-card__title"><DIV></DIV></h3>
             </div>
 
             <form th:action="@{/login}" method="post" class="auth-card__form">
-                
+
                 <div class="auth-card__group">
                     <i class="fa-solid fa-user auth-card__icon"></i>
-                    <input type="text" name="username" class="auth-card__input" placeholder="Email">
+                    <input type="text" name="username" class="auth-card__input" placeholder="Username">
                 </div>
 
                 <div class="auth-card__group">
@@ -55,3 +55,28 @@
 </div>
 </body>
 </html>
+<script>
+    document.querySelector('.auth-card__form').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Chặn load lại trang
+
+        // 1. Lấy dữ liệu từ form
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        // 2. Gửi JSON lên API của bạn
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        // 3. Xử lý kết quả
+        const result = await response.json();
+        if (response.ok && result.success) {
+            // Đăng nhập thành công -> JS tự chuyển trang
+            window.location.href = "/";
+        } else {
+            alert("Lỗi: " + result.message);
+        }
+    });
+</script>

@@ -1,7 +1,7 @@
-package com.fnb.carhub.service;
+package com.carhub.service;
 
-import com.fnb.carhub.entity.User;
-import com.fnb.carhub.repository.UserRepository;
+import com.carhub.entity.User;
+import com.carhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

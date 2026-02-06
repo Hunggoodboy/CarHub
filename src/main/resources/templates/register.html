@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập CarHub</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css}">
     <link rel="stylesheet" th:href="@{/css/auth.css}"> 
     <link rel="stylesheet" 
       href="../static/css/auth.css" 
@@ -25,17 +25,21 @@
                 <i class="fa-solid fa-layer-group auth-card__logo-icon"></i> <h3 class="auth-card__title"><DIV></DIV></h3>
             </div>
 
-            <form th:action="@{/register}" method="post" class="auth-card__form">
-                
+            <form th:action="@{/register}" th:object="${registerRequest}" method="post" class="auth-card__form">
                 <div class="auth-card__group">
                     <i class="fa-solid fa-user auth-card__icon"></i>
-                    <input type="text" name="username" class="auth-card__input" placeholder="Email">
+                    <input type="text" name="username" class="auth-card__input" placeholder="Username">
                 </div>
-
                 <div class="auth-card__group">
                     <i class="fa-solid fa-lock auth-card__icon"></i>
                     <input type="password" name="password" class="auth-card__input" placeholder="Password">
                 </div>
+                
+                <div class="auth-card__group">
+                    <i class="fa-solid fa-envelope auth-card__icon"></i>
+                    <input type="text" name="email" class="auth-card__input" placeholder="Email">
+                </div>
+
                 <div class="auth-card__group">
                         <i class="fa-solid fa-signature auth-card__icon"></i>
                         <input type="text" th:field="*{fullName}" class="auth-card__input" placeholder="Full Name">

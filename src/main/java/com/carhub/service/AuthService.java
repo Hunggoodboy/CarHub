@@ -1,13 +1,13 @@
-package com.fnb.carhub.service;
+package com.carhub.service;
 
-import com.fnb.carhub.dto.AuthResponse;
-import com.fnb.carhub.dto.LoginRequest;
-import com.fnb.carhub.dto.RegisterRequest;
-import com.fnb.carhub.dto.UserDTO;
-import com.fnb.carhub.entity.Customer;
-import com.fnb.carhub.entity.User;
-import com.fnb.carhub.repository.CustomerRepository;
-import com.fnb.carhub.repository.UserRepository;
+import com.carhub.dto.AuthResponse;
+import com.carhub.dto.LoginRequest;
+import com.carhub.dto.RegisterRequest;
+import com.carhub.dto.UserDTO;
+import com.carhub.entity.Customer;
+import com.carhub.entity.User;
+import com.carhub.repository.CustomerRepository;
+import com.carhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,6 +60,7 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         try {
             // Tìm user theo username
+            System.out.println(request.getUsername());
             User user = userRepository.findByUsername(request.getUsername())
                     .orElse(null);
 

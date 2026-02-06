@@ -1,9 +1,9 @@
-package com.fnb.carhub.controller;
+package com.carhub.controller;
 
-import com.fnb.carhub.dto.AuthResponse;
-import com.fnb.carhub.dto.LoginRequest;
-import com.fnb.carhub.dto.RegisterRequest;
-import com.fnb.carhub.service.AuthService;
+import com.carhub.dto.AuthResponse;
+import com.carhub.dto.LoginRequest;
+import com.carhub.dto.RegisterRequest;
+import com.carhub.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

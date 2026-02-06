@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Car Shop</title>
     <link rel="stylesheet"
-          th:href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+          th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 
 </head>
 
@@ -13,11 +14,12 @@
     <header>
         <div class="logo">CarShop</div>
         <nav>
-            <a href="#">Trang chủ</a>
-            <a href="#cars">Xe</a>
-            <a href="#">Bán xe</a>
-            <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
-            <a href="#">Đăng nhập</a>
+            <a th:href="@{#}">Trang chủ</a>
+            <a th:href="@{#cars}">Xe</a>
+            <a th:href="@{#}">Bán xe</a>
+<!--            <a th:src="@{mailto:thanhdn.0306@gmail.com}">Liên hệ</a>-->
+            <a sec:authorize="!isAuthenticated()" th:href="@{login}">Đăng nhập</a>
+            <span sec:authorize="isAuthenticated()">Xin Chào <span sec:authentication="name" style="font-weight: bold;"></span></span>
         </nav>
     </header>
 
@@ -85,21 +87,21 @@
     </section>
 
     <div class="floating">
-        <a href="tel:66668888"><i class="fa fa-phone"></i></a>
-        <a href="https://zalo.me/66668888" target="_blank">
+        <a th:href="@{tel:66668888}"><i class="fa fa-phone"></i></a>
+        <a th:href="@{https://zalo.me/66668888}" target="_blank">
             <i class="fa fa-comment"></i>
         </a>
     </div>
 
     <footer>
          © 2026 CarShop |
-        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+        <a th:href="@{https://www.facebook.com/HocvienPTIT}" target="_blank">
             <i class="fab fa-facebook fa-lg"></i>
         </a>
-        <a href="https://instagram.com" target="_blank">
+        <a th:href="@{https://instagram.com}" target="_blank">
             <i class="fab fa-instagram fa-lg"></i>
         </a>
-        <a href="https://tiktok.com" target="_blank">
+        <a th:href="@{https://tiktok.com}" target="_blank">
             <i class="fab fa-tiktok fa-lg"></i>
         </a>
     </footer>

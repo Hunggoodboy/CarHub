@@ -1,8 +1,8 @@
-package com.fnb.carhub.service;
+package com.carhub.service;
 
-import com.fnb.carhub.dto.UserDTO;
-import com.fnb.carhub.entity.User;
-import com.fnb.carhub.repository.UserRepository;
+import com.carhub.dto.UserDTO;
+import com.carhub.entity.User;
+import com.carhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
