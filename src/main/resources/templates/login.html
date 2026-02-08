@@ -24,7 +24,13 @@
             <div class="auth-card__header">
                 <i class="fa-solid fa-layer-group auth-card__logo-icon"></i> <h3 class="auth-card__title"><DIV></DIV></h3>
             </div>
+            <div th:if="${param.error}" class="alert alert-danger" style="color: red; text-align: center; margin-bottom: 10px;">
+                Tài khoản hoặc mật khẩu không đúng!
+            </div>
 
+            <div th:if="${param.logout}" class="alert alert-success" style="color: green; text-align: center; margin-bottom: 10px;">
+                Bạn đã đăng xuất thành công.
+            </div>
             <form th:action="@{/login}" method="post" class="auth-card__form">
 
                 <div class="auth-card__group">
@@ -55,28 +61,3 @@
 </div>
 </body>
 </html>
-<script>
-    document.querySelector('.auth-card__form').addEventListener('submit', async function(e) {
-        e.preventDefault(); // Chặn load lại trang
-
-        // 1. Lấy dữ liệu từ form
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-
-        // 2. Gửi JSON lên API của bạn
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        // 3. Xử lý kết quả
-        const result = await response.json();
-        if (response.ok && result.success) {
-            // Đăng nhập thành công -> JS tự chuyển trang
-            window.location.href = "/";
-        } else {
-            alert("Lỗi: " + result.message);
-        }
-    });
-</script>
