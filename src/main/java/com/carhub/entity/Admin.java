@@ -20,7 +20,4 @@ public class Admin extends User {
     @OneToMany(mappedBy = "admin")
     private List<WarrantyTicket> managedWarranties;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }
