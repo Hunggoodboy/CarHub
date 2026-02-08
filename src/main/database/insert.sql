@@ -31,7 +31,7 @@ INSERT INTO Brand (id, name, origin) VALUES
 (30, 'Volvo', 'Thụy Điển'),
 (31, 'VinFast', 'Việt Nam');
 
-INSERT INTO Car (id, model, price, discount, manufactureYear, color, description, imageUrl, stockQuantity, brand_id) VALUES 
+INSERT INTO Car (id, model, price, discount, manufacture_year, color, description, image_url, stock_quantity, brand_id) VALUES 
 (1, 'Integra', 215000000.0, 0.0, 2012, 'Trắng', 'Sedan thể thao nhỏ gọn, vận hành linh hoạt.', 'car_images/integra.jpg', 15, 1),
 (2, 'TL', 284000000.0, 0.05, 2012, 'Đen', 'Sedan hạng sang với nội thất cao cấp và tiện nghi.', 'car_images/tl.jpg', 8, 1),
 (3, 'A4', 239900000.0, 0.0, 2012, 'Xám', 'Mẫu xe sang cỡ nhỏ bán chạy nhất của Audi.', 'car_images/a4.jpg', 12, 2),
