@@ -15,10 +15,6 @@ public class CarController {
 
     private final CarService carService;
 
-    /**
-     * Lấy danh sách tất cả xe
-     * GET /api/cars
-     */
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {
         List<CarDTO> cars = carService.getAllCars();
