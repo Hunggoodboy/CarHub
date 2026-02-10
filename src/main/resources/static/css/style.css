@@ -153,12 +153,135 @@ nav a:hover {
 }
 
 footer {
+  width: 100%;
     background-color: #e91a07; 
     color: #e5e7eb;
     padding: 20px;
     text-align: center;
+    clear: both; 
+    margin-top: 50px;
 }
 html {
     scroll-behavior: smooth;
 }
 
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ff4d4d;
+}
+
+/* Container cho Form */
+.form-container-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin: 30px 0;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+form {
+    max-width: 900px;
+    margin: 0 auto 50px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.required {
+    color: #ff4d4d;
+    margin-left: 4px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #ff4d4d;
+}
+
+
+.btn-submit {
+    grid-column: span 2; /* Trải dài cả 2 cột */
+    background-color: #ff4d4d;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: #e60000;
+}
+.Line {
+    text-align: center;         /* Căn giữa dòng chữ */
+    font-size: 28px;            /* Kích thước chữ lớn, dễ nhìn */
+    font-weight: 700;           /* Độ đậm cao để làm nổi bật tiêu đề */
+    color: #111;                /* Màu chữ đen sâu để tạo sự sang trọng */
+    margin: 40px auto 20px;     /* Cách trên 40px, cách dưới 20px */
+    text-transform: uppercase;    /* Viết hoa toàn bộ cho phong cách chuyên nghiệp */
+    letter-spacing: 1.5px;      /* Khoảng cách giữa các chữ cái rộng hơn */
+    font-family: 'Segoe UI', Arial, sans-serif;
+    position: relative;         /* Làm mốc để vẽ đường gạch chân trang trí */
+    padding-bottom: 15px;
+}
+
+/* Tạo một đường gạch chân trang trí màu đỏ phía dưới tiêu đề */
+.Line::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%); /* Căn giữa đường gạch chân */
+    width: 80px;
+    height: 4px;
+    background-color: #ff3b3b;   /* Màu đỏ thương hiệu của bạn */
+    border-radius: 2px;
+}
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .btn-submit {
+        grid-column: span 1;
+    }
+}
