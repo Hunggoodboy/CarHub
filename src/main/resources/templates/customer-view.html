@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Shop</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+</head>
+
+<body>
+    <header>
+        <div class="logo">CarShop</div>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="#cars">Xe</a>
+            <a href="customer-view.html">Bán xe</a>
+            <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+            <a href="login.html">Đăng nhập</a>
+        </nav>
+    </header>
+     <div class="Line"> Nhập thông tin xe cần bán</div>
+     <form th:action="@{/admin/car/save}" method="post" th:object="${car}">
+        <div class="form-grid">
+            <div class="form-group" >
+                    <label>Model xe<span class="required">*</span></label>
+                    <input type="text" th:field="*{model}" placeholder="Camry" required>
+            </div>
+            <div class="form-group">
+                    <label>Giá xe <span class="required">*</span></label>
+                    <input type = "number" step="1000" th:field="*{price}" placeholder="1000000000" required>
+            </div>
+            <div class="form-group">
+                    <label>Năm sản xuất <span class="required">*</span></label>
+                    <input type="number" th:field="*{manufacture_year}" placeholder="2020" required>
+            </div>
+            <div class="form-group">
+                    <label>Màu Sắc <span class="required">*</span></label>
+                    <input type="text" th:field="*{color}" placeholder="50000" required>
+            </div>
+            <div class="form-group">
+                    <label>Mô tả chi tiết <span class="required">*</span></label>
+                    <input type="text" th:field="*{description}" placeholder="15000" required>
+            </div>
+            <div class="form-group">
+                    <label>Hình ảnh (URL) <span class="required">*</span></label>
+                    <input type="file" th:field="*{image_url}" name="imageFile" accept="image/*" class="file-input" required>
+            </div>
+            <button type="submit" class="btn-submit">Lưu thông tin xe</button>
+        </div>
+     </form>
+     
+    
+    <footer>
+         © 2026 CarShop |
+        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+            <i class="fab fa-facebook fa-lg"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank">
+            <i class="fab fa-instagram fa-lg"></i>
+        </a>
+        <a href="https://tiktok.com" target="_blank">
+            <i class="fab fa-tiktok fa-lg"></i>
+        </a>
+    </footer>
+</body>
+</html>
