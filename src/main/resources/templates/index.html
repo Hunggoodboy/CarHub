@@ -5,7 +5,7 @@
     <title>Car Shop</title>
     <link rel="stylesheet"
           th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
-    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 
 
 </head>
@@ -75,24 +75,24 @@
 <section id="cars" class="products">
     <h2>Danh sách xe đang bán </h2>
 
-    <div class="product-grid">
-        <div class="card" th:each="car : ${cars}">
+<!--    <div class="product-grid">-->
+<!--        <div class="card" th:each="car : ${cars}">-->
 
-            <img th:src="@{/images/cars/{img}(img=${car.image})}"
-                 alt="Car image">
+<!--            <img th:src="@{/images/cars/{img}(img=${car.image})}"-->
+<!--                 alt="Car image">-->
 
-            <div class="info">
-                <h4 th:text="${car.name}">Tên xe</h4>
+<!--            <div class="info">-->
+<!--                <h4 th:text="${car.name}">Tên xe</h4>-->
 
-                <div class="price"
-                     th:text="${#numbers.formatDecimal(car.price,0,'COMMA',0,'POINT')} + ' đ'">
-                    Giá
-                </div>
+<!--                <div class="price"-->
+<!--                     th:text="${#numbers.formatDecimal(car.price,0,'COMMA',0,'POINT')} + ' đ'">-->
+<!--                    Giá-->
+<!--                </div>-->
 
-                <a th:href="@{/product_detail}" href="product_detail.html" class="btn">Xem chi tiết</a>
-            </div>
-        </div>
-    </div>
+<!--                <a th:href="@{/product_detail}" href="product_detail.html" class="btn">Xem chi tiết</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </section>
 
 <div class="floating">

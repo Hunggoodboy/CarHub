@@ -24,7 +24,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI", "/error").permitAll()
                         .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
                         .anyRequest().authenticated()
                 )
