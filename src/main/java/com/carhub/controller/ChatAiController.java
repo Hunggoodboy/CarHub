@@ -15,10 +15,10 @@ public class ChatAiController {
 
     private final ChatService chatService;
 
-    @GetMapping("/ChatAI")
-    public ModelAndView getChatAI() {
-        return new ModelAndView("ChatAI");
-    }
+//    @GetMapping("/ChatAI")
+//    public ModelAndView getChatAI() {
+//        return new ModelAndView("ChatAI");
+//    }
 
     @PostMapping("/ChatAI")
     public String chat(@RequestBody ChatRequest chatRequest) {
