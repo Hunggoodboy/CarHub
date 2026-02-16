@@ -32,7 +32,7 @@ nav a:hover {
 .hero {
     height: 380px;
     background: url("https://images.unsplash.com/photo-1503376780353-7e6692767b70")
-    center/cover no-repeat;
+        center/cover no-repeat;
     color: white;
     display: flex;
     align-items: center;
@@ -42,16 +42,6 @@ nav a:hover {
 .hero h1 {
     font-size: 40px;
     margin-bottom: 10px;
-}
-
-.hero button {
-    padding: 12px 24px;
-    background: #ff3b3b;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
 }
 
 .search-box {
@@ -130,6 +120,72 @@ nav a:hover {
     border-radius: 4px;
 }
 
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: #e53935;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+
+.product-detail {
+    width: 85%;
+    margin: 40px auto;
+}
+
+.detail-container {
+    display: grid;
+    grid-template-columns: 320px 1fr; 
+    gap: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    align-items: start;
+}
+
+.detail-image {
+    display: flex;
+    justify-content: flex-start; 
+}
+
+.detail-image img {
+    width: 100%;
+    max-width: 500px; 
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.detail-info h4 {
+    margin-top: 0;
+    font-size: 26px;
+}
+
+.detail-price {
+    font-size: 26px;
+    color: #ff3b3b;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.car-specs {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.car-specs li {
+    margin-bottom: 8px;
+}
+
+.detail-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
 .floating {
     position: fixed;
     right: 20px;
@@ -158,97 +214,7 @@ footer {
     padding: 20px;
     text-align: center;
 }
+
 html {
     scroll-behavior: smooth;
-}
-
-.product-detail {
-    width: 85%;
-    margin: 40px auto;
-}
-
-.detail-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-}
-
-.detail-image img {
-    width: 100%;
-    border-radius: 10px;
-}
-
-.detail-info h1 {
-    margin-top: 0;
-}
-
-.detail-price {
-    font-size: 26px;
-    color: #ff3b3b;
-    font-weight: bold;
-    margin: 15px 0;
-}
-
-.car-specs {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-}
-
-.car-specs li {
-    margin-bottom: 8px;
-}
-
-.detail-actions {
-    display: flex;
-    gap: 15px;
-}
-
-.buy-btn {
-    background: #ff3b3b;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.cart-btn {
-    background: #111;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.cart-btn i {
-    margin-right: 6px;
-}
-
-.description {
-    background: white;
-    padding: 30px;
-    margin-top: 40px;
-    border-radius: 10px;
-}
-
-.related-products {
-    margin-top: 40px;
-}
-
-.related-products h2 {
-    margin-bottom: 20px;
-}
-.btn {
-    display: inline-block;
-    padding: 10px 18px;
-    background: #e53935;
-    color: #fff;
-    border-radius: 6px;
-    text-decoration: none;
 }
