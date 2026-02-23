@@ -23,4 +23,5 @@ public class Car {
     //Kết nối tới OrderDetailEntity
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
+
 }
