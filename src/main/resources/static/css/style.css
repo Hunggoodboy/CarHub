@@ -148,10 +148,18 @@ nav a:hover {
 .detail-image {
     display: flex;
     justify-content: flex-start;
+    align-items: start;
+}
+
+.detail-image {
+    display: flex;
+    justify-content: flex-start;
 }
 
 .detail-image img {
     width: 100%;
+    max-width: 500px;
+    height: auto;
     max-width: 500px;
     height: auto;
     border-radius: 10px;
