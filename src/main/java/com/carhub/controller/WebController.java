@@ -30,6 +30,7 @@ public class WebController {
         return "index";
     }
     // Trang chi tiết xe
+    // Trang chi tiết xe
     @GetMapping("/product_detail")
     public String productDetail() {
         return "product_detail";
