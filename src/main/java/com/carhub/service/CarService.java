@@ -5,10 +5,14 @@ import com.carhub.entity.Car;
 import com.carhub.repository.BrandRepository;
 import com.carhub.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.print.Doc;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -82,7 +86,7 @@ public class CarService {
     }
 
     // Tìm kiếm xe theo nhiều tiêu chí
-    public List<CarDTO> searchCars(String brandName, Double minPrice, Double maxPrice) {
+    public List<CarDTO> searchCars(String brandName,Integer year, Double minPrice, Double maxPrice) {
         List<Car> cars;
 
         if (brandName != null && !brandName.isEmpty()) {
@@ -99,6 +103,11 @@ public class CarService {
                         return finalPrice >= minPrice && finalPrice <= maxPrice;
                     })
                     .collect(Collectors.toList());
+        }
+        if (year != null) {
+             cars = cars.stream()
+                   .filter(car -> car.getManufactureYear() == year)
+                   .collect(Collectors.toList());
         }
 
         return cars.stream()
@@ -127,4 +136,5 @@ public class CarService {
         }
         return false;
     }
+
 }

@@ -29,6 +29,11 @@ public class WebController {
         model.addAttribute("cars", cars);
         return "index";
     }
+    // Trang chi tiết xe
+    @GetMapping("/product_detail")
+    public String productDetail() {
+        return "product_detail";
+    }
 
     // Trang đăng nhập
     @GetMapping("/login")

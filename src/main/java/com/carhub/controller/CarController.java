@@ -104,8 +104,10 @@ public class CarController {
     public ResponseEntity<List<CarDTO>> advancedSearch(
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) Double minPrice,
-            @RequestParam(required = false) Double maxPrice) {
-        List<CarDTO> cars = carService.searchCars(brand, minPrice, maxPrice);
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Integer year)
+    {
+        List<CarDTO> cars = carService.searchCars(brand,year,minPrice, maxPrice);
         return ResponseEntity.ok(cars);
     }
 
