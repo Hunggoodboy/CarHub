@@ -2,67 +2,70 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Car Shop</title>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="../static/css/style.css">
-
+    <title>Car Shop - Đăng Bán Xe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
-    <header>
-        <div class="logo">CarShop</div>
-        <nav>
-            <a href="index.html">Trang chủ</a>
-            <a href="#cars">Xe</a>
-            <a href="customer-view.html">Bán xe</a>
-            <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
-            <a href="login.html">Đăng nhập</a>
-        </nav>
-    </header>
-     <div class="Line"> Nhập thông tin xe cần bán</div>
-     <form th:action="@{/admin/car/save}" method="post" th:object="${car}">
-        <div class="form-grid">
-            <div class="form-group" >
-                    <label>Model xe<span class="required">*</span></label>
-                    <input type="text" th:field="*{model}" placeholder="Camry" required>
+<header>
+    <div class="logo">CarShop</div>
+    <nav>
+        <a th:href="@{/}">Trang chủ</a>
+        <a href="#cars">Xe</a>
+        <a th:href="@{/customer-view}">Bán xe</a>
+        <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+        <a th:href="@{/login}">Đăng nhập</a>
+    </nav>
+</header>
+
+<div class="products" style="margin-top: 40px;">
+    <h2>Nhập thông tin xe cần bán</h2>
+
+    <div th:if="${error}" style="color: red; margin-bottom: 20px;" th:text="${error}"></div>
+
+    <form th:action="@{/admin/car/save}" method="post" th:object="${car}" enctype="multipart/form-data" style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        <div class="form-grid" style="display: grid; gap: 15px;">
+            <div class="form-group">
+                <label>Model xe <span class="required" style="color: red;">*</span></label>
+                <input type="text" th:field="*{model}" placeholder="VD: Camry" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             </div>
             <div class="form-group">
-                    <label>Giá xe <span class="required">*</span></label>
-                    <input type = "number" step="1000" th:field="*{price}" placeholder="1000000000" required>
+                <label>Giá xe <span class="required" style="color: red;">*</span></label>
+                <input type="number" step="1000" th:field="*{price}" placeholder="VD: 1000000000" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             </div>
             <div class="form-group">
-                    <label>Năm sản xuất <span class="required">*</span></label>
-                    <input type="number" th:field="*{manufacture_year}" placeholder="2020" required>
+                <label>Năm sản xuất <span class="required" style="color: red;">*</span></label>
+                <input type="number" th:field="*{manufactureYear}" placeholder="VD: 2020" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             </div>
             <div class="form-group">
-                    <label>Màu Sắc <span class="required">*</span></label>
-                    <input type="text" th:field="*{color}" placeholder="50000" required>
+                <label>Màu sắc <span class="required" style="color: red;">*</span></label>
+                <input type="text" th:field="*{color}" placeholder="VD: Đen" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             </div>
             <div class="form-group">
-                    <label>Mô tả chi tiết <span class="required">*</span></label>
-                    <input type="text" th:field="*{description}" placeholder="15000" required>
+                <label>Mô tả chi tiết <span class="required" style="color: red;">*</span></label>
+                <input type="text" th:field="*{description}" placeholder="VD: Xe còn mới..." required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             </div>
             <div class="form-group">
-                    <label>Hình ảnh (URL) <span class="required">*</span></label>
-                    <input type="file" th:field="*{image_url}" name="imageFile" accept="image/*" class="file-input" required>
+                <label>Hình ảnh xe <span class="required" style="color: red;">*</span></label>
+                <input type="file" name="imageFile" accept="image/*" class="file-input" required style="width: 100%; padding: 10px; box-sizing: border-box;">
             </div>
-            <button type="submit" class="btn-submit">Lưu thông tin xe</button>
+            <button type="submit" class="btn" style="margin-top: 10px;">Lưu thông tin xe</button>
         </div>
-     </form>
-     
-    
-    <footer>
-         © 2026 CarShop |
-        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
-            <i class="fab fa-facebook fa-lg"></i>
-        </a>
-        <a href="https://instagram.com" target="_blank">
-            <i class="fab fa-instagram fa-lg"></i>
-        </a>
-        <a href="https://tiktok.com" target="_blank">
-            <i class="fab fa-tiktok fa-lg"></i>
-        </a>
-    </footer>
+    </form>
+</div>
+
+<footer style="margin-top: 60px;">
+    © 2026 CarShop |
+    <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+        <i class="fab fa-facebook fa-lg"></i>
+    </a>
+    <a href="https://instagram.com" target="_blank">
+        <i class="fab fa-instagram fa-lg"></i>
+    </a>
+    <a href="https://tiktok.com" target="_blank">
+        <i class="fab fa-tiktok fa-lg"></i>
+    </a>
+</footer>
 </body>
 </html>

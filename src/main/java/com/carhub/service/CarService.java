@@ -137,4 +137,11 @@ public class CarService {
         return false;
     }
 
+    // Lưu thông tin xe (dùng cho form customer-view)
+    @Transactional
+    public CarDTO saveCar(Car car) {
+        Car savedCar = carRepository.save(car);
+        return CarDTO.fromEntity(savedCar);
+    }
+
 }
