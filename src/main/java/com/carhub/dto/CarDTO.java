@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import com.carhub.entity.Car;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class CarDTO {
     private Long id;
@@ -19,7 +22,6 @@ public class CarDTO {
     private String brandName;
     private String brandOrigin;
     private Long brandId;
-
     public static CarDTO fromEntity(Car car) {
 
         CarDTO dto = new CarDTO();
@@ -33,7 +35,6 @@ public class CarDTO {
         dto.setFinalPrice(car.getPrice() * (1 - car.getDiscount() / 100));
         dto.setManufactureYear(car.getManufactureYear());
         dto.setStockQuantity(car.getStockQuantity());
-
         if (car.getBrand() != null) {
             dto.setBrandId(car.getBrand().getId());
             dto.setBrandName(car.getBrand().getName());

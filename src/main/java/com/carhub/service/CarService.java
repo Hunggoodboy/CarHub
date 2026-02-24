@@ -1,18 +1,18 @@
 package com.carhub.service;
 
 import com.carhub.dto.CarDTO;
+import com.carhub.dto.CarDetailResponse;
+import com.carhub.dto.ReviewsDTO;
 import com.carhub.entity.Car;
 import com.carhub.repository.BrandRepository;
 import com.carhub.repository.CarRepository;
+import com.carhub.repository.ReviewsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.document.Document;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.print.Doc;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,6 +22,7 @@ public class CarService {
 
     private final CarRepository carRepository;
     private final BrandRepository brandRepository;
+    private final ReviewsRepository reviewsRepository;
 
     // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
@@ -32,18 +33,20 @@ public class CarService {
     }
 
     // Lấy thông tin xe theo ID
-    public Optional<CarDTO> getCarById(Long id) {
-        return carRepository.findById(id)
+    public CarDTO getCarById(Long id) {
+        Optional<CarDTO> car = carRepository.findById(id)
                 .map(CarDTO::fromEntity);
+        return car.orElse(null);
+    }
+    public CarDetailResponse getCarDetail(Long id){
+        CarDetailResponse carDetail = new CarDetailResponse();
+        carDetail.setCar(getCarById(id));
+        carDetail.setReviews(reviewsRepository.getReviewsByCarId(id)
+                .stream()
+                .map(ReviewsDTO::fromEntity).collect(Collectors.toList()));
+        return carDetail;
     }
 
-    // Tìm xe theo model
-    public List<CarDTO> searchByModel(String model) {
-        return carRepository.findByModelContainingIgnoreCase(model)
-                .stream()
-                .map(CarDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
 
     // Tìm xe theo hãng
     public List<CarDTO> getCarsByBrand(String brandName) {
@@ -137,4 +140,10 @@ public class CarService {
         return false;
     }
 
+    public List<CarDTO> searchByModel(String model) {
+        return carRepository.findByModelContainingIgnoreCase(model)
+                .stream()
+                .map(CarDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
