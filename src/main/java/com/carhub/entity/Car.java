@@ -24,4 +24,6 @@ public class Car {
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL)
+    private Reviews review;
 }

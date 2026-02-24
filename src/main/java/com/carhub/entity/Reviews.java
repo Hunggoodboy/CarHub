@@ -1,9 +1,6 @@
 package com.carhub.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -24,11 +21,6 @@ public class Reviews implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
-
-    @Column(name = "car_id")
-    private Long carId;
 
     @Column(name = "rating")
     private Long rating;
@@ -45,4 +37,11 @@ public class Reviews implements Serializable {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @OneToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
