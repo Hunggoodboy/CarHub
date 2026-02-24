@@ -1,6 +1,7 @@
 package com.carhub.controller;
 
 import com.carhub.dto.CarDTO;
+import com.carhub.dto.CarDetailResponse;
 import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,9 @@ public class CarController {
      * GET /api/cars/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<CarDTO> getCarById(@PathVariable Long id) {
-        return carService.getCarById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CarDetailResponse> getCarById(@PathVariable Long id) {
+        CarDetailResponse car = carService.getCarDetail(id);
+        return ResponseEntity.ok(car);
     }
 
     /**

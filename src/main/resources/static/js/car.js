@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", function() {
             if (!response.ok) throw new Error("Xe không tồn tại");
             return response.json();
         })
-        .then(car => {
+        .then(data => {
+            const car = data.car;
+            const reviews = data.review;
             document.getElementById('loading-msg').style.display = 'none';
             document.getElementById('car-content').style.display = 'flex';
 
