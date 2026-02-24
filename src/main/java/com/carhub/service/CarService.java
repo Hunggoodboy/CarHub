@@ -7,6 +7,7 @@ import com.carhub.entity.Car;
 import com.carhub.repository.BrandRepository;
 import com.carhub.repository.CarRepository;
 import com.carhub.repository.ReviewsRepository;
+import com.carhub.service.ai.VectorStoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class CarService {
     private final CarRepository carRepository;
     private final BrandRepository brandRepository;
     private final ReviewsRepository reviewsRepository;
-
+    private final VectorStoreService vectorStoreService;
     // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()
@@ -38,12 +39,22 @@ public class CarService {
                 .map(CarDTO::fromEntity);
         return car.orElse(null);
     }
+    // Lấy Reviews theo id xe
+    public List<ReviewsDTO> getReviewsByCarId(Long id) {
+        return reviewsRepository.getReviewsByCarId(id)
+                .stream()
+                .map(ReviewsDTO::fromEntity).collect(Collectors.toList());
+    }
+    // Lấy Các Mẫu Xe Tương Tự
+    public List<CarDTO> getCarsSimilarByCarId(Long id) {
+        return vectorStoreService.getCarsSimilar(id);
+
+    }
     public CarDetailResponse getCarDetail(Long id){
         CarDetailResponse carDetail = new CarDetailResponse();
         carDetail.setCar(getCarById(id));
-        carDetail.setReviews(reviewsRepository.getReviewsByCarId(id)
-                .stream()
-                .map(ReviewsDTO::fromEntity).collect(Collectors.toList()));
+        carDetail.setReviews(getReviewsByCarId(id));
+        carDetail.setCarsSimilar(getCarsSimilarByCarId(id));
         return carDetail;
     }
 

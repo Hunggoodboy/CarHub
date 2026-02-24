@@ -14,8 +14,8 @@ public class ReviewsDTO {
     private LocalDateTime createdAt;
     public static ReviewsDTO fromEntity(Reviews reviews) {
         ReviewsDTO dto = new ReviewsDTO();
-        dto.setUserId(reviews.getUserId());
-        dto.setCarId(reviews.getCarId());
+        dto.setUserId(reviews.getCar().getId());
+        dto.setCarId(reviews.getCar().getId());
         dto.setRating(reviews.getRating());
         dto.setComment(reviews.getComment());
         dto.setCreatedAt(reviews.getCreatedAt());

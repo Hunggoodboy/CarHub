@@ -8,4 +8,5 @@ import java.util.List;
 public class CarDetailResponse {
     private CarDTO car;
     private List<ReviewsDTO> reviews;
+    private List<CarDTO> carsSimilar;
 }
