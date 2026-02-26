@@ -5,10 +5,13 @@ import com.carhub.entity.User;
 import com.carhub.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -26,6 +29,20 @@ public class UserController {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyId(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(username);
+        Object user = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Long> userId = userService.getIdByUsername(username);
+        Long id = userId.orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println(id);
+        if(userId.isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Bạn chưa đăng nhập");
+        }
+        return ResponseEntity.ok(user);
     }
 
     /**

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
@@ -18,11 +19,12 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByManufactureYear(int year);
     List<Car> findByPriceBetween(double minPrice, double maxPrice);
     List<Car> findByStockQuantityGreaterThan(int quantity);
-
+    Optional<Car> findById(Long id);
     //Tìm theo giá sau khi đã discount
     @Query("SELECT c FROM Car c WHERE c.price * (1 - c.discount) BETWEEN :minPrice AND :maxPrice")
     List<Car> findByFinalPriceBetween(@Param("minPrice") double minPrice, @Param("maxPrice") double maxPrice);
 
     @Query("SELECT c FROM Car c WHERE c.brand.name = :brandName")
     List<Car> findByBrandName(@Param("brandName") String brandName);
+
 }

@@ -25,6 +25,7 @@ public class CarService {
     private final BrandRepository brandRepository;
     private final ReviewsRepository reviewsRepository;
     private final VectorStoreService vectorStoreService;
+    private final ReviewService reviewService;
     // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()
@@ -40,20 +41,15 @@ public class CarService {
         return car.orElse(null);
     }
     // Lấy Reviews theo id xe
-    public List<ReviewsDTO> getReviewsByCarId(Long id) {
-        return reviewsRepository.getReviewsByCarId(id)
-                .stream()
-                .map(ReviewsDTO::fromEntity).collect(Collectors.toList());
-    }
     // Lấy Các Mẫu Xe Tương Tự
     public List<CarDTO> getCarsSimilarByCarId(Long id) {
         return vectorStoreService.getCarsSimilar(id);
-
     }
+
     public CarDetailResponse getCarDetail(Long id){
         CarDetailResponse carDetail = new CarDetailResponse();
         carDetail.setCar(getCarById(id));
-        carDetail.setReviews(getReviewsByCarId(id));
+        carDetail.setReviews(reviewService.getReviewsByCarId(id));
         carDetail.setCarsSimilar(getCarsSimilarByCarId(id));
         return carDetail;
     }
