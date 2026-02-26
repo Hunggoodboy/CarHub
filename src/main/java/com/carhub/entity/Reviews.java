@@ -15,10 +15,9 @@ import java.time.LocalDateTime;
 @Table(name = "reviews")
 public class Reviews implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -28,11 +27,6 @@ public class Reviews implements Serializable {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "is_anonymous")
-    private Boolean anonymous;
-
-    @Column(name = "is_approved")
-    private Boolean approved;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

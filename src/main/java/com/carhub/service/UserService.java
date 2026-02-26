@@ -4,6 +4,7 @@ import com.carhub.dto.UserDTO;
 import com.carhub.entity.User;
 import com.carhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    //Lấy id của người dùng hiện tại
+    public Long getId(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(username);
+        return getIdByUsername(username).orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
+    }
+
     // Lấy thông tin user theo ID
     public Optional<UserDTO> getUserById(Long id) {
         return userRepository.findById(id)
@@ -29,6 +37,11 @@ public class UserService {
     public Optional<UserDTO> getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(UserDTO::fromEntity);
+    }
+
+    public Optional<Long> getIdByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::getId);
     }
 
     // Lấy thông tin user theo email
@@ -44,6 +57,7 @@ public class UserService {
                 .map(UserDTO::fromEntity)
                 .collect(Collectors.toList());
     }
+
 
     // Tìm kiếm user theo tên
     public List<UserDTO> searchUserByName(String name) {
