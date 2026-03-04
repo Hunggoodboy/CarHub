@@ -48,7 +48,11 @@ public class WebController {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
     }
-
+    @GetMapping("/customer-view") 
+    public String showCustomerView() {
+        return "customer-view"; 
+    }
+    
     // Xử lý đăng ký
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("registerRequest") RegisterRequest request, Model model) {

@@ -21,37 +21,41 @@
         </nav>
     </header>
      <div class="Line"> Nhập thông tin xe cần bán</div>
-     <form th:action="@{/admin/car/save}" method="post" th:object="${car}">
-        <div class="form-grid">
-            <div class="form-group" >
-                    <label>Model xe<span class="required">*</span></label>
-                    <input type="text" th:field="*{model}" placeholder="Camry" required>
-            </div>
-            <div class="form-group">
-                    <label>Giá xe <span class="required">*</span></label>
-                    <input type = "number" step="1000" th:field="*{price}" placeholder="1000000000" required>
-            </div>
-            <div class="form-group">
-                    <label>Năm sản xuất <span class="required">*</span></label>
-                    <input type="number" th:field="*{manufacture_year}" placeholder="2020" required>
-            </div>
-            <div class="form-group">
-                    <label>Màu Sắc <span class="required">*</span></label>
-                    <input type="text" th:field="*{color}" placeholder="50000" required>
-            </div>
-            <div class="form-group">
-                    <label>Mô tả chi tiết <span class="required">*</span></label>
-                    <input type="text" th:field="*{description}" placeholder="15000" required>
-            </div>
-            <div class="form-group">
-                    <label>Hình ảnh (URL) <span class="required">*</span></label>
-                    <input type="file" th:field="*{image_url}" name="imageFile" accept="image/*" class="file-input" required>
-            </div>
-            <button type="submit" class="btn-submit">Lưu thông tin xe</button>
+     <form action="/admin/car/save" method="post" enctype="multipart/form-data">
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Model xe <span class="required">*</span></label>
+            <input type="text" name="model" placeholder="Camry" required>
         </div>
-     </form>
-     
-    
+
+        <div class="form-group">
+            <label>Giá xe <span class="required">*</span></label>
+            <input type="number" step="1000" name="price" placeholder="1000000000" required>
+        </div>
+
+        <div class="form-group">
+            <label>Năm sản xuất <span class="required">*</span></label>
+            <input type="number" name="manufactureYear" placeholder="2020" required>
+        </div>
+
+        <div class="form-group">
+            <label>Màu Sắc <span class="required">*</span></label>
+            <input type="text" name="color" placeholder="Trắng" required>
+        </div>
+
+        <div class="form-group">
+            <label>Mô tả chi tiết <span class="required">*</span></label>
+            <input type="text" name="description" placeholder="Mô tả..." required>
+        </div>
+
+        <div class="form-group">
+            <label>Hình ảnh (URL) <span class="required">*</span></label>
+            <input type="file" name="imageFile" accept="image/*" class="file-input" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Lưu thông tin xe</button>
+    </div>
+</form>
     <footer>
          © 2026 CarShop |
         <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
