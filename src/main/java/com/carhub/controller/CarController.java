@@ -2,6 +2,7 @@ package com.carhub.controller;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.CarDetailResponse;
+import com.carhub.entity.Car;
 import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,6 @@ public class CarController {
         CarDetailResponse car = carService.getCarDetail(id);
         return ResponseEntity.ok(car);
     }
-
     /**
      * Tìm kiếm xe theo model
      * GET /api/cars/search?model=xyz
