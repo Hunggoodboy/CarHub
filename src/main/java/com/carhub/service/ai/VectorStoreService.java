@@ -33,6 +33,7 @@ public class VectorStoreService {
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("id",  car.getId());
         metadata.put("model", car.getModel());
+        metadata.put("imageUrl", car.getImageUrl());
         metadata.put("color", car.getColor());
         metadata.put("price", car.getPrice());
         metadata.put("discount", car.getDiscount());
@@ -63,6 +64,8 @@ public class VectorStoreService {
 
         Optional.ofNullable(metadata.get("manufactureYear"))
                 .ifPresent(v -> carDTO.setManufactureYear((Integer) v));
+        Optional.ofNullable(metadata.get("imageUrl"))
+                .ifPresent(v -> carDTO.setImageUrl(v.toString()));
         return carDTO;
     }
     @PostConstruct
