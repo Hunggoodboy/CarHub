@@ -18,7 +18,7 @@ public class ChatAiController {
 //    public ModelAndView getChatAI() {
 //        return new ModelAndView("ChatAI");
 //    }
-
+    
     @PostMapping("/ChatAI")
     public ResponseEntity<String> chat(@RequestBody ChatRequest chatRequest) throws InterruptedException {
         String aiChatContent = AIChatService.generateAnswer(chatRequest);

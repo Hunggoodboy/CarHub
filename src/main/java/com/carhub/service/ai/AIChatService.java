@@ -20,7 +20,7 @@ public class AIChatService {
         this.chatClient = chatClientBuilder.build();
         this.vectorStore = vectorStore;
     }
-
+    
     public String generateAnswer(ChatRequest chatRequest) throws InterruptedException {
         List<Document> similarDocument = vectorStore.similaritySearch(
                 SearchRequest.builder().query(chatRequest.getQuestion())

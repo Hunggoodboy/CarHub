@@ -48,7 +48,10 @@ public class WebController {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
     }
-
+    @GetMapping("/chat-ai")
+    public String chatAI() {
+        return "ChatAI"; // Trả về file ChatAI.html trong templates
+    }
     // Xử lý đăng ký
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("registerRequest") RegisterRequest request, Model model) {

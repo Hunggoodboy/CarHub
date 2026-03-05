@@ -93,3 +93,52 @@ button:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
+/* Container cố định vị trí */
+.chatbot-wrapper {
+    position: fixed;
+    bottom: 30px; /* Cách đáy 30px */
+    right: 30px;  /* Cách phải 30px */
+    z-index: 1000; /* Luôn nằm trên các phần tử khác */
+}
+
+/* Thiết kế nút */
+.chatbot-btn {
+    display: flex;
+    align-items: center;
+    background-color: #007bff; /* Màu xanh giống dự án CarHub của bạn */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px; /* Bo tròn dạng viên thuốc */
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.chatbot-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-5px); /* Hiệu ứng nổi lên khi di chuột */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.chatbot-btn i {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.btn-text {
+    font-weight: bold;
+}
+/* Trạng thái ẩn */
+.chat-hidden {
+    display: none !important;
+}
+
+/* Đảm bảo khung chat có vị trí cố định đè lên nút hoặc nằm cạnh nút */
+#chat-container {
+    position: fixed;
+    bottom: 90px; /* Nằm phía trên nút bấm */
+    right: 20px;
+    width: 350px;
+    z-index: 1001;
+    /* ... các style khác của bạn ... */
+}
