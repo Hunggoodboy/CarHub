@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function loadAllCars() {
     fetch("/api/cars")
         .then(res => res.json())
-        .then(cars => renderCars(cars))
+        .then(cars => {
+            renderCars(cars); 
+        })
         .catch(err => console.error("Lỗi load xe:", err));
 }
 
@@ -25,13 +27,8 @@ function searchCars() {
     let url = "/api/cars/advanced-search";
     const params = [];
 
-    if (brand !== "") {
-        params.push(`brand=${encodeURIComponent(brand)}`);
-    }
-
-    if (year !== "") {
-        params.push(`year=${year}`);
-    }
+    if (brand !== "") params.push(`brand=${encodeURIComponent(brand)}`);
+    if (year !== "") params.push(`year=${year}`);
 
     if (price !== "") {
         const [min, max] = price.split("-");
@@ -45,30 +42,38 @@ function searchCars() {
 
     fetch(url)
         .then(res => res.json())
-        .then(cars => renderCars(cars))
+        .then(cars => {
+            renderCars(cars); 
+        })
         .catch(err => console.error("Lỗi tìm kiếm:", err));
 }
 
-
 function renderCars(cars) {
     const container = document.getElementById("car-list");
-    let html = "";
 
-    if (!cars || cars.length === 0) {
+    if (!Array.isArray(cars) || cars.length === 0) {
         container.innerHTML = "<p>Không tìm thấy xe phù hợp</p>";
         return;
     }
 
+    let html = "";
+
     cars.forEach(car => {
-        const imgPath = `/${car.imageUrl.replace("car_images", "car-images")}`;
+        const imgPath = car.imageUrl
+            ? `/${car.imageUrl.replace("car_images", "car-images")}`
+            : "/images/default-car.png";
+
+        const price = car.finalPrice && car.finalPrice > 0
+            ? car.finalPrice
+            : car.price;
 
         html += `
             <div class="card">
                 <img src="${imgPath}" alt="${car.model}">
                 <div class="info">
                     <h3>${car.model}</h3>
-                    <p>Năm sản xuất: ${car.manufactureYear}</p>
-                    <p class="price">${formatPrice(car.finalPrice)}</p>
+                    <p>Năm sản xuất: ${car.manufactureYear || "N/A"}</p>
+                    <p class="price">${formatPrice(price)}</p>
                     <a href="/product_detail?id=${car.id}" class="btn">
                         Xem chi tiết
                     </a>
@@ -80,7 +85,7 @@ function renderCars(cars) {
     container.innerHTML = html;
 }
 
-/* Giá */
 function formatPrice(price) {
+    if (!price || isNaN(price)) return "Liên hệ";
     return price.toLocaleString("vi-VN") + " ₫";
 }

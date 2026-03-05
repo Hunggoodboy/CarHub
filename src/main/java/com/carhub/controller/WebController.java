@@ -3,6 +3,7 @@ package com.carhub.controller;
 import com.carhub.dto.AuthResponse;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.RegisterRequest;
+import com.carhub.entity.Car;
 import com.carhub.service.AuthService;
 import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -30,18 +33,25 @@ public class WebController {
         return "index";
     }
     // Trang chi tiết xe
-    // Trang chi tiết xe
     @GetMapping("/product_detail")
     public String productDetail() {
         return "product_detail";
     }
-
+    
     // Trang đăng nhập
     @GetMapping("/login")
     public String login() {
         return "login";
     }
-
+    // Trang thanh toán 
+    @GetMapping("/payment")
+    public String payment() {
+        return "payment";
+    }
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
     // Trang đăng ký
     @GetMapping("/register")
     public String register(Model model) {

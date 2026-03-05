@@ -15,7 +15,7 @@
     <div class="logo">CarShop</div>
     <nav>
         <a href="#">Trang chủ</a>
-        <a href="customer-view.html">Bán xe</a>
+        <a th:href="@{/customer-view}">Bán xe</a>
         <a href="#" th:href="@{/}">Bảo hành</a>
         <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
         <a href="login.html" th:href="@{/login}">Đăng nhập</a>
@@ -30,15 +30,6 @@
 </section>
 
 <form class="search-box">
-    <input list ="type-options" name = "type" placeholder="Loại xe ....">
-    <datalist id="type-options">
-        <option value="Sedan"></option>
-        <option value="SUV"></option>
-        <option value="MPV"></option>
-        <option value="Coupe"></option>
-        <option value="Pickup"></option>
-    </datalist>
-
     <input list="brand-options" name="brand" placeholder="Hãng xe...">
     <datalist id="brand-options">
         <option value="Toyota"></option>
@@ -87,17 +78,50 @@
     </a>
 </div>
 
-<footer>
-    © 2026 CarShop |
-    <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
-        <i class="fab fa-facebook fa-lg"></i>
-    </a>
-    <a href="https://instagram.com" target="_blank">
-        <i class="fab fa-instagram fa-lg"></i>
-    </a>
-    <a href="https://tiktok.com" target="_blank">
-        <i class="fab fa-tiktok fa-lg"></i>
-    </a>
+<footer class="site-footer">
+    <div class="footer-container">
+
+        <div class="footer-col">
+            <h3>CarShop</h3>
+            <p>
+                Nền tảng mua bán xe uy tín,  
+                mang đến những mẫu xe chất lượng  
+                và trải nghiệm mua sắm an toàn.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Liên kết</h4>
+            <ul>
+                <li><a th:href="@{/index}">Trang chủ</a></li>
+                <li><a href="#">Xe mới</a></li>
+                <li><a href="#">Giỏ hàng</a></li>
+                <li><a href="#">Tài khoản</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Liên hệ</h4>
+            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
+            <p>Hotline: 0999 999 999</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Theo dõi chúng tôi</h4>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 CarShop. All rights reserved.
+    </div>
 </footer>
 </body>
 </html>

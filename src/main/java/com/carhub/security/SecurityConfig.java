@@ -28,10 +28,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**","/car-images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI", "/error", "/product_detail").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI", "/error", "/product_detail","/payment/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/car-images/**", "/webjars/**").permitAll()
                         .requestMatchers("/", "/index", "/register", "/login", "/ChatAI", "/product_detail").permitAll()
-                        .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/cars/**","/api/payment/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

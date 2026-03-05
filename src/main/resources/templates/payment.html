@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PayMent</title>
+
+    <link rel="stylesheet"
+          th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <div class="logo">CarShop</div>
+    <nav>
+        <a th:href="@{/index}">trang chủ</a>
+        <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+        <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="#"><i class="fa-solid fa-user"></i></a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div>
+        <h1>Khám Phá Những Chiếc Xe Của Bạn</h1>
+        <p>Tìm những chiếc xe phù hợp với bạn</p>
+    </div>
+</section>
+
+<section class="payment_section">
+    <div class="payment_container">
+        <h2>Trang thanh toán</h2>
+
+        <div class="payment-box">
+            <h3>Địa chỉ cụ thể</h3>
+
+            <label>Địa chỉ cụ thể</label>
+            <input type="text" name = "street" placeholder="Số nhà , tên đường , ...">
+
+            <div class="row-2">
+                <div>
+                    <label>Xã / Phường</label>
+                    <input type="text" name="ward" placeholder="Nhập xã / phường">
+                </div>
+                <div>
+                    <label>Tỉnh / Thành phố</label>
+                    <input type="text" name = "city" placeholder="Nhập tỉnh/thành phố">
+                </div>
+            </div>
+
+            <label>Số Điện Thoại Liên hệ</label>
+            <input type="text" name = "phone" placeholder="Nhập Số Điện Thoại">
+        </div>
+
+        <div class="payment-box">
+            <h3>Thông tin đơn hàng</h3>
+            <div class="price-row">
+                <span>Giá xe:</span>
+                <span id="finalPrice">--</span>
+            </div>
+        </div>
+
+        <div class="payment-box">
+            <h3>Phương thức thanh toán</h3>
+
+            <label class="radio">
+                <input type="radio" name="paymentMethod" value="COD" checked>
+                Thanh toán khi nhận xe
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="paymentMethod" value = "BANK">
+                Chuyển khoản ngân hàng
+            </label>
+        </div>
+
+        <button class="payment-btn">Xác nhận thanh toán</button>
+    </div>
+</section>
+
+<div id="bill-overlay"></div>
+
+<div id="bill-modal">
+    <span id="close-bill">&times;</span>
+
+    <h3>Hóa đơn thanh toán</h3>
+
+    <p><b>Giá xe:</b> <span id="bill-price"></span></p>
+    <p><b>Địa chỉ:</b> <span id="bill-address"></span></p>
+    <p><b>Số điện thoại:</b> <span id="bill-phone"></span></p>
+    <p><b>Phương thức:</b> <span id="bill-method"></span></p>
+
+    <div id="qr-box">
+        <p><b>Quét mã QR để thanh toán</b></p>
+        <img src="/car-images/qr_bank.jpg" width="200">
+    </div>
+
+    <button id="submit-order-btn" class="btn" >
+        Gửi yêu cầu
+    </button>
+</div>
+<footer class="site-footer">
+    <div class="footer-container">
+
+        <div class="footer-col">
+            <h3>CarShop</h3>
+            <p>
+                Nền tảng mua bán xe uy tín,  
+                mang đến những mẫu xe chất lượng  
+                và trải nghiệm mua sắm an toàn.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Liên kết</h4>
+            <ul>
+                <li><a th:href="@{/index}">Trang chủ</a></li>
+                <li><a href="#">Xe mới</a></li>
+                <li><a href="#">Giỏ hàng</a></li>
+                <li><a href="#">Tài khoản</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Liên hệ</h4>
+            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
+            <p>Hotline: 0999 999 999</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Theo dõi chúng tôi</h4>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 CarShop. All rights reserved.
+    </div>
+</footer>
+<script th:src="@{/js/payment.js}"></script>
+</body>
+</html>
