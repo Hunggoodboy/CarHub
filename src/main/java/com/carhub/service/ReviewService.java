@@ -42,7 +42,7 @@ public class ReviewService {
     }
 
     public void createReview(ReviewsDTO reviewsDTO, Long CarId) {
-        if(userBuyThisCarId(CarId)) {
+//        if(userBuyThisCarId(CarId)) {
             Car car = carRepository.findById(CarId).orElseThrow(() -> new RuntimeException("Car not found"));
             User user = userRepository.findById(userService.getId()).orElseThrow(() -> new RuntimeException("User not found"));
             Reviews reviews = new Reviews();
@@ -52,9 +52,9 @@ public class ReviewService {
             reviews.setRating(reviewsDTO.getRating());
             reviews.setComment(reviewsDTO.getComment());
             reviewsRepository.save(reviews);
-        }
-        else{
-            throw new NotPurchasedException("Bạn chưa mua sản phẩm");
-        }
+//        }
+//        else{
+//            throw new NotPurchasedException("Bạn chưa mua sản phẩm");
+//        }
     }
 }

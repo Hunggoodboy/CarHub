@@ -99,8 +99,17 @@ public class VectorStoreService {
                 Xe được bảo hành tới năm: %s
                 """, car.getName(), car.getModel(), car.getColor(), car.getDescription(), car.getPrice(), car.getDiscount(), car.getStockQuantity(), car.getManufactureYear());
         List<Document> cars = vectorStore.similaritySearch(SearchRequest.builder().query(InformationOfCar).topK(10).build());
-        return cars.stream()
+
+        List<CarDTO> Cars = cars.stream()
                 .map(this::documentToDTO)
                 .collect(Collectors.toList());
+
+        for(CarDTO carDTO : Cars) {
+            carDTO.setImageUrl(carRepository.findImageUrlById(carDTO.getId()));
+        }
+        for(CarDTO carDTO : Cars) {
+            System.out.println(carDTO);
+        }
+        return Cars;
     }
 }

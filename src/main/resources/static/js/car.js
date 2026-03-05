@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         content: content
                     };
 
-                    fetch("/api/reviews", {
+                    fetch(`/api/cars/${carId}`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
