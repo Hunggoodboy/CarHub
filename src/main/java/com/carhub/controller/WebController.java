@@ -5,6 +5,7 @@ import com.carhub.dto.CarDTO;
 import com.carhub.dto.RegisterRequest;
 import com.carhub.entity.Car;
 import com.carhub.service.AuthService;
+import com.carhub.service.UserService;
 import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -27,6 +28,7 @@ public class WebController {
 
     private final CarService carService;
     private final AuthService authService;
+    private final UserService userService;
 
     // Trang chủ
     @GetMapping({"/", "/index"})
@@ -46,6 +48,26 @@ public class WebController {
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+
+    // Trang quên mật khẩu
+    @GetMapping("/forgot-password")
+    public String showForgotPassword() {
+        return "forgot-password";
+    }
+
+    // Xử lý quên mật khẩu
+    @PostMapping("/forgot-password")
+    public String handleForgotPassword(@RequestParam("email") String email,
+                                       @RequestParam("newPassword") String newPassword,
+                                       Model model) {
+        boolean success = userService.resetPasswordByEmail(email, newPassword);
+        if (success) {
+            return "redirect:/login?resetSuccess";
+        } else {
+            model.addAttribute("error", "Email không tồn tại trong hệ thống.");
+            return "forgot-password";
+        }
     }
     // Trang thanh toán
     @GetMapping("/payment")

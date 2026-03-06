@@ -44,8 +44,11 @@
                 </div>
 
                 <div class="auth-card__actions">
-                    <a href="#" class="auth-card__forgot">Quên mật khẩu?</a>
+                    <a th:href="@{/forgot-password}" class="auth-card__forgot">Quên mật khẩu?</a>
                     <button type="submit" class="btn btn--gradient">ĐĂNG NHẬP</button>
+                </div>
+                <div th:if="${param.resetSuccess}" class="alert alert-success" style="color: green; text-align: center; margin-top: 10px;">
+                    Đổi mật khẩu thành công. Vui lòng đăng nhập lại.
                 </div>
             </form>
 

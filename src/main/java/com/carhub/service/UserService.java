@@ -129,4 +129,17 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    // Quên mật khẩu: đặt lại mật khẩu theo email
+    @Transactional
+    public boolean resetPasswordByEmail(String email, String newPassword) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
 }
