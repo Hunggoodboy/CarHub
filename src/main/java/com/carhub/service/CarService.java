@@ -152,6 +152,7 @@ public class CarService {
         }
         return false;
     }
+
     public void saveCarService(String model, Long price, int manufactureYear, String color, String description, MultipartFile imageFile) throws IOException {
         String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
         String filePath = Paths.get("src/main/resources/static/car-images/", fileName).toString();
@@ -165,10 +166,19 @@ public class CarService {
         car.setModel(model);
         carRepository.save(car);
     }
+
     public List<CarDTO> searchByModel(String model) {
         return carRepository.findByModelContainingIgnoreCase(model)
                 .stream()
                 .map(CarDTO::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    // Lưu thông tin xe (dùng cho form customer-view)
+    @Transactional
+    public CarDTO saveCar(Car car) {
+        Car savedCar = carRepository.save(car);
+        return CarDTO.fromEntity(savedCar);
+    }
+
 }
