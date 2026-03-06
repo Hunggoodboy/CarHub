@@ -87,29 +87,6 @@ public class WebController {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
     }
-    @GetMapping("/customer-view")
-    public String showCustomerView(Model model) {
-        model.addAttribute("car", new CarDTO());
-        return "customer-view";
-    }
-
-    @PostMapping("/car/save")
-    public String saveCar(@ModelAttribute CarDTO carDTO,
-                          @RequestParam("model") String model,
-                          @RequestParam("price") Long price,
-                          @RequestParam("manufactureYear") int manufactureYear,
-                          @RequestParam("color") String color,
-                          @RequestParam("description") String description,
-                          @RequestParam("imageFile") MultipartFile imageFile)
-    {
-        try {
-            carService.saveCarService(model, price, manufactureYear, color, description, imageFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return "redirect:/";
-    }
-
     // Xử lý đăng ký
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("registerRequest") RegisterRequest request, Model model) {
