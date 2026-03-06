@@ -32,6 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/car-images/**", "/webjars/**").permitAll()
                         .requestMatchers("/", "/index", "/register", "/login", "/ChatAI", "/product_detail").permitAll()
                         .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
+                        .requestMatchers("/api/password/**").authenticated()
+                        .requestMatchers("/customer-view").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -6,4 +6,5 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig {
+
 }
