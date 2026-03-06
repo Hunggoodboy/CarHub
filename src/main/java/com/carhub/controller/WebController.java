@@ -36,17 +36,18 @@ public class WebController {
         return "index";
     }
     // Trang chi tiết xe
+    // Trang chi tiết xe
     @GetMapping("/product_detail")
     public String productDetail() {
         return "product_detail";
     }
-    
+
     // Trang đăng nhập
     @GetMapping("/login")
     public String login() {
         return "login";
     }
-    // Trang thanh toán 
+    // Trang thanh toán
     @GetMapping("/payment")
     public String payment() {
         return "payment";
@@ -54,16 +55,20 @@ public class WebController {
     public String getMethodName(@RequestParam String param) {
         return new String();
     }
-    
+
     // Trang đăng ký
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
     }
-    @GetMapping("/customer-view") 
+    @GetMapping("/chat-ai")
+    public String chatAI() {
+        return "ChatAI"; // Trả về file ChatAI.html trong templates
+    }
+    @GetMapping("/customer-view")
     public String showCustomerView() {
-        return "customer-view"; 
+        return "customer-view";
     }
     @PostMapping("/car/save")
     public String saveCar(@ModelAttribute CarDTO carDTO,
@@ -81,7 +86,7 @@ public class WebController {
         }
         return "redirect:/";
     }
-    
+
     // Xử lý đăng ký
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("registerRequest") RegisterRequest request, Model model) {
