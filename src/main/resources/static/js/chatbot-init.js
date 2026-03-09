@@ -32,13 +32,74 @@ function toggleChat() {
     chatContainer.classList.toggle('chat-hidden');
 }
 
-function appendMessage(role, text) {
+function scrollMessagesToBottom() {
     const messages = document.getElementById('messages');
-    if (!messages) return;
+    if (!messages) {
+        return;
+    }
 
-    const safeText = (text ?? '').toString();
-    messages.innerHTML += `<div class="message ${role}">${safeText}</div>`;
     messages.scrollTop = messages.scrollHeight;
+}
+
+function createMessageElement(role) {
+    const messages = document.getElementById('messages');
+    if (!messages) {
+        return null;
+    }
+
+    const bubble = document.createElement('div');
+    bubble.className = `message ${role}`;
+    messages.appendChild(bubble);
+    scrollMessagesToBottom();
+    return bubble;
+}
+
+function appendMessage(role, text) {
+    const bubble = createMessageElement(role);
+    if (!bubble) {
+        return;
+    }
+
+    bubble.textContent = (text ?? '').toString();
+    scrollMessagesToBottom();
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function createTypingIndicator() {
+    const bubble = createMessageElement('bot');
+    if (!bubble) {
+        return null;
+    }
+
+    bubble.classList.add('typing-indicator');
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+    return bubble;
+}
+
+async function typeBotMessage(text) {
+    const content = (text ?? '').toString();
+    const bubble = createMessageElement('bot');
+    if (!bubble) {
+        return;
+    }
+
+    if (!content) {
+        bubble.textContent = 'Minh chua co cau tra loi phu hop luc nay.';
+        return;
+    }
+
+    // Keep animation smooth for both short and long answers.
+    const delay = content.length > 300 ? 8 : 16;
+    const step = content.length > 300 ? 2 : 1;
+
+    for (let i = 0; i < content.length; i += step) {
+        bubble.textContent = content.slice(0, i + step);
+        scrollMessagesToBottom();
+        await sleep(delay);
+    }
 }
 
 async function sendMessage() {
@@ -53,8 +114,10 @@ async function sendMessage() {
     input.value = '';
     input.disabled = true;
     if (sendBtn) sendBtn.disabled = true;
+    let typingIndicator = null;
 
     try {
+        typingIndicator = createTypingIndicator();
         const response = await fetch('/ChatAI', {
             method: 'POST',
             headers: {
@@ -68,8 +131,18 @@ async function sendMessage() {
         }
 
         const answer = await response.text();
-        appendMessage('bot', answer || 'Mình chưa có câu trả lời phù hợp lúc này.');
+
+        if (typingIndicator) {
+            await sleep(220);
+            typingIndicator.remove();
+            typingIndicator = null;
+        }
+
+        await typeBotMessage(answer);
     } catch (error) {
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
         appendMessage('bot', 'Xin loi, khong the ket noi den tro ly AI luc nay.');
         console.error('ChatAI request failed:', error);
     } finally {
