@@ -8,7 +8,6 @@ import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,19 +21,27 @@ public class AIChatService {
     }
     
     public String generateAnswer(ChatRequest chatRequest) throws InterruptedException {
+        String question = chatRequest != null ? chatRequest.getQuestion() : null;
+        if (question == null || question.trim().isEmpty()) {
+            return "Ban vui long nhap cau hoi cu the de minh tu van chinh xac hon.";
+        }
+
         List<Document> similarDocument = vectorStore.similaritySearch(
-                SearchRequest.builder().query(chatRequest.getQuestion())
+            SearchRequest.builder().query(question)
                         .topK(4)
                         .build()
         );
         String context = similarDocument.stream().map(Document::getText).collect(Collectors.joining("\n"));
         String promptTemplate = String.format("""
-                Bạn là trợ lý ảo cho shop CarHub,
-                Dưới đây là các thông tin trả lời cho khách(Context):
+            Ban la tro ly ao cho shop CarHub.
+            Cau hoi cua khach:
+            %s
+
+            Duoi day la cac thong tin tham khao (context):
                 %s
-                Bạn hãy là giúp tôi tư vấn cho khách hàng những chiếc xe phù hợp nhé
-                Bạn chỉ nên trả lời đúng câu hỏi của khách hàng chứ đừng trả lời miên man
-                """, context);
+            Hay tu van dung trong pham vi cau hoi, ngan gon, ro rang.
+            Neu context khong du thong tin, hay noi ro dieu do va dat 1-2 cau hoi lam ro nhu cau.
+            """, question, context);
         try {
             return chatClient.prompt().user(promptTemplate).call().content();
         }
