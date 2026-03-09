@@ -62,14 +62,12 @@ public class WebController {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
     }
-    @GetMapping("/chat-ai")
-    public String chatAI() {
-        return "ChatAI"; // Trả về file ChatAI.html trong templates
-    }
     @GetMapping("/customer-view")
-    public String showCustomerView() {
+    public String showCustomerView(Model model) {
+        model.addAttribute("car", new CarDTO());
         return "customer-view";
     }
+
     @PostMapping("/car/save")
     public String saveCar(@ModelAttribute CarDTO carDTO,
                           @RequestParam("model") String model,

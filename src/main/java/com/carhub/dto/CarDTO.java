@@ -3,6 +3,7 @@ package com.carhub.dto;
 import jakarta.persistence.Entity;
 import lombok.*;
 import com.carhub.entity.Car;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class CarDTO {
     private String color;
     private String description;
     private String imageUrl;
+    private MultipartFile imageFile;
     private double price;
     private double discount;
     private double finalPrice;
