@@ -7,7 +7,7 @@
           th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
     <link rel="stylesheet" th:href="@{/css/ChatAI.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-
+    
 
 </head>
 
@@ -80,13 +80,28 @@
 </section>
 
 <script src="/js/car_list.js"></script>
-
+<!-- 
 <div class="floating">
+    <script src="/js/chatbot-init.js"></script>
     <a href="tel:66668888"><i class="fa fa-phone"></i></a>
     <a href="https://zalo.me/66668888" target="_blank">
         <i class="fa fa-comment"></i>
     </a>
+</div> -->
+<div class="floating-container">
+    <a href="tel:096688888" class="floating-item phone-icon">
+        <i class="fa fa-phone"></i>
+    </a>
+
+    <a href="https://zalo.me/096688888" target="_blank" class="floating-item zalo-icon">
+        <i class="fa fa-comment"></i>
+    </a>
+
+    <div class="floating-item chat-ai-icon" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </div>
 </div>
+
 <script src="/js/chatbot-init.js"></script>
 <!--<footer>-->
 <!--    © 2026 CarShop |-->

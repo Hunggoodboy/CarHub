@@ -80,12 +80,14 @@ public class VectorStoreService {
             System.out.println(String.format("Đã nạp %s dữ liệu  xe vào VectorStore",  documentList.size()));
         }
     }
+
     public void loadCar(Car car) {
         Document docCar = carToDocument(car);
         List<Document> toList = new ArrayList<>();
         toList.add(docCar);
         vectorStore.add(toList);
     }
+
     public List<CarDTO> getCarsSimilar(Long id){
         Car car = carRepository.findById(id).orElse(null);
         String InformationOfCar = String.format("""
