@@ -86,12 +86,6 @@ async function typeBotMessage(text) {
         return;
     }
 
-    if (!content) {
-        bubble.textContent = 'Minh chua co cau tra loi phu hop luc nay.';
-        return;
-    }
-
-    // Keep animation smooth for both short and long answers.
     const delay = content.length > 300 ? 8 : 16;
     const step = content.length > 300 ? 2 : 1;
 
