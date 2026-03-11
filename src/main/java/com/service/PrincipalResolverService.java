@@ -30,7 +30,7 @@ public class PrincipalResolverService implements ApplicationRunner {
     public AppPrincipal getPrincipal(Authentication auth) {
         if(auth.getPrincipal() instanceof OAuth2User oAuth2User){
             String emailOfUser = oAuth2User.getAttribute("email");
-            User.Role role = userRepository.findRoleByEmail(emailOfUser).orElseThrow(() -> new RuntimeException("User not found"));
+            User.Role role = userRepository.findByEmail(emailOfUser).orElseThrow(() -> new RuntimeException("User not found")).getRole();
             return principalCache.computeIfAbsent(emailOfUser, val -> {
                     return new AppPrincipal(userRepository.findIdByEmail(emailOfUser).orElseThrow(() -> new RuntimeException("Can't find this user")), emailOfUser, "OAuth2User", role);
             });
