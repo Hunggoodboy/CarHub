@@ -1,10 +1,12 @@
-package com.controller;
+package com.carhub.controller;
 
-import com.dto.CarDTO;
-import com.dto.CarDetailResponse;
-import com.dto.ReviewsDTO;
-import com.service.CarService;
-import com.service.ReviewService;
+import com.carhub.dto.CarDTO;
+import com.carhub.dto.CarDetailResponse;
+import com.carhub.dto.ReviewsDTO;
+import com.carhub.entity.Car;
+import com.carhub.service.CarService;
+import com.carhub.service.ReviewService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.List;
 public class CarController {
 
     private final CarService carService;
+    private final ReviewService reviewService;
 
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {
@@ -34,10 +37,18 @@ public class CarController {
         return ResponseEntity.ok(car);
     }
 
-    @PostMapping("/{id}")
-    public  ResponseEntity<Void> createdReviews(@PathVariable Long id, @RequestBody ReviewsDTO reviewsDTO) {
-        reviewService.createReview(reviewsDTO, id);
-        return ResponseEntity.noContent().build();
+    @RestController
+    @RequestMapping("/api/reviews")
+    @AllArgsConstructor
+    public class ReviewController {
+        @PostMapping("/{id}")
+         public ResponseEntity<Void> createdReviews(@PathVariable Long id,
+                                               @RequestBody ReviewsDTO reviewsDTO) {
+
+            reviewService.createReview(reviewsDTO, id);
+
+            return ResponseEntity.noContent().build();
+        }
     }
 
     /**

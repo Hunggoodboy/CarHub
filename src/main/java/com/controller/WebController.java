@@ -1,20 +1,20 @@
-package com.controller;
+package com.carhub.controller;
 
-import com.dto.AuthResponse;
-import com.dto.CarDTO;
-import com.dto.RegisterRequest;
-import com.service.AuthService;
-import com.service.CarService;
+import com.carhub.dto.AuthResponse;
+import com.carhub.dto.CarDTO;
+import com.carhub.dto.RegisterRequest;
+import com.carhub.entity.Car;
+import com.carhub.service.AuthService;
+import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -32,27 +32,36 @@ public class WebController {
         model.addAttribute("cars", cars);
         return "index";
     }
-    // Trang chi tiết xe
-    // Trang chi tiết xe
+//     Trang chi tiết xe
     @GetMapping("/product_detail")
     public String productDetail() {
         return "product_detail";
     }
-
+    
     // Trang đăng nhập
     @GetMapping("/login")
     public String login() {
         return "login";
     }
-    // Trang thanh toán
+    // Trang thanh toán 
     @GetMapping("/payment")
     public String payment() {
         return "payment";
     }
+    // Trang bao hành
+    @GetMapping("/warranty")
+    public String warranty(){
+        return "warranty";
+    }
+    // Trang xe đã mua
+    @GetMapping("/my-cars")
+    public String myCarsPage() {
+        return "purchased_cars";
+    }
     public String getMethodName(@RequestParam String param) {
         return new String();
     }
-
+    
     // Trang đăng ký
     @GetMapping("/register")
     public String register(Model model) {

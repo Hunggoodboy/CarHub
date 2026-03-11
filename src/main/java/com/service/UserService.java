@@ -4,8 +4,11 @@ import com.dto.UserDTO;
 import com.entity.User;
 import com.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +24,19 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     //Lấy id của người dùng hiện tại
-    public Long getId(){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(username);
-        return getIdByUsername(username).orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
+    public Long getId(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Bạn chưa đăng nhập!");
+        }
+        if(authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
+            String email = oAuth2User.getAttribute("email");
+            return getUserByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ email")).getId();
+        }
+        else if(authentication.getPrincipal() instanceof UserDetails) {
+            String username = authentication.getName();
+            return getIdByUsername(username).orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
+        }
+        throw new RuntimeException("Người dùng chưa đăng nhập");
     }
 
     // Lấy thông tin user theo ID

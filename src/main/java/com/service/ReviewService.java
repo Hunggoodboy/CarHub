@@ -1,18 +1,26 @@
-package com.service;
+package com.carhub.service;
 
-import com.dto.ReviewsDTO;
-import com.entity.Car;
-import com.entity.Reviews;
-import com.entity.User;
-import com.repository.CarRepository;
-import com.repository.OrderDetailRepository;
-import com.repository.ReviewsRepository;
-import com.repository.UserRepository;
+import com.carhub.controller.UserController;
+import com.carhub.dto.CarDTO;
+import com.carhub.dto.ReviewsDTO;
+import com.carhub.dto.UserDTO;
+import com.carhub.entity.Car;
+import com.carhub.entity.OrderDetail;
+import com.carhub.entity.Reviews;
+import com.carhub.entity.User;
+import com.carhub.exception.NotPurchasedException;
+import com.carhub.repository.CarRepository;
+import com.carhub.repository.OrderDetailRepository;
+import com.carhub.repository.ReviewsRepository;
+import com.carhub.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,14 +38,16 @@ public class ReviewService {
                 .map(ReviewsDTO::fromEntity).collect(Collectors.toList());
     }
     public boolean userBuyThisCarId(Long carId) {
-        Long userId = userService.getId();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userService.getId(authentication);
         return orderDetailRepository.findOrderDetailByCarIdAndUserId(userId, carId).isPresent();
     }
 
     public void createReview(ReviewsDTO reviewsDTO, Long CarId) {
-//        if(userBuyThisCarId(CarId)) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(userBuyThisCarId(CarId)) {
             Car car = carRepository.findById(CarId).orElseThrow(() -> new RuntimeException("Car not found"));
-            User user = userRepository.findById(userService.getId()).orElseThrow(() -> new RuntimeException("User not found"));
+            User user = userRepository.findById(userService.getId(authentication)).orElseThrow(() -> new RuntimeException("User not found"));
             Reviews reviews = new Reviews();
             reviews.setCreatedAt(LocalDateTime.now());
             reviews.setUser(user);
@@ -45,9 +55,9 @@ public class ReviewService {
             reviews.setRating(reviewsDTO.getRating());
             reviews.setComment(reviewsDTO.getComment());
             reviewsRepository.save(reviews);
-//        }
-//        else{
-//            throw new NotPurchasedException("Bạn chưa mua sản phẩm");
-//        }
+        }
+        else{
+            throw new NotPurchasedException("Bạn chưa mua sản phẩm");
+        }
     }
 }

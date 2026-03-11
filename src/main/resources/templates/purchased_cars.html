@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <meta charset="UTF-8">
+        <title>Các xe đã mua</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+    </head>
+    
+    <body>
+        <header>
+            <div class="logo">CarShop</div>
+            <nav>
+                <a th:href="@{/index}">Trang chủ</a>
+            </nav>
+        </header>
+        <section class="hero">
+            <div>
+                <h1>Khám Phá Những Chiếc Xe Của Bạn</h1>
+                <p>Tìm những chiếc xe phù hợp với bạn</p>
+            </div>
+        </section>
+        <main class="purchased-main">
+            <h2>Danh sách xe đã mua</h2>
+            <div id="loading-msg">Đang tải danh sách xe</div>
+            <div id="purchased-car-list" class="product-grid"></div>
+        </main>
+        <footer class="site-footer">
+            <div class="footer-container">
+
+                <div class="footer-col">
+                    <h3>CarShop</h3>
+                    <p>
+                        Nền tảng mua bán xe uy tín,
+                        mang đến những mẫu xe chất lượng
+                        và trải nghiệm mua sắm an toàn.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a th:href="@{/index}">Trang chủ</a></li>
+                        <li><a href="#">Xe mới</a></li>
+                        <li><a href="#">Giỏ hàng</a></li>
+                        <li><a href="#">Tài khoản</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Liên hệ</h4>
+                    <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
+                    <p>Hotline: 0999 999 999</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
+                        <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                © 2026 CarShop. All rights reserved.
+            </div>
+        </footer>
+        <srcipt th:src="@{/js/purchased_car.js}"></srcipt>
+    </body>
+</html>
