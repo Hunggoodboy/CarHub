@@ -6,6 +6,8 @@ import com.carhub.dto.ReviewsDTO;
 import com.carhub.entity.Car;
 import com.carhub.service.CarService;
 import com.carhub.service.ReviewService;
+
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +38,21 @@ public class CarController {
         return ResponseEntity.ok(car);
     }
 
-    @PostMapping("/{id}")
-    public  ResponseEntity<Void> createdReviews(@PathVariable Long id, @RequestBody ReviewsDTO reviewsDTO) {
-        reviewService.createReview(reviewsDTO, id);
-        return ResponseEntity.noContent().build();
+    @RestController
+    @RequestMapping("/api/reviews")
+    @AllArgsConstructor
+    public class ReviewController {
+
+        private final ReviewService reviewService;
+
+        @PostMapping("/{id}")
+         public ResponseEntity<Void> createdReviews(@PathVariable Long id,
+                                               @RequestBody ReviewsDTO reviewsDTO) {
+
+            reviewService.createReview(reviewsDTO, id);
+
+            return ResponseEntity.noContent().build();
+        }
     }
 
     /**

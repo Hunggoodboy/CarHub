@@ -1,4 +1,4 @@
-console.log("car.js loaded");
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -143,7 +143,7 @@ function setupComment(carId) {
             return;
         }
 
-        fetch(`/api/reviews`, {
+        fetch(`/api/reviews/${carId}`, {
 
             method: "POST",
 
@@ -153,7 +153,6 @@ function setupComment(carId) {
 
             body: JSON.stringify({
 
-                carId: carId,
                 comment: content,
                 rating: selectedRating
 
