@@ -17,8 +17,8 @@
     <nav>
         <a href="#">Trang chủ</a>
         <a th:href="@{/customer-view}">Bán xe</a>
-        <a href="#" th:href="@{/}">Bảo hành</a>
-        <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+        <a th:href="@{/warranty}">Bảo hành</a>
+        <a th:href="@{/my-cars}">Xe đã mua</a>
         <a href="login.html" th:href="@{/login}">Đăng nhập</a>
     </nav>
 </header>
@@ -75,8 +75,7 @@
 <section id="cars" class="products">
     <h2>Danh sách xe đang bán</h2>
 
-    <div id="car-list" class="product-grid">
-    </div>
+    <div id="car-list" class="product-grid"></div>
 </section>
 
 <script src="/js/car_list.js"></script>
@@ -88,17 +87,6 @@
     </a>
 </div>
 <script src="/js/chatbot-init.js"></script>
-<!--<footer>-->
-<!--    © 2026 CarShop |-->
-<!--    <a href="https://www.facebook.com/HocvienPTIT" target="_blank">-->
-<!--        <i class="fab fa-facebook fa-lg"></i>-->
-<!--    </a>-->
-<!--    <a href="https://instagram.com" target="_blank">-->
-<!--        <i class="fab fa-instagram fa-lg"></i>-->
-<!--    </a>-->
-<!--    <a href="https://tiktok.com" target="_blank">-->
-<!--        <i class="fab fa-tiktok fa-lg"></i>-->
-<!--    </a>-->
 
 <footer class="site-footer">
     <div class="footer-container">
@@ -134,8 +122,8 @@
                 <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
                     <i class="fab fa-facebook-f"></i>
                 </a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
+                <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
             </div>
         </div>
 

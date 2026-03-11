@@ -16,26 +16,20 @@ import java.time.LocalDateTime;
 public class Reviews implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column(name = "rating")
     private Long rating;
 
-    @Column(name = "comment")
     private String comment;
 
-
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 }

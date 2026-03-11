@@ -1,131 +1,128 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Chi tiết xe | CarShop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
-<body>
-<header>
-    <div class="logo">CarShop</div>
-    <nav>
-        <a th:href="@{/index}">Trang chủ</a>
-        <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
-        <a href="#" title="Giỏ hàng"><i class="fa-solid fa-cart-shopping"></i></a>
-        <a href="#" title="Thông tin tài khoản"><i class="fa-solid fa-user"></i></a>
-    </nav>
-</header>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chi tiết xe | CarShop</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+    </head>
+    <body>
+        <header>
+            <div class="logo">CarShop</div>
+                <nav>
+                    <a th:href="@{/index}">Trang chủ</a>
+                    <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+                    <a href="#" title="Giỏ hàng"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <a href="#" title="Thông tin tài khoản"><i class="fa-solid fa-user"></i></a>
+                </nav>
+        </header>
 
-<section class="hero">
-    <div>
-        <h1>Khám Phá Những Mẫu Xe Mới</h1>
-        <p>Tìm chiếc xe phù hợp với bạn</p>
-    </div>
-</section>
+        <section class="hero">
+            <div>
+                <h1>Khám Phá Những Mẫu Xe Mới</h1>
+                <p>Tìm chiếc xe phù hợp với bạn</p>
+            </div>
+        </section>
 
-<main class="product-detail">
-    <div id="loading-msg" style="text-align: center; padding: 20px;">Đang tải thông tin xe...</div>
+        <main class="product-detail">
+            <div id="loading-msg" style="text-align: center; padding: 20px;">Đang tải thông tin xe...</div>
 
-    <div class="detail-container" id="car-content" style="display: none;">
-        <div class="detail-image">
-            <img id="car-img" src="" alt="Car image">
-        </div>
-
-        <div class="detail-info">
-            <h4 id="car-model">Tên xe</h4>
-
-            <div class="detail-price">
-                <span id="car-final-price" style="color: red;">0</span> đ
-                <del id="car-old-price" style="font-size: 0.8em; color: #888; margin-left: 10px; display: none;"></del>
+            <div class="detail-container" id="car-content" style="display: none;">
+                <div class="detail-image">
+                <img id="car-img" src="" alt="Car image">
             </div>
 
-            <ul class="car-specs">
-                <li><strong>Hãng:</strong> <span id="car-brand"></span></li>
-                <li><strong>Màu sắc:</strong> <span id="car-color"></span></li>
-                <li><strong>Năm sản xuất:</strong> <span id="car-year"></span></li>
-                <li><strong>Xuất xứ:</strong> <span id="car-origin"></span></li>
-                <li><strong>Số lượng kho:</strong> <span id="car-stock"></span></li>
-                <li><strong>Mô tả:</strong> <p id="car-desc"></p></li>
-            </ul>
+                <div class="detail-info">
+                    <h4 id="car-model">Tên xe</h4>
 
-            <div class="detail-actions">
-                <a id="buy-now-btn" href="#" class="btn">Mua ngay</a>
-                <a href="#" class="btn"><i class="fa-solid fa-cart-plus"></i> Thêm giỏ hàng</a>
+                    <div class="detail-price">
+                        <span id="car-final-price" style="color: red;">0</span> đ
+                        <del id="car-old-price" style="font-size: 0.8em; color: #888; margin-left: 10px; display: none;"></del>
+                    </div>
+
+                    <ul class="car-specs">
+                        <li><strong>Hãng:</strong> <span id="car-brand"></span></li>
+                        <li><strong>Màu sắc:</strong> <span id="car-color"></span></li>
+                        <li><strong>Năm sản xuất:</strong> <span id="car-year"></span></li>
+                        <li><strong>Xuất xứ:</strong> <span id="car-origin"></span></li>
+                        <li><strong>Số lượng kho:</strong> <span id="car-stock"></span></li>
+                        <li><strong>Mô tả:</strong> <p id="car-desc"></p></li>
+                    </ul>
+
+                    <div class="detail-actions">
+                        <a id="buy-now-btn" href="#" class="btn">Mua ngay</a>
+                        <a href="#" class="btn"><i class="fa-solid fa-cart-plus"></i> Thêm giỏ hàng</a>
+                    </div>
+                </div>
             </div>
-        </div>
-
-    </div>
-    
-    <section class="comment-section">
-        <h3>Đánh giá & Bình luận</h3>
-
-        <div class="comment-form">
-            <label for="comment-input">Viết chia sẻ của bạn</label>
-            <div class="comment-input-box">
-                <input
-                        type="text"
-                        id="comment-input"
-                        placeholder="Chia sẻ trải nghiệm của bạn..."
-                >
-                <button id="send-comment-btn" class="btn">Gửi</button>
+            <div class="comment-form">
+                <label>Đánh giá của bạn</label>
+                <div class="rating-box">
+                    <i class="fa-solid fa-star star" data-value="1"></i>
+                    <i class="fa-solid fa-star star" data-value="2"></i>
+                    <i class="fa-solid fa-star star" data-value="3"></i>
+                    <i class="fa-solid fa-star star" data-value="4"></i>
+                    <i class="fa-solid fa-star star" data-value="5"></i>
+                </div>
+                <div class="comment-input-box">
+                    <input type="text" id="comment-input" placeholder="Chia sẻ trải nghiệm của bạn">
+                    <button id="send-comment-btn" class="btn">Gửi</button>
+                </div>
             </div>
-        </div>
-
-        <div id="comment-list" class="comment-list">
-            <p>Chưa có bình luận nào.</p>
-        </div>
-    </section>
-    <h3>Xe liên quan</h3>
-    <div id="related-car-list" class="related-cars"></div>
-</main>
-
-<footer class="site-footer">
-    <div class="footer-container">
-
-        <div class="footer-col">
-            <h3>CarShop</h3>
-            <p>
-                Nền tảng mua bán xe uy tín,  
-                mang đến những mẫu xe chất lượng  
-                và trải nghiệm mua sắm an toàn.
-            </p>
-        </div>
-
-        <div class="footer-col">
-            <h4>Liên kết</h4>
-            <ul>
-                <li><a th:href="@{/index}">Trang chủ</a></li>
-                <li><a href="#">Xe mới</a></li>
-                <li><a href="#">Giỏ hàng</a></li>
-                <li><a href="#">Tài khoản</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4>Liên hệ</h4>
-            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
-            <p>Hotline: 0999 999 999</p>
-        </div>
-
-        <div class="footer-col">
-            <h4>Theo dõi chúng tôi</h4>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
+            <div id="comment-list" class="comment-list">
+                <p>Chưa có bình luận nào.</p>
             </div>
-        </div>
+            </section>
+                <h3>Xe liên quan</h3>
+            <div id="related-car-list" class="product-grid"></div>
+        </main>
 
-    </div>
+        <footer class="site-footer">
+            <div class="footer-container">
 
-    <div class="footer-bottom">
-        © 2026 CarShop. All rights reserved.
-    </div>
-</footer>
+                <div class="footer-col">
+                    <h3>CarShop</h3>
+                   <p>
+                        Nền tảng mua bán xe uy tín,  
+                        mang đến những mẫu xe chất lượng  
+                        và trải nghiệm mua sắm an toàn.
+                    </p>
+                </div>
 
-<script src="/js/car.js"></script>
-</body>
+                <div class="footer-col">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a th:href="@{/index}">Trang chủ</a></li>
+                        <li><a href="#">Xe mới</a></li>
+                        <li><a href="#">Giỏ hàng</a></li>
+                        <li><a href="#">Tài khoản</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Liên hệ</h4>
+                    <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
+                    <p>Hotline: 0999 999 999</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
+                        <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                © 2026 CarShop. All rights reserved.
+            </div>
+        </footer>
+
+        <script src="/js/car.js"></script>
+    </body>
 </html>

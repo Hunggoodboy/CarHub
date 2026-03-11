@@ -52,6 +52,16 @@ public class WebController {
     public String payment() {
         return "payment";
     }
+    // Trang bao hành
+    @GetMapping("/warranty")
+    public String warranty(){
+        return "warranty";
+    }
+    // Trang xe đã mua
+    @GetMapping("/my-cars")
+    public String myCarsPage() {
+        return "purchased_cars";
+    }
     public String getMethodName(@RequestParam String param) {
         return new String();
     }

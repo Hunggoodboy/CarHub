@@ -100,8 +100,9 @@ nav a:hover {
     object-fit: cover;
 }
 
-.card .info {
+.card .info{
     padding: 15px;
+    text-align: center;
 }
 
 .price {
@@ -300,7 +301,36 @@ footer {
 .related-cars .btn:hover {
     background-color: #125aa0;
 }
+.rating-box{
+    display:flex;
+    gap:6px;
+    margin:10px 0;
+}
 
+.star{
+    font-size:22px;
+    cursor:pointer;
+    color:#ccc;
+    transition:0.2s;
+}
+
+.star.active{
+    color:#f5b301;
+}
+
+.star:hover{
+    transform:scale(1.2);
+}
+
+.review-rating{
+    color:#f5b301;
+    font-size:14px;
+}
+
+.review-item{
+    padding:10px;
+    border-bottom:1px solid #eee;
+}
 .comment-section {
     margin-top: 40px;
     padding-top: 20px;
@@ -551,6 +581,69 @@ footer {
     font-size: 22px;
     cursor: pointer;
     color: red;
+}
+
+.warrenty_section{
+    width: 100%;
+    padding: 60px 20px;
+    background: #f5f6fa;
+    display: flex;
+    justify-content: center;
+}
+
+.warrenty_container{
+    width: 100%;
+    max-width: 700px;
+}
+
+.warrenty_container h2{
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+.warrenty-box{
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.warrenty-box h3{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
+}
+
+.warrenty-box label{
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #444;
+}
+
+.warrenty-box input{
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.warrenty-box input:focus{
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 3px rgba(0,123,255,0.3);
+}
+
+@media (max-width:600px){
+    .row-2{
+        flex-direction: column;
+    }
 }
 
 .site-footer {
