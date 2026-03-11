@@ -52,9 +52,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 oldPriceEl.style.display = "none";
             }
 
-
+            // ===== LOAD REVIEW TỪ BE =====
             renderReviews(data.reviews);
 
+            // ===== GỬI REVIEW SANG BE =====
             const submitBtn = document.getElementById("send-comment-btn");
             const commentInput = document.getElementById("comment-input");
 
@@ -97,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
 
-
+            // ===== XE LIÊN QUAN =====
             if (Array.isArray(data.carsSimilar)) {
                 const relatedCars = data.carsSimilar
                     .filter(c => c.id !== car.id)

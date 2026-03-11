@@ -17,7 +17,6 @@ import java.util.List;
 public class CarController {
 
     private final CarService carService;
-    private final ReviewService reviewService;
 
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {

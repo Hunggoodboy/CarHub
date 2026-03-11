@@ -1,9 +1,5 @@
-package com.config;
+package com.carhub.config;
 
-import com.dto.AppPrincipal;
-import com.service.Oauth2UserService;
-import com.service.PrincipalResolverService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
