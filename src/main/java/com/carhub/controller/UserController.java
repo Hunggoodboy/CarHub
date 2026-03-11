@@ -6,9 +6,13 @@ import com.carhub.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,7 +31,13 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/me")
+    @ResponseBody
+    public Map<String, Object> getCurrentUser(Authentication authentication) {
 
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        return oAuth2User.getAttributes();
+    }
     /**
      * Lấy thông tin user theo username
      * GET /api/users/username/{username}

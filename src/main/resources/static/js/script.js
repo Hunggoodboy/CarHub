@@ -56,7 +56,11 @@ function appendMessage(sender, text) {
     // Tự động cuộn xuống dưới cùng
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
-
+function toggleChat() {
+    const chatContainer = document.getElementById('chat-container');
+    // Toggle class để ẩn/hiện
+    chatContainer.classList.toggle('chat-hidden');
+}
 // 3. Hàm xử lý khi nhấn Enter
 function handleKeyPress(e) {
     if (e.key === 'Enter') sendMessage();

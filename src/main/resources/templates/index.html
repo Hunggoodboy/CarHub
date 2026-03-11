@@ -5,6 +5,7 @@
     <title>Car Shop</title>
     <link rel="stylesheet"
           th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/ChatAI.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
 
@@ -16,8 +17,8 @@
     <nav>
         <a href="#">Trang chủ</a>
         <a th:href="@{/customer-view}">Bán xe</a>
-        <a href="#" th:href="@{/}">Bảo hành</a>
-        <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+        <a th:href="@{/warranty}">Bảo hành</a>
+        <a th:href="@{/my-cars}">Xe đã mua</a>
         <a href="login.html" th:href="@{/login}">Đăng nhập</a>
     </nav>
 </header>
@@ -30,6 +31,15 @@
 </section>
 
 <form class="search-box">
+    <input list ="type-options" name = "type" placeholder="Loại xe ....">
+    <datalist id="type-options">
+        <option value="Sedan"></option>
+        <option value="SUV"></option>
+        <option value="MPV"></option>
+        <option value="Coupe"></option>
+        <option value="Pickup"></option>
+    </datalist>
+
     <input list="brand-options" name="brand" placeholder="Hãng xe...">
     <datalist id="brand-options">
         <option value="Toyota"></option>
@@ -65,8 +75,7 @@
 <section id="cars" class="products">
     <h2>Danh sách xe đang bán</h2>
 
-    <div id="car-list" class="product-grid">
-    </div>
+    <div id="car-list" class="product-grid"></div>
 </section>
 
 <script src="/js/car_list.js"></script>
@@ -77,6 +86,7 @@
         <i class="fa fa-comment"></i>
     </a>
 </div>
+<script src="/js/chatbot-init.js"></script>
 
 <footer class="site-footer">
     <div class="footer-container">
@@ -84,8 +94,8 @@
         <div class="footer-col">
             <h3>CarShop</h3>
             <p>
-                Nền tảng mua bán xe uy tín,  
-                mang đến những mẫu xe chất lượng  
+                Nền tảng mua bán xe uy tín,
+                mang đến những mẫu xe chất lượng
                 và trải nghiệm mua sắm an toàn.
             </p>
         </div>
@@ -112,8 +122,8 @@
                 <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
                     <i class="fab fa-facebook-f"></i>
                 </a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
+                <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
             </div>
         </div>
 

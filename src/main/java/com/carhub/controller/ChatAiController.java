@@ -4,9 +4,11 @@ import com.carhub.dto.ChatRequest;
 import com.carhub.service.ai.AIChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,11 +16,11 @@ public class ChatAiController {
 
     private final AIChatService AIChatService;
 
-//    @GetMapping("/ChatAI")
-//    public ModelAndView getChatAI() {
-//        return new ModelAndView("ChatAI");
-//    }
-
+    @GetMapping("/ChatAI")
+    public String getChatAI() {
+        return "ChatAI";
+    }
+    
     @PostMapping("/ChatAI")
     public ResponseEntity<String> chat(@RequestBody ChatRequest chatRequest) throws InterruptedException {
         String aiChatContent = AIChatService.generateAnswer(chatRequest);

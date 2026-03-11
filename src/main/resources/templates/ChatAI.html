@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring AI Chat</title>
-    <link rel="stylesheet" th:href="@{/css/ChatAI.css}">
-</head>
-<body>
+<div class="chatbot-wrapper">
+    <button onclick="toggleChat()" class="chatbot-btn" title="Chat với AI">
+        <i class="fas fa-comments"></i>
+        <span class="btn-text">Chat AI</span>
+    </button>
+</div>
 
-<div id="chat-container">
-    <div id="header">Spring AI Assistant</div>
+<div id="chat-container" class="chat-hidden">
+    <div id="header">
+        Spring AI Assistant
+        <span onclick="toggleChat()" style="float:right; cursor:pointer;">&times;</span>
+    </div>
     <div id="messages">
         <div class="message bot">Xin chào! Tôi có thể giúp gì cho bạn?</div>
     </div>
@@ -18,8 +18,3 @@
         <button onclick="sendMessage()" id="sendBtn">Gửi</button>
     </div>
 </div>
-
-<script th:src="@{js/script.js}"></script>
-
-</body>
-</html>

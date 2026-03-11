@@ -12,9 +12,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +31,7 @@ public class CarService {
     private final BrandRepository brandRepository;
     private final ReviewsRepository reviewsRepository;
     private final VectorStoreService vectorStoreService;
+    private final ReviewService reviewService;
     // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()
@@ -40,20 +47,15 @@ public class CarService {
         return car.orElse(null);
     }
     // Lấy Reviews theo id xe
-    public List<ReviewsDTO> getReviewsByCarId(Long id) {
-        return reviewsRepository.getReviewsByCarId(id)
-                .stream()
-                .map(ReviewsDTO::fromEntity).collect(Collectors.toList());
-    }
     // Lấy Các Mẫu Xe Tương Tự
     public List<CarDTO> getCarsSimilarByCarId(Long id) {
         return vectorStoreService.getCarsSimilar(id);
-
     }
+
     public CarDetailResponse getCarDetail(Long id){
         CarDetailResponse carDetail = new CarDetailResponse();
         carDetail.setCar(getCarById(id));
-        carDetail.setReviews(getReviewsByCarId(id));
+        carDetail.setReviews(reviewService.getReviewsByCarId(id));
         carDetail.setCarsSimilar(getCarsSimilarByCarId(id));
         return carDetail;
     }
@@ -150,7 +152,19 @@ public class CarService {
         }
         return false;
     }
-
+    public void saveCarService(String model, Long price, int manufactureYear, String color, String description, MultipartFile imageFile) throws IOException {
+        String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+        String filePath = Paths.get("src/main/resources/static/car-images/", fileName).toString();
+        Files.copy(imageFile.getInputStream(), Path.of(filePath));
+        Car car = new Car();
+        car.setManufactureYear(manufactureYear);
+        car.setPrice(price);
+        car.setDescription(description);
+        car.setColor(color);
+        car.setImageUrl("car-images/" + fileName);
+        car.setModel(model);
+        carRepository.save(car);
+    }
     public List<CarDTO> searchByModel(String model) {
         return carRepository.findByModelContainingIgnoreCase(model)
                 .stream()

@@ -7,15 +7,15 @@ import com.carhub.entity.Car;
 import com.carhub.service.AuthService;
 import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
@@ -32,7 +32,7 @@ public class WebController {
         model.addAttribute("cars", cars);
         return "index";
     }
-    // Trang chi tiết xe
+//     Trang chi tiết xe
     @GetMapping("/product_detail")
     public String productDetail() {
         return "product_detail";
@@ -48,6 +48,16 @@ public class WebController {
     public String payment() {
         return "payment";
     }
+    // Trang bao hành
+    @GetMapping("/warranty")
+    public String warranty(){
+        return "warranty";
+    }
+    // Trang xe đã mua
+    @GetMapping("/my-cars")
+    public String myCarsPage() {
+        return "purchased_cars";
+    }
     public String getMethodName(@RequestParam String param) {
         return new String();
     }
@@ -57,6 +67,28 @@ public class WebController {
     public String register(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register";
+    }
+    @GetMapping("/customer-view")
+    public String showCustomerView(Model model) {
+        model.addAttribute("car", new CarDTO());
+        return "customer-view";
+    }
+
+    @PostMapping("/car/save")
+    public String saveCar(@ModelAttribute CarDTO carDTO,
+                          @RequestParam("model") String model,
+                          @RequestParam("price") Long price,
+                          @RequestParam("manufactureYear") int manufactureYear,
+                          @RequestParam("color") String color,
+                          @RequestParam("description") String description,
+                          @RequestParam("imageFile") MultipartFile imageFile)
+    {
+        try {
+            carService.saveCarService(model, price, manufactureYear, color, description, imageFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:/";
     }
 
     // Xử lý đăng ký

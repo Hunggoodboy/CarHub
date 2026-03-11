@@ -1,0 +1,35 @@
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Tạo HTML cho nút và khung chat
+    const chatbotHTML = `
+        <div class="chatbot-wrapper">
+            <button onclick="toggleChat()" class="chatbot-btn" title="Chat với AI">
+                <i class="fas fa-comments"></i>
+                <span class="btn-text">Chat AI</span>
+            </button>
+        </div>
+        <div id="chat-container" class="chat-hidden">
+            <div id="header">
+                Spring AI Assistant
+                <span onclick="toggleChat()" style="float:right; cursor:pointer;">&times;</span>
+            </div>
+            <div id="messages">
+                <div class="message bot">Xin chào! Tôi có thể giúp gì cho bạn?</div>
+            </div>
+            <div id="input-area">
+                <input type="text" id="userInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" id="sendBtn">Gửi</button>
+            </div>
+        </div>
+    `;
+
+    // 2. Chèn vào cuối thẻ body
+    document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+});
+
+// 3. Hàm Toggle hoạt động xuyên suốt
+function toggleChat() {
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+        chatContainer.classList.toggle('chat-hidden');
+    }
+}

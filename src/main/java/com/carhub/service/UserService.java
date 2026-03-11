@@ -4,7 +4,11 @@ import com.carhub.dto.UserDTO;
 import com.carhub.entity.User;
 import com.carhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +23,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    //Lấy id của người dùng hiện tại
+    public Long getId(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Bạn chưa đăng nhập!");
+        }
+        if(authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
+            String email = oAuth2User.getAttribute("email");
+            return getUserByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ email")).getId();
+        }
+        else if(authentication.getPrincipal() instanceof UserDetails) {
+            String username = authentication.getName();
+            return getIdByUsername(username).orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
+        }
+        throw new RuntimeException("Người dùng chưa đăng nhập");
+    }
+
     // Lấy thông tin user theo ID
     public Optional<UserDTO> getUserById(Long id) {
         return userRepository.findById(id)
@@ -29,6 +49,11 @@ public class UserService {
     public Optional<UserDTO> getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(UserDTO::fromEntity);
+    }
+
+    public Optional<Long> getIdByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::getId);
     }
 
     // Lấy thông tin user theo email
@@ -44,6 +69,7 @@ public class UserService {
                 .map(UserDTO::fromEntity)
                 .collect(Collectors.toList());
     }
+
 
     // Tìm kiếm user theo tên
     public List<UserDTO> searchUserByName(String name) {
