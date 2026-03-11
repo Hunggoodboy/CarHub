@@ -36,10 +36,21 @@ public class CarController {
         return ResponseEntity.ok(car);
     }
 
-    @PostMapping("/{id}")
-    public  ResponseEntity<Void> createdReviews(@PathVariable Long id, @RequestBody ReviewsDTO reviewsDTO) {
-        reviewService.createReview(reviewsDTO, id);
-        return ResponseEntity.noContent().build();
+    @RestController
+    @RequestMapping("/api/reviews")
+    @AllArgsConstructor
+    public class ReviewController {
+
+        private final ReviewService reviewService;
+
+        @PostMapping("/{id}")
+         public ResponseEntity<Void> createdReviews(@PathVariable Long id,
+                                               @RequestBody ReviewsDTO reviewsDTO) {
+
+            reviewService.createReview(reviewsDTO, id);
+
+            return ResponseEntity.noContent().build();
+        }
     }
 
     /**
