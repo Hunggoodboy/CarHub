@@ -152,7 +152,6 @@ function setupComment(carId) {
 
             body: JSON.stringify({
 
-                carId: carId,
                 comment: content,
                 rating: selectedRating
 
