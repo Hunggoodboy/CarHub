@@ -2,7 +2,6 @@ package com.carhub.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.*;
 
 import java.util.List;
 
@@ -24,6 +23,6 @@ public class Car {
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
-    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL)
-    private Reviews review;
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    private List<Reviews> review;
 }

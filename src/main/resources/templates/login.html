@@ -33,6 +33,8 @@
             </div>
             <form th:action="@{/login}" method="post" class="auth-card__form">
 
+                <input type="hidden" name="redirect" th:value="${param.redirect}">
+
                 <div class="auth-card__group">
                     <i class="fa-solid fa-user auth-card__icon"></i>
                     <input type="text" name="username" class="auth-card__input" placeholder="Username">

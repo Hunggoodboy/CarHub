@@ -1,5 +1,6 @@
 package com.carhub.controller;
 
+import com.carhub.dto.AppPrincipal;
 import com.carhub.dto.UserDTO;
 import com.carhub.entity.User;
 import com.carhub.service.UserService;
@@ -7,12 +8,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,10 +31,12 @@ public class UserController {
     }
     @GetMapping("/me")
     @ResponseBody
-    public Map<String, Object> getCurrentUser(Authentication authentication) {
-
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        return oAuth2User.getAttributes();
+    public ResponseEntity<AppPrincipal>getCurrentUser(Authentication authentication) {
+         AppPrincipal principal = (AppPrincipal) authentication.getPrincipal();
+         if(authentication == null) {
+             return ResponseEntity.badRequest().build();
+         }
+        return ResponseEntity.ok(principal);
     }
     /**
      * Lấy thông tin user theo username

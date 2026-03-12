@@ -1,12 +1,8 @@
 package com.carhub.dto;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 import com.carhub.entity.Car;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class CarDTO {

@@ -4,13 +4,13 @@ import com.carhub.entity.OtpToken;
 import com.carhub.entity.User;
 import com.carhub.repository.OtpTokenRepository;
 import com.carhub.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -22,6 +22,7 @@ public class OtpTokenService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
+    private final ResetTokenService resetTokenService;
     public String generateOtp(){
         return String.valueOf(10000 + new Random().nextInt(10000));
     }
@@ -41,6 +42,7 @@ public class OtpTokenService {
         message.setTo(email);
         message.setSubject("Mã OTP để lấy lại mật khẩu của bạn");
         message.setText("Mã OTP của bạn là : " + Otp + "\n Mã này được sử dụng trong vòng 5 phút, vui lòng không được chia sẻ với bất kì ai");
+        String newToken = resetTokenService.generateToken(email);
         javaMailSender.send(message);
     }
     public boolean verifyOtpToken(String Email, String otp) {
@@ -58,8 +60,16 @@ public class OtpTokenService {
         otpTokenRepository.save(otpToken);
         return true;
     }
+
     public void setPasswordEncoder(String email, String newPassword) {
         User user =  userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy mail"));
         userRepository.updateNewPassword(email, newPassword);
+    }
+
+    //Xoá mã OTP sau mỗi 5p
+    @Transactional
+    @Scheduled(fixedRate = 1000)
+    public void deleteOTP(){
+        otpTokenRepository.deleteByExpiryDateBefore(LocalDateTime.now());
     }
 }

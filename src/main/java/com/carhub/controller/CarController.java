@@ -3,10 +3,8 @@ package com.carhub.controller;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.CarDetailResponse;
 import com.carhub.dto.ReviewsDTO;
-import com.carhub.entity.Car;
 import com.carhub.service.CarService;
 import com.carhub.service.ReviewService;
-
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +40,6 @@ public class CarController {
     @RequestMapping("/api/reviews")
     @AllArgsConstructor
     public class ReviewController {
-
-        private final ReviewService reviewService;
-
         @PostMapping("/{id}")
          public ResponseEntity<Void> createdReviews(@PathVariable Long id,
                                                @RequestBody ReviewsDTO reviewsDTO) {

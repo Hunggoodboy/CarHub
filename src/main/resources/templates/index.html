@@ -78,14 +78,21 @@
     <div id="car-list" class="product-grid"></div>
 </section>
 
+<div class="floating-container">
+    <a href="tel:096688888" class="floating-item phone-icon">
+        <i class="fa fa-phone"></i>
+    </a>
 
-
-<div class="floating">
-    <a href="tel:66668888"><i class="fa fa-phone"></i></a>
-    <a href="https://zalo.me/66668888" target="_blank">
+    <a href="https://zalo.me/096688888" target="_blank" class="floating-item zalo-icon">
         <i class="fa fa-comment"></i>
     </a>
+
+    <div class="floating-item chat-ai-icon" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </div>
 </div>
+
+<script src="/js/chatbot-init.js"></script>
 
 <footer class="site-footer">
     <div class="footer-container">
@@ -93,8 +100,8 @@
         <div class="footer-col">
             <h3>CarShop</h3>
             <p>
-                Nền tảng mua bán xe uy tín,
-                mang đến những mẫu xe chất lượng
+                Nền tảng mua bán xe uy tín,  
+                mang đến những mẫu xe chất lượng  
                 và trải nghiệm mua sắm an toàn.
             </p>
         </div>
@@ -133,6 +140,5 @@
     </div>
 </footer>
 <script th:src="@{/js/car_list.js}"></script>
-<script th:src="@{/js/chatbot-init.js}"></script>
 </body>
 </html>
