@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -23,17 +22,23 @@ public class WebController {
     private final AuthService authService;
 
     // Trang chủ
-    @GetMapping({"/", "/index"})
+    @GetMapping({ "/", "/index" })
     public String index(Model model) {
         List<CarDTO> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
         return "index";
     }
+
     // Trang chi tiết xe
     // Trang chi tiết xe
     @GetMapping("/product_detail")
     public String productDetail() {
         return "product_detail";
+    }
+
+    @GetMapping("/cart")
+    public String cart() {
+        return "cart";
     }
 
     // Trang đăng nhập

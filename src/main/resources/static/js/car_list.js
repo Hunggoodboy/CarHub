@@ -69,6 +69,16 @@ function renderCars(cars) {
                     <h3>${car.model}</h3>
                     <p>Năm sản xuất: ${car.manufactureYear}</p>
                     <p class="price">${formatPrice(car.finalPrice)}</p>
+                    <button
+                        class="btn"
+                        type="button"
+                        data-add-to-cart
+                        data-id="${car.id}"
+                        data-model="${car.model}"
+                        data-image="${car.imageUrl}"
+                        data-price="${car.finalPrice}">
+                        <i class="fa-solid fa-cart-plus"></i> Thêm giỏ hàng
+                    </button>
                     <a href="/product_detail?id=${car.id}" class="btn">
                         Xem chi tiết
                     </a>
