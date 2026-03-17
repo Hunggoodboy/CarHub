@@ -38,14 +38,25 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler((request, response, authentication) -> {
+
+                            var savedRequest = new org.springframework.security.web.savedrequest.HttpSessionRequestCache()
+                            .getRequest(request, response);
+
+                            if (savedRequest != null) {
+                               response.sendRedirect(savedRequest.getRedirectUrl());
+                            } else {
+                                response.sendRedirect("/");
+                            }
+
+                            })
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .userInfoEndpoint(info -> info.userService(oauth2UserService))
-                        .defaultSuccessUrl("/", true))
+                        .defaultSuccessUrl("/", false))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")

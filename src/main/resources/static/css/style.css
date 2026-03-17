@@ -3,7 +3,33 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     background: #f5f5f5;
 }
+/* Khi màn hình nhỏ hơn 768px (máy tính bảng và điện thoại) */
+@media (max-width: 768px) {
+    
+    /* 1. Chuyển thanh tìm kiếm từ hàng ngang thành hàng dọc */
+    .search-box {
+        grid-template-columns: 1fr; /* Chỉ còn 1 cột duy nhất */
+        width: 90%; /* Tăng độ rộng để dễ bấm trên điện thoại */
+        margin: -20px auto 20px; /* Giảm bớt khoảng cách đè lên ảnh */
+    }
 
+    /* 2. Menu Header: Ẩn bớt hoặc chuyển thành dạng danh sách dọc */
+    header nav {
+        display: flex;
+        flex-wrap: wrap; /* Cho phép các chữ tự xuống dòng nếu thiếu chỗ */
+        justify-content: center;
+        gap: 10px;
+    }
+
+    header nav a {
+        font-size: 14px; /* Thu nhỏ chữ một chút */
+    }
+
+    /* 3. Nút Tìm kiếm: Cho rộng hết cỡ cho dễ bấm bằng ngón tay */
+    .search-box button {
+        width: 100%;
+    }
+}
 header {
     background: #111;
     color: #fff;
@@ -193,28 +219,6 @@ nav a:hover {
     gap: 15px;
     margin-top: 20px;
 }
-
-/* .floating {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.floating a {
-    width: 50px;
-    height: 50px;
-    background: #25d366;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-size: 22px;
-    text-decoration: none;
-} */
 
 footer {
     background-color: #e91a07;
@@ -643,6 +647,47 @@ footer {
     .row-2{
         flex-direction: column;
     }
+}
+.login-modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.login-modal-content{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    width:300px;
+}
+
+.login-modal-buttons{
+    margin-top:15px;
+}
+
+.login-modal-buttons button{
+    margin:5px;
+    padding:8px 15px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+#go-login-btn{
+    background:#2e7d32;
+    color:white;
+}
+
+#close-login-modal{
+    background:#ccc;
 }
 
 .site-footer {
