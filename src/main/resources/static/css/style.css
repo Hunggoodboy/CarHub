@@ -3,7 +3,33 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     background: #f5f5f5;
 }
+/* Khi màn hình nhỏ hơn 768px (máy tính bảng và điện thoại) */
+@media (max-width: 768px) {
+    
+    /* 1. Chuyển thanh tìm kiếm từ hàng ngang thành hàng dọc */
+    .search-box {
+        grid-template-columns: 1fr; /* Chỉ còn 1 cột duy nhất */
+        width: 90%; /* Tăng độ rộng để dễ bấm trên điện thoại */
+        margin: -20px auto 20px; /* Giảm bớt khoảng cách đè lên ảnh */
+    }
 
+    /* 2. Menu Header: Ẩn bớt hoặc chuyển thành dạng danh sách dọc */
+    header nav {
+        display: flex;
+        flex-wrap: wrap; /* Cho phép các chữ tự xuống dòng nếu thiếu chỗ */
+        justify-content: center;
+        gap: 10px;
+    }
+
+    header nav a {
+        font-size: 14px; /* Thu nhỏ chữ một chút */
+    }
+
+    /* 3. Nút Tìm kiếm: Cho rộng hết cỡ cho dễ bấm bằng ngón tay */
+    .search-box button {
+        width: 100%;
+    }
+}
 header {
     background: #111;
     color: #fff;
