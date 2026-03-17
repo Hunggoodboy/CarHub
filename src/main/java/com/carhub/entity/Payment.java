@@ -12,9 +12,15 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String method, status;
+    private String status;
     private Double amount;
     private LocalDateTime paymentDate;
+    public enum TypePayment {
+        CAST, TRANSFER
+    }
+
+    @Enumerated(EnumType.STRING)
+    private TypePayment typePayment;
 
     @OneToOne
     @JoinColumn(name = "order_id")

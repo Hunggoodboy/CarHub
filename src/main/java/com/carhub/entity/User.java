@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -29,13 +30,12 @@ public class User implements UserDetails {
     @Column(nullable = true)
     private String address;
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // Enum: ADMIN, CUSTOMER, USER
     public enum Role {
-        ADMIN, CUSTOMER, USER
+        ADMIN, CUSTOMER
     }
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Order> orders;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.CUSTOMER; // Enum: ADMIN, CUSTOMER, USER
 
     public Collection<? extends GrantedAuthority> getAuthorities(){
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));

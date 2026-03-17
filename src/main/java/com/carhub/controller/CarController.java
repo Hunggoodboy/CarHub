@@ -2,8 +2,10 @@ package com.carhub.controller;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.CarDetailResponse;
+import com.carhub.dto.OrderRequest;
 import com.carhub.dto.ReviewsDTO;
 import com.carhub.service.CarService;
+import com.carhub.service.OrderService;
 import com.carhub.service.ReviewService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ public class CarController {
 
     private final CarService carService;
     private final ReviewService reviewService;
-
+    private final OrderService orderService;
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {
         List<CarDTO> cars = carService.getAllCars();
@@ -35,6 +37,7 @@ public class CarController {
         CarDetailResponse car = carService.getCarDetail(id);
         return ResponseEntity.ok(car);
     }
+
 
     @RestController
     @RequestMapping("/api/reviews")

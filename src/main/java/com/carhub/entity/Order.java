@@ -1,7 +1,9 @@
 package com.carhub.entity;
 
+import com.carhub.dto.OrderRequest;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.aspectj.weaver.ast.Or;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,9 +16,24 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+    private Long buyerId;
+    private Long sellerId;
     LocalDateTime orderDate;
-    Double totalAmountOriginal,totalAmountFinal ;
-    String status, deliveryAddress;
+    Double totalAmountOriginal,totalAmountFinal, totalDiscount;
+    String deliveryAddress;
+    private String street;
+    private String ward;
+    private String city;
+    private String phone;
+    public enum Status{
+        PENDING,
+        DELIVERED,
+        CANCELLED,
+        COMPLETED
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status = Status.PENDING;
     //Kết nối OrderDetail
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
@@ -29,7 +46,5 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
 }

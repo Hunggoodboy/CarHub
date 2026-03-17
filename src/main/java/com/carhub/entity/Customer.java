@@ -10,7 +10,11 @@ import java.util.List;
 @Entity
 @Data
 public class Customer extends User{
+
     private String shippingAddress;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Car> cars;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
