@@ -17,7 +17,6 @@ public class Order {
     @Column(nullable = false)
     private Long id;
     private Long buyerId;
-    private Long sellerId;
     LocalDateTime orderDate;
     Double totalAmountOriginal,totalAmountFinal, totalDiscount;
     String deliveryAddress;
@@ -42,9 +41,12 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seller_id")
+    private User seller;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
 
 }

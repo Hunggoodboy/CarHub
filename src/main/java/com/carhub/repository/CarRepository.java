@@ -2,6 +2,7 @@ package com.carhub.repository;
 
 import com.carhub.entity.Brand;
 import com.carhub.entity.Car;
+import com.carhub.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,7 +21,9 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByPriceBetween(double minPrice, double maxPrice);
     List<Car> findByStockQuantityGreaterThan(int quantity);
     Optional<Car> findById(Long id);
-    Long findCustomerIdById(Long carId);
+
+    @Query("SELECT c.user FROM Car c WHERE c.id = :carId")
+    User findSellerById(Long carId);
     //Tìm theo giá sau khi đã discount
     @Query("SELECT c FROM Car c WHERE c.price * (1 - c.discount) BETWEEN :minPrice AND :maxPrice")
     List<Car> findByFinalPriceBetween(@Param("minPrice") double minPrice, @Param("maxPrice") double maxPrice);

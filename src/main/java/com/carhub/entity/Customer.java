@@ -3,18 +3,18 @@ package com.carhub.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Data;
 
 import java.util.List;
 
 @Entity
 @Data
+@PrimaryKeyJoinColumn(name = "id")
 public class Customer extends User{
 
     private String shippingAddress;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Car> cars;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;

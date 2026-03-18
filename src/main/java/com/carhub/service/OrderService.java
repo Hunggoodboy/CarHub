@@ -1,14 +1,8 @@
 package com.carhub.service;
 
 import com.carhub.dto.OrderRequest;
-import com.carhub.entity.Car;
-import com.carhub.entity.Order;
-import com.carhub.entity.OrderDetail;
-import com.carhub.entity.Payment;
-import com.carhub.repository.CarRepository;
-import com.carhub.repository.OrderDetailRepository;
-import com.carhub.repository.OrderRepository;
-import com.carhub.repository.PaymentRepository;
+import com.carhub.entity.*;
+import com.carhub.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,13 +18,14 @@ public class OrderService {
     private final CarRepository carRepository;
     private final PaymentRepository paymentRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final CustomerRepository customerRepository;
     public void save(OrderRequest orderRequest) {
         Car car = carRepository.findById(orderRequest.getCarId()).get();
         Order order = convertOrderRequestToOrder(orderRequest);
         orderRepository.save(order);
         OrderDetail orderDetail = convertOrderRequestToOrderDetail(orderRequest, car,  order);
         orderDetailRepository.save(orderDetail);
-        Payment payment = convertOrderRequestToPayment(orderRequest, car,  order);
+        Payment payment = convertOrderRequestToPayment(orderRequest , order);
         paymentRepository.save(payment);
     }
     public Order convertOrderRequestToOrder(OrderRequest orderRequest) {
@@ -38,7 +33,8 @@ public class OrderService {
         Long buyerId = userService.getId(authentication);
         Order order = new Order();
         order.setBuyerId(buyerId);
-        order.setSellerId(carRepository.findCustomerIdById(orderRequest.getCarId()));
+        order.setSeller(carRepository.findSellerById(orderRequest.getCarId()));
+        order.setCustomer(customerRepository.findById(userService.getId(authentication)).orElseThrow(() -> new RuntimeException("Customer not found")));
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmountOriginal(orderRequest.getTotalAmountOriginal());
         order.setTotalDiscount(orderRequest.getTotalDiscount());
@@ -60,10 +56,20 @@ public class OrderService {
         detail.setOrder(order);
         return detail;
     }
-    public Payment convertOrderRequestToPayment(OrderRequest orderRequest, Car car, Order order) {
+    public Payment convertOrderRequestToPayment(OrderRequest orderRequest,  Order order) {
         Payment payment = new Payment();
         payment.setStatus("PENDING");
-        payment.setTypePayment(Payment.TypePayment.valueOf(orderRequest.getPaymentMethod()));
+
+        String method = orderRequest.getPaymentMethod();
+        Payment.TypePayment type;
+        if ("COD".equalsIgnoreCase(method)) {
+            type = Payment.TypePayment.CAST;
+        } else {
+            type = Payment.TypePayment.TRANSFER;
+        }
+        payment.setOrder(order);
+//        payment.set
+        payment.setTypePayment(type);
         payment.setPaymentDate(LocalDateTime.now());
         return payment;
     }

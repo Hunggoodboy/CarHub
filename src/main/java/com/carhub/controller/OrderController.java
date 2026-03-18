@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/orders")
 @AllArgsConstructor
@@ -17,6 +19,6 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> addOrder(@RequestBody OrderRequest orderRequest) {
         orderService.save(orderRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Map.of("message", "Đặt hàng thành công"));
     }
 }
