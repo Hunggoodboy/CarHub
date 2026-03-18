@@ -166,7 +166,7 @@ function ensureCartShell() {
 
 		<section class="cart-drawer" id="cart-drawer" aria-hidden="true">
 			<header class="cart-header">
-                <h3>Giỏ hàng của bạn</h3>
+                <h3>Mục yêu thích</h3>
                 <button type="button" id="close-cart" class="cart-close" aria-label="Đóng giỏ hàng">
 					<i class="fa-solid fa-xmark"></i>
 				</button>
@@ -191,7 +191,7 @@ function renderCartItems(items) {
     const cartItemsEl = document.getElementById("cart-items");
     const cartTotalEl = document.getElementById("cart-total");
     const cartCountEl = document.getElementById("cart-count");
-
+    const cartLinkEl = document.getElementById
     if (!cartItemsEl || !cartTotalEl || !cartCountEl) {
         return;
     }
@@ -200,7 +200,7 @@ function renderCartItems(items) {
         cartItemsEl.innerHTML = `
 			<div class="cart-empty">
 				<i class="fa-regular fa-face-smile"></i>
-                <p>Chưa có xe nào trong giỏ hàng.</p>
+                <p>Chưa có xe nào trong mục yêu thích.</p>
 			</div>
 		`;
         cartTotalEl.textContent = "0 đ";
@@ -215,14 +215,10 @@ function renderCartItems(items) {
 		<article class="cart-item" data-id="${item.id}">
 			<img src="${buildImagePath(item.imageUrl)}" alt="${item.model}">
 			<div class="cart-item-content">
-				<h4>${item.model}</h4>
+				<h4 href = "/product_detail?id=${item.id}">${item.model}</h4>
 				<p>${formatCurrency(item.finalPrice)}</p>
-				<div class="cart-qty">
-					<button type="button" data-action="minus" data-id="${item.id}">-</button>
-					<span>${item.quantity}</span>
-					<button type="button" data-action="plus" data-id="${item.id}">+</button>
-				</div>
 			</div>
+            <a id="view-detail-cart" href="/product_detail?id=${item.id}"> Xem thông tin</a>
 			<button type="button" class="cart-remove" data-action="remove" data-id="${item.id}">
 				<i class="fa-regular fa-trash-can"></i>
 			</button>

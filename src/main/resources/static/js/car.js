@@ -142,54 +142,6 @@ function loadCarDetail(carId) {
 
             }
 
-
-            currentCar = car;
-            const reviews = data.review;
-            document.getElementById('loading-msg').style.display = 'none';
-            document.getElementById('car-content').style.display = 'flex';
-
-            // lấy các dữ liệu tương ứng của xe 
-            document.getElementById('car-model').innerText = car.model;
-            document.getElementById('car-brand').innerText = car.brandName;
-            document.getElementById('car-origin').innerText = car.brandOrigin;
-            document.getElementById('car-color').innerText = car.color;
-            document.getElementById('car-year').innerText = car.manufactureYear;
-            document.getElementById('car-stock').innerText = car.stockQuantity > 0 ? car.stockQuantity : "Hết hàng";
-            document.getElementById('car-desc').innerText = car.description || "Đang cập nhật...";
-
-            // hiển thị ảnh
-            document.getElementById('car-img').src = car.imageUrl
-                ? `/${car.imageUrl.replace("car_images", "car-images")}`
-                : '/images/default-car.png';
-
-            
-            document.getElementById('car-final-price').innerText = formatter.format(car.finalPrice);
-
-            if (car.discount > 0) {
-                const oldPriceEl = document.getElementById('car-old-price');
-                oldPriceEl.style.display = 'inline';
-                oldPriceEl.innerText = formatter.format(car.price) + " đ";
-            }
-
-            const addToCartBtn = document.getElementById("add-to-cart-detail");
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener("click", function (event) {
-                    event.preventDefault();
-
-                    if (!currentCar || !window.CarHubCart) {
-                        return;
-                    }
-
-                    window.CarHubCart.addItem({
-                        id: currentCar.id,
-                        model: currentCar.model,
-                        imageUrl: currentCar.imageUrl,
-                        finalPrice: currentCar.finalPrice,
-                        quantity: 1
-                    });
-                    window.CarHubCart.open();
-                });
-            }
         })
         .catch(error => {
             console.error(error);
@@ -213,12 +165,12 @@ function setupComment(carId) {
         const content = commentInput.value.trim();
 
         if (!content) {
-            alert("Vui lòng nhập bình luận!");
+            showAlert("Vui lòng nhập bình luận!");
             return;
         }
 
         if (selectedRating === 0) {
-            alert("Vui lòng chọn số sao đánh giá!");
+            showAlert("Vui lòng chọn số sao đánh giá!");
             return;
         }
 
@@ -285,13 +237,28 @@ function setupComment(carId) {
                     }else if(err.message === "Bạn chưa mua xe nên không thể đánh giá"){
                         showBuyCarModal();
                     }else{
-                        alert(err.message);
+                        showAlert(err.message);
                     }
 
             });
 
     });
 
+}
+function closeAlert() {
+    document.getElementById("custom-alert").style.display = "none";
+}
+function showAlert(message) {
+    const alertBox = document.getElementById("custom-alert");
+    const alertMessage = document.getElementById("alert-message");
+
+    if (alertMessage) {
+        alertMessage.innerText = message;
+    }
+
+    if (alertBox) {
+        alertBox.style.display = "flex";
+    }
 }
 
 function showLoginModal(){

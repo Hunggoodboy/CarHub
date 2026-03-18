@@ -1,4 +1,4 @@
-// ================= LOAD GIÁ XE =================
+
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const carId = params.get("id");
@@ -21,19 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error("Lỗi load giá xe:", err));
 });
 
-
-// ================= BILL MODAL LOGIC =================
 document.addEventListener("DOMContentLoaded", () => {
     const confirmBtn = document.querySelector(".payment-btn");
     const modal = document.getElementById("bill-modal");
     const overlay = document.getElementById("bill-overlay");
     const closeBtn = document.getElementById("close-bill");
     const qrBox = document.getElementById("qr-box");
-    const submitBtn = document.getElementById("submit-order-btn"); // nút Gửi yêu cầu
+    const submitBtn = document.getElementById("submit-order-btn"); 
 
     if (!confirmBtn) return;
 
-    // ====== MỞ BILL ======
     confirmBtn.addEventListener("click", () => {
         const address = document.querySelector('input[placeholder*="Số nhà"]')?.value.trim();
         const ward = document.querySelector('input[placeholder*="xã"]')?.value.trim();
@@ -64,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "block";
     });
 
-    // ====== GỬI YÊU CẦU (POST BE) ======
+    
     submitBtn?.addEventListener("click", () => {
         const params = new URLSearchParams(window.location.search);
         const carId = params.get("id");

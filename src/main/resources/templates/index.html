@@ -8,6 +8,7 @@
         th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="../static/css/cart.css" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/ChatAI.css}">
 
 
 </head>
@@ -68,71 +69,15 @@
         <button type="submit">Tìm kiếm</button>
     </form>
 
-
+    
     <section id="cars" class="products">
         <h2>Danh sách xe đang bán</h2>
 
-        <div id="car-list" class="product-grid">
-        </div>
+        <div id="car-list" class="product-grid"> </div>
     </section>
 
-    <script src="../static/js/car_list.js" th:src="@{/js/car_list.js}"></script>
     <script src="../static/js/cart.js" th:src="@{/js/cart.js}"></script>
 
-    <div class="floating">
-        <a href="tel:66668888"><i class="fa fa-phone"></i></a>
-        <a href="https://zalo.me/66668888" target="_blank">
-            <i class="fa fa-comment"></i>
-        </a>
-    </div>
-
-<form class="search-box">
-    <input list ="type-options" name = "type" placeholder="Loại xe ....">
-    <datalist id="type-options">
-        <option value="Sedan"></option>
-        <option value="SUV"></option>
-        <option value="MPV"></option>
-        <option value="Coupe"></option>
-        <option value="Pickup"></option>
-    </datalist>
-
-    <input list="brand-options" name="brand" placeholder="Hãng xe...">
-    <datalist id="brand-options">
-        <option value="Toyota"></option>
-        <option value="BMW"></option>
-        <option value="VinFast"></option>
-        <option value="Ford"></option>
-        <option value="Mercedes-Benz"></option>
-    </datalist>
-
-    <input
-    type="number"
-    name="year"
-    placeholder="Năm sản xuất"
-    step="1">
-
-
-    <select name="price">
-        <option value="">Khoảng giá</option>
-        <option value="0-100000000">Dưới 100 triệu</option>
-        <option value="100000000-200000000">100 - 200 triệu</option>
-        <option value="200000000-500000000">200 - 500 triệu</option>
-        <option value="500000000-1000000000">500 triệu - 1 tỷ</option>
-        <option value="1000000000-2000000000">1 - 2 tỷ</option>
-        <option value="2000000000-5000000000">2 - 5 tỷ</option>
-        <option value="5000000000-10000000000">5 - 10 tỷ</option>
-        <option value="10000000000-99000000000">Trên 10 tỷ</option>
-    </select>
-
-    <button type="submit">Tìm kiếm</button>
-</form>
-
-
-<section id="cars" class="products">
-    <h2>Danh sách xe đang bán</h2>
-
-    <div id="car-list" class="product-grid"></div>
-</section>
 
 <div class="floating-container">
     <a href="tel:096688888" class="floating-item phone-icon">
@@ -148,7 +93,7 @@
     </div>
 </div>
 
-<script src="/js/chatbot-init.js"></script>
+<script th:src="@{/js/chatbot-init.js}"></script>
 
 <footer class="site-footer">
     <div class="footer-container">

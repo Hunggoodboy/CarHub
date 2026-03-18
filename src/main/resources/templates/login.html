@@ -21,7 +21,6 @@
 
             <div class="auth-card__right">
 
-<<<<<<< HEAD
                 <div class="auth-card__header">
                     <i class="fa-solid fa-layer-group auth-card__logo-icon"></i>
                     <h3 class="auth-card__title">
@@ -31,13 +30,6 @@
                 <div th:if="${param.error}" class="alert alert-danger"
                     style="color: red; text-align: center; margin-bottom: 10px;">
                     Tài khoản hoặc mật khẩu không đúng!
-=======
-                <input type="hidden" name="redirect" th:value="${param.redirect}">
-
-                <div class="auth-card__group">
-                    <i class="fa-solid fa-user auth-card__icon"></i>
-                    <input type="text" name="username" class="auth-card__input" placeholder="Username">
->>>>>>> front-end
                 </div>
 
                 <div th:if="${param.logout}" class="alert alert-success"

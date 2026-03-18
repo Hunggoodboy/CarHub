@@ -1,7 +1,7 @@
 .floating-cart {
     position: fixed;
     right: 24px;
-    bottom: 140px;
+    bottom: 220px;
     z-index: 1200;
 }
 
@@ -184,7 +184,12 @@
     font-size: 28px;
     color: #d62828;
 }
-
+#view-detail-cart{
+    color: gray;
+    font-size:small;
+    text-decoration: none;
+    
+}
 @media (max-width: 768px) {
     .floating-cart {
         right: 16px;
