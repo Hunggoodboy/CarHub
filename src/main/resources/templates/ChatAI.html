@@ -1,20 +1,28 @@
-<div class="chatbot-wrapper">
-    <button onclick="toggleChat()" class="chatbot-btn" title="Chat với AI">
-        <i class="fas fa-comments"></i>
-        <span class="btn-text">Chat AI</span>
-    </button>
-</div>
+<!DOCTYPE html>
+<html lang="vi">
 
-<div id="chat-container" class="chat-hidden">
-    <div id="header">
-        Spring AI Assistant
-        <span onclick="toggleChat()" style="float:right; cursor:pointer;">&times;</span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring AI Chat</title>
+    <link rel="stylesheet" href="../static/css/ChatAI.css" th:href="@{/css/ChatAI.css}">
+</head>
+
+<body>
+
+    <div id="chat-container">
+        <div id="header">Spring AI Assistant</div>
+        <div id="messages">
+            <div class="message bot">Xin chào! Tôi có thể giúp gì cho bạn?</div>
+        </div>
+        <div id="input-area">
+            <input type="text" id="userInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()" id="sendBtn">Gửi</button>
+        </div>
     </div>
-    <div id="messages">
-        <div class="message bot">Xin chào! Tôi có thể giúp gì cho bạn?</div>
-    </div>
-    <div id="input-area">
-        <input type="text" id="userInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
-        <button onclick="sendMessage()" id="sendBtn">Gửi</button>
-    </div>
-</div>
+
+    <script src="../static/js/script.js" th:src="@{/js/script.js}"></script>
+
+</body>
+
+</html>

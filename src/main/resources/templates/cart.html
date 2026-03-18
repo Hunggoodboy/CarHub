@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng | CarShop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="../static/css/cart.css" th:href="@{/css/cart.css}">
+</head>
+
+<body>
+    <header>
+        <div class="logo">CarShop</div>
+        <nav>
+            <a href="index.html" th:href="@{/index}">Trang chủ</a>
+            <a href="product_detail.html" th:href="@{/product_detail}">Chi tiết xe</a>
+            <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+            <a href="login.html" th:href="@{/login}">Đăng nhập</a>
+        </nav>
+    </header>
+
+    <section class="hero" style="height: 260px;">
+        <div>
+            <h1>Giỏ Hàng Nổi Bên Phải</h1>
+            <p>Nhấn nút giỏ hàng ở góc phải để xem và chỉnh sửa xe đã chọn.</p>
+        </div>
+    </section>
+
+    <main class="products" style="padding-bottom: 40px;"></main>
+
+    <footer>
+        © 2026 CarShop |
+        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+            <i class="fab fa-facebook fa-lg"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank">
+            <i class="fab fa-instagram fa-lg"></i>
+        </a>
+        <a href="https://tiktok.com" target="_blank">
+            <i class="fab fa-tiktok fa-lg"></i>
+        </a>
+    </footer>
+
+    <script src="../static/js/cart.js" th:src="@{/js/cart.js}"></script>
+</body>
+
+</html>

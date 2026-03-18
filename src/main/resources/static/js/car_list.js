@@ -72,11 +72,23 @@ function renderCars(cars) {
                 <img src="${imgPath}" alt="${car.model}">
                 <div class="info">
                     <h3>${car.model}</h3>
-                    <p>Năm sản xuất: ${car.manufactureYear || "N/A"}</p>
-                    <p class="price">${formatPrice(price)}</p>
-                    <a href="/product_detail?id=${car.id}" class="btn">
-                        Xem chi tiết
-                    </a>
+                    <p>Năm sản xuất: ${car.manufactureYear}</p>
+                    <p class="price">${formatPrice(car.finalPrice)}</p>
+                    <div class="detail-actions1">
+                        <button
+                            class="btn1 add-cart"
+                            type="button"
+                            data-add-to-cart
+                            data-id="${car.id}"
+                            data-model="${car.model}"
+                            data-image="${car.imageUrl}"
+                            data-price="${car.finalPrice}">
+                            Thêm vào yêu thích 
+                        </button>
+                        <a href="/product_detail?id=${car.id}" class="btn1 view-detail">
+                             Xem chi tiết
+                        </a>
+                    </div>
                 </div>
             </div>
         `;

@@ -165,12 +165,12 @@ function setupComment(carId) {
         const content = commentInput.value.trim();
 
         if (!content) {
-            alert("Vui lòng nhập bình luận!");
+            showAlert("Vui lòng nhập bình luận!");
             return;
         }
 
         if (selectedRating === 0) {
-            alert("Vui lòng chọn số sao đánh giá!");
+            showAlert("Vui lòng chọn số sao đánh giá!");
             return;
         }
 
@@ -237,13 +237,28 @@ function setupComment(carId) {
                     }else if(err.message === "Bạn chưa mua xe nên không thể đánh giá"){
                         showBuyCarModal();
                     }else{
-                        alert(err.message);
+                        showAlert(err.message);
                     }
 
             });
 
     });
 
+}
+function closeAlert() {
+    document.getElementById("custom-alert").style.display = "none";
+}
+function showAlert(message) {
+    const alertBox = document.getElementById("custom-alert");
+    const alertMessage = document.getElementById("alert-message");
+
+    if (alertMessage) {
+        alertMessage.innerText = message;
+    }
+
+    if (alertBox) {
+        alertBox.style.display = "flex";
+    }
 }
 
 function showLoginModal(){
