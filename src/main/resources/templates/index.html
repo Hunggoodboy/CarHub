@@ -21,8 +21,22 @@
         <a th:href="@{/customer-view}">Bán xe</a>
         <a th:href="@{/warranty}">Bảo hành</a>
         <a th:href="@{/my-cars}">Xe đã mua</a>
-        <a href="login.html" th:href="@{/login}">Đăng nhập</a>
+        <a th:if="${#authentication.name == 'anonymousUser'}"
+         th:href="@{/login}">
+            Đăng nhập
+        </a>
+        <a th:if="${#authentication.name != 'anonymousUser'}"
+        href="/logout">
+           Đăng xuất
+        </a>
     </nav>
+    <div id="welcome-message"
+        th:if="${session.justLoggedIn}"
+        class="welcome-message">
+     
+        Xin chào <span th:text="${fullName}"></span> 👋
+    </div>
+    
 </header>
 
     <section class="hero">
@@ -31,6 +45,13 @@
             <p>Tìm chiếc xe phù hợp với bạn</p>
         </div>
     </section>
+    <div th:if="${#authentication.name == 'anonymousUser'}"
+     class="login-suggestion">
+
+        <p>Hãy đăng nhập để có trải nghiệm tốt nhất 🚀</p>
+    
+        <a href="/login" class="login-btn">Đăng nhập ngay</a>
+    </div>
 
     <form class="search-box">
         <input list="type-options" name="type" placeholder="Loại xe ....">
@@ -141,6 +162,7 @@
     </div>
 </footer>
 <script th:src="@{/js/car_list.js}"></script>
+<script th:src="@{/js/welcome.js}"></script>
 </body>
 
 </html>

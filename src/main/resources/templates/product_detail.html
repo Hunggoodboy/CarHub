@@ -15,6 +15,12 @@
                     <a href="#" title="Giỏ hàng"><i class="fa-solid fa-cart-shopping"></i></a>
                     <a href="#" title="Thông tin tài khoản"><i class="fa-solid fa-user"></i></a>
                 </nav>
+                <div id="welcome-message"
+                th:if="${session.justLoggedIn}"
+                class="welcome-message">
+     
+                    Xin chào </span> 👋
+                </div>
         </header>
 
         <section class="hero">
@@ -147,5 +153,6 @@
         </div>
 
         <script src="/js/car.js"></script>
+        <script th:src="@{/js/welcome.js}"></script>
     </body>
 </html>

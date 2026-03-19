@@ -2,11 +2,13 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>PayMent</title>
+    <title>PayMent - CarShop</title>
 
-    <link rel="stylesheet"
-          th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <script src="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -34,22 +36,32 @@
         <div class="payment-box">
             <h3>Địa chỉ giao xe</h3>
 
-            <label>Địa chỉ cụ thể</label>
-            <input type="text" name = "street" placeholder="Số nhà , tên đường , ...">
+            <label>Địa chỉ cụ thể (Số nhà, tên đường...)</label>
+            <div class="address-container">
+                <input type="text" id="street-input" name="street" placeholder="Nhập địa chỉ của bạn..." autocomplete="off">
+                <div id="address-suggestions" class="address-suggestions"></div>
+            </div>
+
+            <div id="map-container">
+                <div class="map-warning">
+                    <i class="fa-solid fa-location-crosshairs"></i> Vui lòng kiểm tra vị trí ghim chính xác để giao xe
+                </div>
+                <div id="map"></div>
+            </div>
 
             <div class="row-2">
                 <div>
                     <label>Xã / Phường</label>
-                    <input type="text" name="ward" placeholder="Nhập xã / phường">
+                    <input type="text" id="ward-input" name="ward" placeholder="Nhập xã / phường">
                 </div>
                 <div>
                     <label>Tỉnh / Thành phố</label>
-                    <input type="text" name = "city" placeholder="Nhập tỉnh/thành phố">
+                    <input type="text" id="city-input" name="city" placeholder="Nhập tỉnh/thành phố">
                 </div>
             </div>
 
             <label>Số Điện Thoại Liên hệ</label>
-            <input type="text" name = "phone" placeholder="Nhập Số Điện Thoại">
+            <input type="text" id="phone-input" name="phone" placeholder="Nhập Số Điện Thoại">
         </div>
 
         <div class="payment-box">
@@ -62,14 +74,12 @@
 
         <div class="payment-box">
             <h3>Phương thức thanh toán</h3>
-
             <label class="radio">
                 <input type="radio" name="paymentMethod" value="CASH" checked>
                 Thanh toán bằng tiền mặt 
             </label>
-
             <label class="radio">
-                <input type="radio" name="paymentMethod" value = "BANK">
+                <input type="radio" name="paymentMethod" value="BANK">
                 Chuyển khoản ngân hàng
             </label>
         </div>
@@ -79,12 +89,9 @@
 </section>
 
 <div id="bill-overlay"></div>
-
 <div id="bill-modal">
     <span id="close-bill">&times;</span>
-
     <h3>Hóa đơn thanh toán</h3>
-
     <p><b>Giá xe:</b> <span id="bill-price"></span></p>
     <p><b>Địa chỉ:</b> <span id="bill-address"></span></p>
     <p><b>Số điện thoại:</b> <span id="bill-phone"></span></p>
@@ -95,55 +102,13 @@
         <img src="/car-images/qr_bank.jpg" width="200">
     </div>
 
-    <button id="submit-order-btn" class="btn" >
-        Gửi yêu cầu
-    </button>
+    <button id="submit-order-btn" class="btn">Gửi yêu cầu</button>
 </div>
+
 <footer class="site-footer">
-    <div class="footer-container">
-
-        <div class="footer-col">
-            <h3>CarShop</h3>
-            <p>
-                Nền tảng mua bán xe uy tín,  
-                mang đến những mẫu xe chất lượng  
-                và trải nghiệm mua sắm an toàn.
-            </p>
-        </div>
-
-        <div class="footer-col">
-            <h4>Liên kết</h4>
-            <ul>
-                <li><a th:href="@{/index}">Trang chủ</a></li>
-                <li><a href="#">Xe mới</a></li>
-                <li><a href="#">Giỏ hàng</a></li>
-                <li><a href="#">Tài khoản</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4>Liên hệ</h4>
-            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
-            <p>Hotline: 0999 999 999</p>
-        </div>
-
-        <div class="footer-col">
-            <h4>Theo dõi chúng tôi</h4>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href=""><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        © 2026 CarShop. All rights reserved.
-    </div>
+    <div class="footer-bottom">© 2026 CarShop. All rights reserved.</div>
 </footer>
+
 <script th:src="@{/js/payment.js}"></script>
 </body>
 </html>

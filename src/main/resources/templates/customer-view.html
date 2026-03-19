@@ -22,6 +22,12 @@
             <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
             <a href="login.html">Đăng nhập</a>
         </nav>
+        <div id="welcome-message"
+            th:if="${session.justLoggedIn}"
+            class="welcome-message">
+     
+             Xin chào  👋
+        </div>
     </header>
      <div class="Line"> Nhập thông tin xe cần bán</div>
     <form th:action="@{/car/save}" method="post" enctype="multipart/form-data" th:object="${car}">
@@ -100,5 +106,6 @@
             © 2026 CarShop. All rights reserved.
         </div>
 </footer>
+<script th:src="@{/js/welcome.js}"></script>
 </body>
 </html>

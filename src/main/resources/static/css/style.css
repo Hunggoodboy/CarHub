@@ -68,6 +68,23 @@ nav a:hover {
     font-size: 40px;
     margin-bottom: 10px;
 }
+.welcome-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    background: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+
+    font-size: 16px;
+    z-index: 9999;
+
+    opacity: 1;
+    transition: all 0.5s ease;
+}
 
 .search-box {
     background: white;
@@ -830,6 +847,115 @@ footer {
     color: white;
     border-radius: 6px;
     cursor: pointer;
+}
+/* --- PHẦN CSS CHO BẢN ĐỒ VÀ GỢI Ý ĐỊA CHỈ (GOONG MAPS) --- */
+
+/* Khung bao ngoài của ô nhập địa chỉ để định vị danh sách gợi ý */
+.address-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Danh sách các gợi ý hiện ra khi gõ phím */
+.address-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    z-index: 9999; /* Đảm bảo hiện lên trên cùng */
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 0 0 8px 8px;
+}
+
+/* Từng dòng địa chỉ trong danh sách gợi ý */
+.suggestion-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #f1f1f1;
+    transition: all 0.2s ease;
+    line-height: 1.4;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f8f9fa;
+    color: #ee4d2d; /* Màu cam thương hiệu (giống Shopee) */
+}
+
+/* Khung chứa bản đồ */
+#map-container {
+    margin: 15px 0;
+    display: none; /* Ẩn đi khi chưa chọn địa chỉ */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Dòng thông báo màu vàng phía trên bản đồ */
+.map-warning {
+    background: #fff9e6;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #856404;
+    border-bottom: 1px solid #ffeeba;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+/* Chiều cao của bản đồ */
+#map {
+    height: 280px;
+    width: 100%;
+    background-color: #eee;
+}
+
+/* Chỉnh lại khoảng cách cho các input trong payment-box */
+.payment-box input[type="text"] {
+    margin-bottom: 10px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.payment-box input[type="text"]:focus {
+    border-color: #ee4d2d;
+    outline: none;
+}
+.login-suggestion {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.login-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.login-btn:hover {
+    background: #0056b3;
 }
 html {
     scroll-behavior: smooth;
