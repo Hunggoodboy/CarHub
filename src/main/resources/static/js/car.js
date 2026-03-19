@@ -127,7 +127,8 @@ function loadCarDetail(carId) {
             renderReviews(data.reviews);
 
             setupComment(car.id);
-
+            console.log('sellerId:', car.sellerId);
+            ChatWidget.init(car.sellerId, 'Người bán');
             if (Array.isArray(data.carsSimilar)) {
 
                 const relatedCars = data.carsSimilar

@@ -13,20 +13,19 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    private Long senderId;
-    private Long receiverId;
-    private MessageType messageType;
+    private String senderName;
     private String content;
-    private LocalDateTime createdAt;
-    private boolean isRead;
-    public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
-    }
+    private LocalDateTime sentAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        this.sentAt = LocalDateTime.now();
     }
 }

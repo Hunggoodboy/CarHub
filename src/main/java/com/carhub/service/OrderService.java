@@ -1,6 +1,6 @@
 package com.carhub.service;
 
-import com.carhub.dto.OrderRequest;
+import com.carhub.dto.Request.OrderRequest;
 import com.carhub.entity.*;
 import com.carhub.repository.*;
 import lombok.AllArgsConstructor;

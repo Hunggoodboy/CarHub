@@ -1,13 +1,11 @@
 package com.carhub.controller;
 
-import com.carhub.dto.AuthResponse;
+import com.carhub.dto.Response.AuthResponse;
 import com.carhub.dto.CarDTO;
-import com.carhub.dto.RegisterRequest;
-import com.carhub.entity.Car;
+import com.carhub.dto.Request.RegisterRequest;
 import com.carhub.service.AuthService;
 import com.carhub.service.CarService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,6 +80,10 @@ public class WebController {
     public String showCustomerView(Model model) {
         model.addAttribute("car", new CarDTO());
         return "customer-view";
+    }
+    @GetMapping("/chat")
+    public String chat() {
+        return "chat";
     }
 
     @PostMapping("/car/save")

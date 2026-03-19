@@ -1,11 +1,6 @@
-package com.carhub.dto;
+package com.carhub.dto.Request;
 
-import com.carhub.entity.*;
-import jakarta.persistence.*;
 import lombok.Data;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class OrderRequest {

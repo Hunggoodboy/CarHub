@@ -1,9 +1,7 @@
 package com.carhub.entity;
 
-import com.carhub.dto.OrderRequest;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.aspectj.weaver.ast.Or;
 
 import java.time.LocalDateTime;
 import java.util.List;

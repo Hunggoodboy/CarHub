@@ -1,4 +1,4 @@
-package com.carhub.dto;
+package com.carhub.dto.Request;
 
 import lombok.Data;
 

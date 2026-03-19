@@ -1,8 +1,7 @@
 package com.carhub.controller;
 
 import com.carhub.dto.CarDTO;
-import com.carhub.dto.CarDetailResponse;
-import com.carhub.dto.OrderRequest;
+import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.dto.ReviewsDTO;
 import com.carhub.service.CarService;
 import com.carhub.service.OrderService;

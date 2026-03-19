@@ -5,6 +5,8 @@
         <title>Chi tiết xe | CarShop</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="stylesheet" th:href="@{/css/chat-widget.css}">
+
     </head>
     <body>
         <header>
@@ -12,6 +14,9 @@
                 <nav>
                     <a th:href="@{/index}">Trang chủ</a>
                     <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+                    <a th:href="@{/chat}" title="Tin nhắn">
+                        <i class="fa-solid fa-comment-dots"></i>
+                        <span class="nav-badge">3</span> </a>
                     <a href="#" title="Giỏ hàng"><i class="fa-solid fa-cart-shopping"></i></a>
                     <a href="#" title="Thông tin tài khoản"><i class="fa-solid fa-user"></i></a>
                 </nav>
@@ -52,6 +57,15 @@
                     <div class="detail-actions">
                         <a id="buy-now-btn" href="#" class="btn">Mua ngay</a>
                         <a href="#" class="btn"><i class="fa-solid fa-cart-plus"></i> Thêm giỏ hàng</a>
+                        <button class="btn-consult" onclick="
+                                if(document.getElementById('chat-widget')) {
+                                    ChatWidget.openWidget();
+                                } else {
+                                    alert('Đang kết nối, vui lòng thử lại!');
+                                }
+                            ">
+                            <span class="consult-icon">💬</span> Tư vấn người bán
+                        </button>
                     </div>
                 </div>
             </div>
@@ -147,5 +161,9 @@
         </div>
 
         <script src="/js/car.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+        <script th:src="@{/js/chat-widget.js}"></script>
     </body>
+
 </html>

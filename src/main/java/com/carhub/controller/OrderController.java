@@ -1,6 +1,6 @@
 package com.carhub.controller;
 
-import com.carhub.dto.OrderRequest;
+import com.carhub.dto.Request.OrderRequest;
 import com.carhub.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

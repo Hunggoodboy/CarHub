@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tin nhắn</title>
+    <link rel="stylesheet" th:href="@{/css/chat.css}" href="/css/chat.css">
+</head>
+<body>
+<div class="chat-container">
+    <aside class="chat-sidebar">
+        <div class="sidebar-header">
+            <h2>Đoạn chat</h2>
+        </div>
+        <ul id="recent-chats-list" class="recent-chats">
+        </ul>
+    </aside>
+
+    <main class="chat-window">
+        <header class="chat-header" id="chat-header" style="display: none;">
+            <div class="chat-partner-info">
+                <div class="avatar" id="partner-avatar">?</div>
+                <h3 id="partner-name">Tên người dùng</h3>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chat-messages">
+            <div class="empty-chat-state" id="empty-state">
+                Hãy chọn một đoạn chat hoặc bắt đầu cuộc trò chuyện mới.
+            </div>
+        </div>
+
+        <footer class="chat-input-area" id="chat-input-area" style="display: none;">
+            <textarea id="chat-input" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+            <button id="btn-send">Gửi</button>
+        </footer>
+    </main>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script th:src="@{/js/chat-app.js}" src="/js/chat-app.js"></script>
+</body>
+</html>

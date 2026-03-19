@@ -22,7 +22,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByStockQuantityGreaterThan(int quantity);
     Optional<Car> findById(Long id);
 
-    @Query("SELECT c.user FROM Car c WHERE c.id = :carId")
+    @Query("SELECT c.seller FROM Car c WHERE c.id = :carId")
     User findSellerById(Long carId);
     //Tìm theo giá sau khi đã discount
     @Query("SELECT c FROM Car c WHERE c.price * (1 - c.discount) BETWEEN :minPrice AND :maxPrice")

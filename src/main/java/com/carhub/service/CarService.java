@@ -1,7 +1,7 @@
 package com.carhub.service;
 
 import com.carhub.dto.CarDTO;
-import com.carhub.dto.CarDetailResponse;
+import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.entity.Car;
 import com.carhub.repository.BrandRepository;
 import com.carhub.repository.CarRepository;

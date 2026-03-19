@@ -1,8 +1,8 @@
 package com.carhub.controller;
 
-import com.carhub.dto.AuthResponse;
-import com.carhub.dto.LoginRequest;
-import com.carhub.dto.RegisterRequest;
+import com.carhub.dto.Response.AuthResponse;
+import com.carhub.dto.Request.LoginRequest;
+import com.carhub.dto.Request.RegisterRequest;
 import com.carhub.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

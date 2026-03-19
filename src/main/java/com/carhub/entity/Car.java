@@ -29,5 +29,5 @@ public class Car {
     //Kết nối tới User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
-    private User user;
+    private User seller;
 }

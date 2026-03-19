@@ -1,5 +1,6 @@
-package com.carhub.dto;
+package com.carhub.dto.Response;
 
+import com.carhub.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
