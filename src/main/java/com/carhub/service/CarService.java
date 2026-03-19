@@ -5,9 +5,12 @@ import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.entity.Car;
 import com.carhub.repository.BrandRepository;
 import com.carhub.repository.CarRepository;
+import com.carhub.repository.OrderDetailRepository;
 import com.carhub.repository.ReviewsRepository;
 import com.carhub.service.ai.VectorStoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +33,8 @@ public class CarService {
     private final ReviewsRepository reviewsRepository;
     private final VectorStoreService vectorStoreService;
     private final ReviewService reviewService;
+    private final OrderDetailRepository orderDetailRepository;
+    private final UserService userService;
     // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()
@@ -94,6 +99,16 @@ public class CarService {
     // Lấy xe còn hàng
     public List<CarDTO> getAvailableCars() {
         return carRepository.findByStockQuantityGreaterThan(0)
+                .stream()
+                .map(CarDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // Lấy tất cả xe mà người dùng hiện tại đã mua (không lọc theo trạng thái đơn hàng)
+    public List<CarDTO> getPurchasedCarsForCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userService.getId(authentication);
+        return orderDetailRepository.findPurchasedCarsByUserId(userId)
                 .stream()
                 .map(CarDTO::fromEntity)
                 .collect(Collectors.toList());

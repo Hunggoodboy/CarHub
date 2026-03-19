@@ -117,6 +117,16 @@ public class CarController {
     }
 
     /**
+     * Lấy tất cả xe mà người dùng hiện tại đã mua
+     * GET /api/cars/purchased
+     */
+    @GetMapping("/purchased")
+    public ResponseEntity<List<CarDTO>> getPurchasedCarsForCurrentUser() {
+        List<CarDTO> cars = carService.getPurchasedCarsForCurrentUser();
+        return ResponseEntity.ok(cars);
+    }
+
+    /**
      * Tìm kiếm xe nâng cao với nhiều tiêu chí
      * GET /api/cars/advanced-search?brand=Toyota&minPrice=1000000&maxPrice=5000000
      */

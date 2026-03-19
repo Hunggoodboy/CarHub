@@ -24,17 +24,18 @@
             <div class="warrenty_container">
                 <h2>Dịch vụ bảo hành</h2>
                 <div class="warrenty-box">
+                    <input type="hidden" id="car_id" name="car_id" th:value="${carId}">
                     <h3>Thông tin xe</h3>
                     <label>Tên xe</label>
-                    <input type="text" id="name_car" name="name_car" placeholder="Tên xe ">
+                    <input type="text" id="name_car" name="name_car" placeholder="Tên xe " th:value="${carModel}" readonly>
                     <div class="row-2">
                         <div>
                             <label>Hãng xe</label>
-                            <input type="text" id="branch_car" name="branch_car" placeholder=" Nhập hãng xe">
+                            <input type="text" id="branch_car" name="branch_car" placeholder=" Nhập hãng xe" th:value="${carBrand}" readonly>
                         </div>
                         <div>
                             <label>Năm sản xuất</label>
-                            <input type="number" id="year_car" name="year_car" placeholder="Nhập năm sản xuất">
+                            <input type="number" id="year_car" name="year_car" placeholder="Nhập năm sản xuất" th:value="${carYear}" readonly>
                         </div>
                     </div>
                     <h3>Địa chỉ</h3>
