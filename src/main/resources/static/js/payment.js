@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     streetInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
         const query = this.value.trim();
-        if (query.length < 2) { suggestionsBox.innerHTML = ''; return; }
+        if (query.length < 4) { suggestionsBox.innerHTML = ''; return; }
 
         searchTimeout = setTimeout(() => {
             fetch(`https://rsapi.goong.io/Place/AutoComplete?api_key=${GOONG_API_KEY}&input=${encodeURIComponent(query)}`)
@@ -116,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 300);
     });
 
-    // 4. XÁC NHẬN THANH TOÁN (HIỆN BILL)
     confirmBtn?.addEventListener("click", () => {
         const address = streetInput.value.trim();
         const ward = wardInput.value.trim();
@@ -140,8 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.style.display = "block";
         modal.style.display = "block";
     });
-
-    // 5. GỬI ĐƠN HÀNG LÊN BE (GIỮ NGUYÊN TÊN BIẾN CỦA BẠN)
+    
     submitBtn?.addEventListener("click", () => {
         const data = {
             carId: carId,
