@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     streetInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
         const query = this.value.trim();
-        if (query.length < 2) { suggestionsBox.innerHTML = ''; return; }
+        if (query.length < 4) { suggestionsBox.innerHTML = ''; return; }
 
         searchTimeout = setTimeout(() => {
             fetch(`https://rsapi.goong.io/Place/AutoComplete?api_key=${GOONG_API_KEY}&input=${encodeURIComponent(query)}`)
