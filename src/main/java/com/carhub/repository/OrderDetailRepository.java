@@ -18,6 +18,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     List<OrderDetail> findByCar(Car car);
     List<OrderDetail> findByCarId(Long carId);
     //Tìm xe theo user_id và car_
-    @Query("SELECT od FROM OrderDetail od WHERE od.order.user.id = :user_id AND od.car.id = :car_id")
+    @Query("SELECT od FROM OrderDetail od WHERE od.order.customer.id = :user_id AND od.car.id = :car_id")
             Optional<OrderDetail> findOrderDetailByCarIdAndUserId(@Param("user_id") Long user_id, @Param("car_id") Long car_id);
 }

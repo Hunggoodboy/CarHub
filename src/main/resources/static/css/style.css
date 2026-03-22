@@ -24,6 +24,32 @@ body {
     header nav a {
         font-size: 14px; /* Thu nhỏ chữ một chút */
     }
+    header nav a i {
+         font-size: 18px; /* Tăng kích thước icon lên một chút cho rõ nét */
+         vertical-align: middle;
+         transition: transform 0.2s ease, color 0.2s ease;
+     }
+
+    /* Hiệu ứng phóng to nhẹ (pop-up) khi trỏ chuột vào các icon */
+    header nav a:hover i {
+        transform: scale(1.15);
+        color: #ff3b3b;
+    }
+
+    /* (Tùy chọn tương lai) Chấm đỏ thông báo tin nhắn chưa đọc / số lượng giỏ hàng */
+    .nav-badge {
+        position: relative;
+        top: -10px;
+        right: 5px;
+        background-color: #ff3b3b;
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 50%;
+        /* Tạo viền đen trùng màu nền header để chấm đỏ không bị lẹm vào icon */
+        border: 2px solid #111;
+    }
 
     /* 3. Nút Tìm kiếm: Cho rộng hết cỡ cho dễ bấm bằng ngón tay */
     .search-box button {

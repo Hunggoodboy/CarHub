@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // --- CẤU HÌNH KEY (Thay key của bạn lấy từ console.goong.io) ---
-    const GOONG_MAP_KEY = 'NAuy0xKrg4BYVnfEnD6OKD3GS8hJ1prrWtm1naq8'; // Map Key (m_...)
-    const GOONG_API_KEY = '7wYgWYbRnGZRFPMBG6blGJQRLN7Mz5eyE3apnifh'; // API Key (a_...)
+    // --- CẤU HÌNH KEY GOONG ---
+    const GOONG_MAP_KEY = 'NAuy0xKrg4BYVnfEnD6OKD3GS8hJ1prrWtm1naq8';
+    const GOONG_API_KEY = '7wYgWYbRnGZRFPMBG6blGJQRLN7Mz5eyE3apnifh';
 
     const params = new URLSearchParams(window.location.search);
     const carId = params.get("id");
 
+    // Elements địa chỉ
     const streetInput = document.getElementById('street-input');
     const wardInput = document.getElementById('ward-input');
     const cityInput = document.getElementById('city-input');
@@ -13,6 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const suggestionsBox = document.getElementById('address-suggestions');
     const mapContainer = document.getElementById('map-container');
 
+    // Elements đơn hàng (Cần thiết cho tính toán)
+    const quantityInput = document.getElementById("quantity-input");
+    const unitPriceEl = document.getElementById("unit-price");
+    const originalPriceEl = document.getElementById("original-price");
+    const discountPriceEl = document.getElementById("discount-price");
+    const finalPriceTotalEl = document.getElementById("finalPrice");
+
+    // Elements Modal
     const confirmBtn = document.querySelector(".payment-btn");
     const modal = document.getElementById("bill-modal");
     const overlay = document.getElementById("bill-overlay");
@@ -20,28 +29,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const qrBox = document.getElementById("qr-box");
     const submitBtn = document.getElementById("submit-order-btn");
 
-    // 1. KHỞI TẠO MAP GOONG
+    const formatter = new Intl.NumberFormat('vi-VN');
+
+    // 1. KHỞI TẠO MAP GOONG (Giữ nguyên logic cũ)
     goongjs.accessToken = GOONG_MAP_KEY;
     const map = new goongjs.Map({
         container: 'map',
         style: 'https://tiles.goong.io/assets/navigation_day.json',
-        center: [105.8342, 21.0278], // Mặc định ở Hà Nội
+        center: [105.8342, 21.0278],
         zoom: 13
     });
     
-    const marker = new goongjs.Marker({
-          draggable: true // Cho phép kéo ghim bằng chuột
-    })
-    .setLngLat([105.8342, 21.0278])
-    .addTo(map);
+    const marker = new goongjs.Marker({ draggable: true })
+        .setLngLat([105.8342, 21.0278])
+        .addTo(map);
 
-    // Lắng nghe sự kiện khi người dùng kéo xong ghim
     marker.on('dragend', function() {
         const lngLat = marker.getLngLat();
-        console.log('Tọa độ mới:', lngLat.lng, lngLat.lat);
-    
-        // (Tùy chọn) Bạn có thể dùng Reverse Geocoding của Goong 
-        // để cập nhật lại tên đường vào ô input khi người dùng thả ghim
         fetch(`https://rsapi.goong.io/Geocode?latlng=${lngLat.lat},${lngLat.lng}&api_key=${GOONG_API_KEY}`)
             .then(res => res.json())
             .then(data => {
@@ -51,23 +55,61 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // 2. XỬ LÝ TẢI GIÁ XE
+    // xu ly du lieu xe , tinh toan
     if (carId) {
         fetch(`/api/cars/${carId}`)
             .then(res => res.json())
             .then(data => {
                 const car = data.car;
                 if (!car) return;
-                const priceEl = document.getElementById("finalPrice");
-                if (priceEl) {
-                    const price = car.finalPrice || car.price;
-                    priceEl.innerText = new Intl.NumberFormat('vi-VN').format(price) + ' ₫';
+
+                // lay gia
+                const unitPriceValue = car.finalPrice || car.price; 
+                const originalPriceValue = car.price;              
+                const discountPerUnit = originalPriceValue - unitPriceValue;
+
+                // cap nhat gia
+                function updateCalculation() {
+                    const qty = parseInt(quantityInput.value) || 1;
+                    if (qty < 1) { quantityInput.value = 1; return; }
+
+                    const originalPriceRow = originalPriceEl.parentElement; 
+                    const discountPriceRow = discountPriceEl.parentElement; 
+
+                    if (discountPerUnit > 0) {
+                    // neu ko giam gia thi hien tat ca
+                    originalPriceRow.style.display = "flex";
+                    discountPriceRow.style.display = "flex";
+
+                    unitPriceEl.innerText = formatter.format(unitPriceValue) + ' ₫';
+                    originalPriceEl.innerText = formatter.format(originalPriceValue) + ' ₫';
+                    originalPriceEl.style.textDecoration = "line-through"; // Hiện gạch ngang
+
+                    const totalDiscount = discountPerUnit * qty;
+                    discountPriceEl.innerText = "- " + formatter.format(totalDiscount) + " ₫";
+                    } else {
+                        // ẩn giá gốc và giảm giá
+                        originalPriceRow.style.display = "none";
+                        discountPriceRow.style.display = "none";
+
+                        unitPriceEl.innerText = formatter.format(unitPriceValue) + ' ₫';
+                    }
+
+                     // hien thi tong thanh toan
+                    const totalFinal = unitPriceValue * qty;
+                    finalPriceTotalEl.innerHTML = `<b>${formatter.format(totalFinal)} ₫</b>`;
                 }
+
+                // Khởi tạo ban đầu
+                updateCalculation();
+
+                // Lắng nghe sự kiện đổi số lượng
+                quantityInput.addEventListener("input", updateCalculation);
             })
-            .catch(err => console.error("Lỗi load giá xe:", err));
+            .catch(err => console.error("Lỗi tải dữ liệu xe:", err));
     }
 
-    // 3. TÌM KIẾM ĐỊA CHỈ (AUTOCOMPLETE)
+    // 3. AUTOCOMPLETE ĐỊA CHỈ 
     let searchTimeout = null;
     streetInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
@@ -85,24 +127,17 @@ document.addEventListener("DOMContentLoaded", () => {
                             div.className = 'suggestion-item';
                             div.innerText = item.description;
                             div.onclick = () => {
-                                // Lấy chi tiết Place
                                 fetch(`https://rsapi.goong.io/Place/Detail?api_key=${GOONG_API_KEY}&place_id=${item.place_id}`)
                                     .then(res => res.json())
                                     .then(detail => {
                                         const res = detail.result;
                                         const loc = res.geometry.location;
-                                        
-                                        // Hiển thị Map
                                         mapContainer.style.display = 'block';
                                         map.resize();
                                         map.flyTo({ center: [loc.lng, loc.lat], zoom: 16 });
                                         marker.setLngLat([loc.lng, loc.lat]);
-
-                                        // Điền dữ liệu
                                         streetInput.value = res.name + ", " + res.formatted_address;
                                         suggestionsBox.innerHTML = '';
-                                        
-                                        // Tự động điền Xã/Tỉnh
                                         if (res.compound) {
                                             cityInput.value = res.compound.province || "";
                                             wardInput.value = res.compound.commune || "";
@@ -115,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         }, 300);
     });
-
     confirmBtn?.addEventListener("click", () => {
         const address = streetInput.value.trim();
         const ward = wardInput.value.trim();
@@ -127,19 +161,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const methodLabel = document.querySelector('input[name="paymentMethod"]:checked')
-                            .parentElement.innerText.trim();
+        const methodSelected = document.querySelector('input[name="paymentMethod"]:checked');
+        const methodLabel = methodSelected.parentElement.innerText.trim();
 
-        document.getElementById("bill-price").innerText = document.getElementById("finalPrice").innerText;
-        document.getElementById("bill-address").innerText = `${address}`;
+        // Gán dữ liệu vào Modal Bill
+        document.getElementById("bill-price").innerText = finalPriceTotalEl.innerText;
+        document.getElementById("bill-address").innerText = `${address}, ${ward}, ${city}`;
         document.getElementById("bill-phone").innerText = phone;
         document.getElementById("bill-method").innerText = methodLabel;
 
-        qrBox.style.display = methodLabel.includes("Chuyển khoản") ? "block" : "none";
+        qrBox.style.display = methodSelected.value === "BANK" ? "block" : "none";
         overlay.style.display = "block";
         modal.style.display = "block";
     });
-    
+
+    // 5. GỬI ĐƠN HÀNG LÊN SERVER
     submitBtn?.addEventListener("click", () => {
         const data = {
             carId: carId,
@@ -147,7 +183,8 @@ document.addEventListener("DOMContentLoaded", () => {
             ward: wardInput.value.trim(),
             city: cityInput.value.trim(),
             phone: phoneInput.value.trim(),
-            paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+            paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+            quantity: parseInt(quantityInput.value)
         };
 
         fetch("/api/orders", {
@@ -156,17 +193,15 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(data)
         })
         .then(res => {
-            if (!res.ok) throw new Error("Gửi yêu cầu thất bại");
+            if (!res.ok) throw new Error("Thất bại");
             return res.json();
         })
         .then(() => {
             alert("Gửi yêu cầu mua xe thành công!");
             closeModal();
+            window.location.href = "/index"; // Chuyển trang khi xong
         })
-        .catch(err => {
-            console.error(err);
-            alert("Có lỗi xảy ra, vui lòng thử lại!");
-        });
+        .catch(err => alert("Có lỗi xảy ra, vui lòng thử lại!"));
     });
 
     function closeModal() {

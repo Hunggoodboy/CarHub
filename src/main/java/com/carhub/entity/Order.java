@@ -14,9 +14,23 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+    private Long buyerId;
     LocalDateTime orderDate;
-    Double totalAmountOriginal,totalAmountFinal ;
-    String status, deliveryAddress;
+    Double totalAmountOriginal,totalAmountFinal, totalDiscount;
+    String deliveryAddress;
+    private String street;
+    private String ward;
+    private String city;
+    private String phone;
+    public enum Status{
+        PENDING,
+        DELIVERED,
+        CANCELLED,
+        COMPLETED
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status = Status.PENDING;
     //Kết nối OrderDetail
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
@@ -25,11 +39,12 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seller_id")
+    private User seller;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

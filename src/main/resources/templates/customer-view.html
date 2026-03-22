@@ -16,11 +16,9 @@
     <header>
         <div class="logo">CarShop</div>
         <nav>
-            <a href="index.html">Trang chủ</a>
-            <a href="#cars">Xe</a>
-            <a href="customer-view.html">Bán xe</a>
+            <a th:href="@{/index}">Trang chủ</a>
             <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
-            <a href="login.html">Đăng nhập</a>
+            <a th:href="@{/login}">Đăng nhập</a>
         </nav>
         <div id="welcome-message"
             th:if="${session.justLoggedIn}"

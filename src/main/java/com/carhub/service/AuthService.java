@@ -1,8 +1,8 @@
 package com.carhub.service;
 
-import com.carhub.dto.AuthResponse;
-import com.carhub.dto.LoginRequest;
-import com.carhub.dto.RegisterRequest;
+import com.carhub.dto.Response.AuthResponse;
+import com.carhub.dto.Request.LoginRequest;
+import com.carhub.dto.Request.RegisterRequest;
 import com.carhub.dto.UserDTO;
 import com.carhub.entity.Customer;
 import com.carhub.entity.User;

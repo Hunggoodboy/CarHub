@@ -20,6 +20,7 @@ public class CarDTO {
     private String brandName;
     private String brandOrigin;
     private Long brandId;
+    private Long SellerId;
     public static CarDTO fromEntity(Car car) {
 
         CarDTO dto = new CarDTO();
@@ -33,6 +34,7 @@ public class CarDTO {
         dto.setFinalPrice(car.getPrice() * (1 - car.getDiscount() / 100));
         dto.setManufactureYear(car.getManufactureYear());
         dto.setStockQuantity(car.getStockQuantity());
+        dto.setSellerId(car.getSeller().getId());
         if (car.getBrand() != null) {
             dto.setBrandId(car.getBrand().getId());
             dto.setBrandName(car.getBrand().getName());

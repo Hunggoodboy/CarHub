@@ -124,10 +124,27 @@ function loadCarDetail(carId) {
                 oldPriceEl.style.display = "none";
             }
 
+            // --- PHẦN CHỈNH SỬA THÊM: Xử lý nút Tư vấn ---
+            const consultBtn = document.querySelector(".btn-consult");
+            if (consultBtn) {
+                consultBtn.onclick = function() {
+                    if (typeof ChatWidget !== 'undefined') {
+                        // Lưu tên xe vào bộ nhớ tạm
+                        sessionStorage.setItem("pending_car_name", car.model);
+                        // Mở khung chat
+                        ChatWidget.openWidget();
+                    } else {
+                        alert('Đang kết nối, vui lòng thử lại!');
+                    }
+                };
+            }
+            // --------------------------------------------
+
             renderReviews(data.reviews);
 
             setupComment(car.id);
-
+            console.log('sellerId:', car.sellerId);
+            ChatWidget.init(car.sellerId, 'Người bán');
             if (Array.isArray(data.carsSimilar)) {
 
                 const relatedCars = data.carsSimilar

@@ -2,11 +2,9 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>PayMent - CarShop</title>
-
+    <title>Thanh Toán - CarShop</title>
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-
     <script src="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.css" rel="stylesheet" />
 </head>
@@ -33,9 +31,9 @@
     <div class="payment_container">
         <h2>Trang thanh toán</h2>
 
+        <!-- ĐỊA CHỈ GIAO XE -->
         <div class="payment-box">
             <h3>Địa chỉ giao xe</h3>
-
             <label>Địa chỉ cụ thể (Số nhà, tên đường...)</label>
             <div class="address-container">
                 <input type="text" id="street-input" name="street" placeholder="Nhập địa chỉ của bạn..." autocomplete="off">
@@ -59,7 +57,6 @@
                     <input type="text" id="city-input" name="city" placeholder="Nhập tỉnh/thành phố">
                 </div>
             </div>
-
             <label>Số Điện Thoại Liên hệ</label>
             <input type="text" id="phone-input" name="phone" placeholder="Nhập Số Điện Thoại">
         </div>
@@ -67,20 +64,36 @@
         <div class="payment-box">
             <h3>Thông tin đơn hàng</h3>
             <div class="price-row">
-                <span>Giá xe:</span>
-                <span id="finalPrice">--</span>
+                <span>Số lượng:</span>
+                <div class="quantity-selector">
+                    <input id="quantity-input" type="number" value="1" min="1" style="width: 60px; padding: 5px;">
+                </div>
+            </div>
+            <div class="price-row">
+                <span>Giá xe (1 chiếc):</span>
+                <span id="unit-price" style="font-weight: bold;">--</span>
+            </div>
+            <div class="price-row">
+                <span>Giá gốc:</span>
+                <span id="original-price" style="text-decoration: line-through; color: #888;">--</span>
+            </div>
+            <div class="price-row discount-row">
+                <span>Giảm giá:</span>
+                <span id="discount-price" style="color: #e74c3c; font-weight: bold;">- 0 ₫</span>
+            </div>
+            <div class="price-row total-row" style="border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px;">
+                <span><b>Tổng thanh toán:</b></span>
+                <span id="finalPrice" style="font-size: 1.2em; color: #2c3e50;"><b>--</b></span>
             </div>
         </div>
 
         <div class="payment-box">
             <h3>Phương thức thanh toán</h3>
             <label class="radio">
-                <input type="radio" name="paymentMethod" value="CASH" checked>
-                Thanh toán bằng tiền mặt 
+                <input type="radio" name="paymentMethod" value="CASH" checked> Thanh toán bằng tiền mặt 
             </label>
             <label class="radio">
-                <input type="radio" name="paymentMethod" value="BANK">
-                Chuyển khoản ngân hàng
+                <input type="radio" name="paymentMethod" value="BANK"> Chuyển khoản ngân hàng
             </label>
         </div>
 
@@ -88,25 +101,67 @@
     </div>
 </section>
 
+
 <div id="bill-overlay"></div>
 <div id="bill-modal">
     <span id="close-bill">&times;</span>
     <h3>Hóa đơn thanh toán</h3>
-    <p><b>Giá xe:</b> <span id="bill-price"></span></p>
+    <p><b>Tổng cộng:</b> <span id="bill-price"></span></p>
     <p><b>Địa chỉ:</b> <span id="bill-address"></span></p>
     <p><b>Số điện thoại:</b> <span id="bill-phone"></span></p>
     <p><b>Phương thức:</b> <span id="bill-method"></span></p>
 
-    <div id="qr-box">
+    <div id="qr-box" style="display:none; text-align: center; margin-top: 15px;">
         <p><b>Quét mã QR để thanh toán</b></p>
-        <img src="/car-images/qr_bank.jpg" width="200">
+        <img src="/car-images/qr_bank.jpg" width="180" style="border: 1px solid #ddd; padding: 5px;">
     </div>
-
-    <button id="submit-order-btn" class="btn">Gửi yêu cầu</button>
+    <button id="submit-order-btn" class="payment-btn" style="margin-top: 20px; width: 100%;">Gửi yêu cầu</button>
 </div>
 
 <footer class="site-footer">
-    <div class="footer-bottom">© 2026 CarShop. All rights reserved.</div>
+    <div class="footer-container">
+
+        <div class="footer-col">
+            <h3>CarShop</h3>
+            <p>
+                Nền tảng mua bán xe uy tín,
+                mang đến những mẫu xe chất lượng
+                và trải nghiệm mua sắm an toàn.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Liên kết</h4>
+            <ul>
+                <li><a th:href="@{/index}">Trang chủ</a></li>
+                <li><a href="#">Xe mới</a></li>
+                <li><a href="#">Giỏ hàng</a></li>
+                <li><a href="#">Tài khoản</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Liên hệ</h4>
+            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
+            <p>Hotline: 0999 999 999</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Theo dõi chúng tôi</h4>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
+                <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 CarShop. All rights reserved.
+     </div>
 </footer>
 
 <script th:src="@{/js/payment.js}"></script>

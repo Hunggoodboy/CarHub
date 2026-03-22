@@ -1,5 +1,7 @@
-package com.carhub.dto;
+package com.carhub.dto.Response;
 
+import com.carhub.dto.CarDTO;
+import com.carhub.dto.ReviewsDTO;
 import lombok.Data;
 
 import java.util.List;

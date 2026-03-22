@@ -29,6 +29,9 @@
         href="/logout">
            Đăng xuất
         </a>
+        <a th:href="@{/chat}" title="Tin nhắn">
+            <i class="fa-solid fa-comment-dots"></i>
+            <span class="nav-badge">3</span> </a>
     </nav>
     <div id="welcome-message"
         th:if="${session.justLoggedIn}"

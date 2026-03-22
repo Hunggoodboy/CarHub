@@ -23,19 +23,23 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     //Lấy id của người dùng hiện tại
-    public Long getId(Authentication authentication) {
+    public UserDTO getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new RuntimeException("Bạn chưa đăng nhập!");
         }
         if(authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
             String email = oAuth2User.getAttribute("email");
-            return getUserByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ email")).getId();
+            return getUserByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ email"));
         }
         else if(authentication.getPrincipal() instanceof UserDetails) {
             String username = authentication.getName();
-            return getIdByUsername(username).orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
+            return getUserByUsername(username).orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
         }
         throw new RuntimeException("Người dùng chưa đăng nhập");
+    }
+
+    public Long getId(Authentication authentication) {
+        return getCurrentUser(authentication).getId();
     }
 
     // Lấy thông tin user theo ID

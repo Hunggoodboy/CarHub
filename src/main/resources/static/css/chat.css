@@ -1,0 +1,353 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.chat-container {
+    display: flex;
+    height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* --- SIDEBAR --- */
+.chat-sidebar {
+    width: 350px;
+    border-right: 1px solid #e4e6eb;
+    display: flex;
+    flex-direction: column;
+    background: #b0e0e6;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #e4e6eb;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#chat-search {
+    width:100%;
+    padding : 10px 15px 10px 35px;
+    border : none;
+    border-radius: 20px;
+    background-color: rgba(255,255,255,0.5);
+    outline : none;
+    transition: all 0.3s;
+}
+#chat-search:focus {
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.search-container i{
+    position: absolute;
+    left : 28px;
+    top : 27px;
+    color : #888;
+}
+
+.btn-back {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* hover giống app thật */
+.btn-back:hover {
+    background: #f0f2f5;
+}
+#btn-like {
+    background : #e4e6eb;
+    border : none;
+    border-radius: 50%;
+    width:40px;
+    height : 50px;
+    cursor: pointer;
+    font-size: 18px;
+}
+#btn-like:hover{
+    background: #d8dadf;
+}
+
+.recent-chats {
+    list-style: none;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.chat-item {
+    display: flex;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chat-item:hover {
+    background-color: #f5f6f7;
+}
+
+.chat-item.active {
+    background-color: #e7f3ff;
+}
+
+.chat-item:active {
+    transform: scale(0.98);
+}
+
+.chat-item .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-weight: bold;
+    color: white;
+}
+
+.chat-item-details h4 {
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.chat-item-details p {
+    font-size: 13px;
+    color: #65676B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* --- CHAT WINDOW --- */
+.chat-window {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e4e6eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.chat-partner-info {
+    display: flex;
+    align-items: center;
+}
+
+.chat-partner-info .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-right: 10px;
+}
+.status {
+    font-size: 12px;
+    margin-top: 2px;
+    display: block;
+}
+
+.status.connected {
+    color: green;
+}
+
+.status.disconnected {
+    color: red;
+}
+
+.status.reconnecting {
+    color: orange;
+}
+
+/* --- MESSAGES AREA --- */
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    background: url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920&auto=format&fit=crop") center/cover no-repeat;
+    position: relative;
+}
+
+
+.empty-chat-state {
+    text-align: center;
+    color: white;
+    margin-top: 100px;
+    font-size : 30px;
+}
+.carhub-logo-container {
+    margin-bottom: 25px; 
+    position: relative; 
+    display: inline-block; 
+}
+
+.carhub-logo-text {
+    font-size: 32px; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    color: #ffffff; 
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+}
+
+
+.hub-highlight {
+    color: #e74c3c; 
+}
+
+
+.carhub-logo-underline {
+    height: 4px; 
+    background: linear-gradient(90deg, #ffffff 0%, #e74c3c 100%); 
+    width: 60%; 
+    margin: 8px auto 0; 
+    border-radius: 2px;
+}
+
+
+.welcome-text-container h3 {
+    font-size: 20px; 
+    font-weight: 600;
+    margin-bottom: 10px; 
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-text-container p {
+    font-size: 15px; 
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8); 
+}
+/* Bong bóng chat */
+.msg-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+    animation: fadeIn 0.2s ease;
+}
+
+.msg-wrapper.me {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.msg-wrapper.them {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+.msg-bubble {
+    padding: 10px 14px;
+    border-radius: 20px;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.me .msg-bubble {
+    background-color: #0084ff;
+    color: white;
+    border-bottom-right-radius: 6px;
+}
+
+.them .msg-bubble {
+    background-color: #e4e6eb;
+    color: black;
+    border-bottom-left-radius: 6px;
+}
+
+/* ⚠️ GIỮ NGUYÊN PHẦN NÀY NHƯ BẠN YÊU CẦU */
+.msg-time {
+    font-size: 11px;
+    color: #65676B;
+    margin-top: 4px;
+}
+
+/* --- INPUT AREA --- */
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid #e4e6eb;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+}
+
+.chat-input-area textarea {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 25px;
+    border: none;
+    resize: none;
+    outline: none;
+    font-size: 15px;
+    background: #f0f2f5;
+}
+
+.chat-input-area button {
+    background: #0084ff;
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* --- SCROLLBAR --- */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+/* --- ANIMATION --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

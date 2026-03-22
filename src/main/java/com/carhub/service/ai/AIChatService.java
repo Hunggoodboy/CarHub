@@ -1,6 +1,6 @@
 package com.carhub.service.ai;
 
-import com.carhub.dto.ChatRequest;
+import com.carhub.dto.Request.ChatAiRequest;
 import org.springframework.ai.chat.client.ChatClient;
 
 import org.springframework.ai.document.Document;
@@ -20,7 +20,7 @@ public class AIChatService {
         this.vectorStore = vectorStore;
     }
     
-    public String generateAnswer(ChatRequest chatRequest) throws InterruptedException {
+    public String generateAnswer(ChatAiRequest chatRequest) throws InterruptedException {
         String question = chatRequest != null ? chatRequest.getQuestion() : null;
         if (question == null || question.trim().isEmpty()) {
             return "Ban vui long nhap cau hoi cu the de minh tu van chinh xac hon.";

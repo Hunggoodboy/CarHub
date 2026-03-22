@@ -1,8 +1,8 @@
 package com.carhub.controller;
 
-import com.carhub.dto.EmailRequest;
-import com.carhub.dto.OtpRequest;
-import com.carhub.dto.ResetPasswordRequest;
+import com.carhub.dto.Request.EmailRequest;
+import com.carhub.dto.Request.OtpRequest;
+import com.carhub.dto.Request.ResetPasswordRequest;
 import com.carhub.repository.UserRepository;
 import com.carhub.service.OtpTokenService;
 import com.carhub.service.ResetTokenService;

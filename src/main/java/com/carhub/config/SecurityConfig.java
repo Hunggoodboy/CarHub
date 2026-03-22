@@ -26,10 +26,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**","/car-images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI", "/error").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/car-images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI").permitAll()
+                        .requestMatchers("/css/**","/js/**", "/images/**","/car-images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI","/chat", "/error").permitAll()
                         .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
                         .requestMatchers("/api/password/**").authenticated()
                         .requestMatchers("/customer-view").hasRole("CUSTOMER")

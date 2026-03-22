@@ -1,6 +1,6 @@
 package com.carhub.controller;
 
-import com.carhub.dto.ChatRequest;
+import com.carhub.dto.Request.ChatAiRequest;
 import com.carhub.service.ai.AIChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class ChatAiController {
     }
     
     @PostMapping("/ChatAI")
-    public ResponseEntity<String> chat(@RequestBody ChatRequest chatRequest) throws InterruptedException {
+    public ResponseEntity<String> chat(@RequestBody ChatAiRequest chatRequest) throws InterruptedException {
         String aiChatContent = AIChatService.generateAnswer(chatRequest);
         return ResponseEntity.ok(aiChatContent);
     }

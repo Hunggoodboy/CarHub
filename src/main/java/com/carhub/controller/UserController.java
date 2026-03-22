@@ -31,12 +31,8 @@ public class UserController {
     }
     @GetMapping("/me")
     @ResponseBody
-    public ResponseEntity<AppPrincipal>getCurrentUser(Authentication authentication) {
-         AppPrincipal principal = (AppPrincipal) authentication.getPrincipal();
-         if(authentication == null) {
-             return ResponseEntity.badRequest().build();
-         }
-        return ResponseEntity.ok(principal);
+    public ResponseEntity<?> getCurrentUserId(Authentication authentication) {
+        return ResponseEntity.ok(userService.getCurrentUser(authentication).getId());
     }
     /**
      * Lấy thông tin user theo username
