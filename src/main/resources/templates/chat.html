@@ -9,28 +9,47 @@
 <div class="chat-container">
     <aside class="chat-sidebar">
         <div class="sidebar-header">
-            <h2>Đoạn chat</h2>
+            <div class="header-left">
+                <a th:href="@{/index}" class="btn-back">✕</a>
+                <h2>Đoạn chat</h2>
+            </div>
         </div>
-        <ul id="recent-chats-list" class="recent-chats">
-        </ul>
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="chat-search" placeholder="Tìm kiếm...">
+        </div>
+        <ul id="recent-chats-list" class="recent-chats"></ul>
     </aside>
 
     <main class="chat-window">
         <header class="chat-header" id="chat-header" style="display: none;">
             <div class="chat-partner-info">
                 <div class="avatar" id="partner-avatar">?</div>
-                <h3 id="partner-name">Tên người dùng</h3>
+                <div>
+                    <h3 id="partner-name">Tên người dùng</h3>
+                    <span id="connection-status" class="status connected">🟢 Đã kết nối</span>
+                </div>
+                
             </div>
         </header>
 
         <div class="chat-messages" id="chat-messages">
             <div class="empty-chat-state" id="empty-state">
-                Hãy chọn một đoạn chat hoặc bắt đầu cuộc trò chuyện mới.
+                <div class="carhub-logo-container">
+                   <span class="carhub-logo-text">Car<span class="hub-highlight">Hub</span></span>
+                   <div class="carhub-logo-underline"></div> 
+                </div>
+
+                <div class="welcome-text-container">
+                    <h3>Chào mừng đến với CarHub Chat!</h3>
+                    <p>Hãy chọn một đoạn chat để bắt đầu</p>
+                </div>
             </div>
         </div>
 
         <footer class="chat-input-area" id="chat-input-area" style="display: none;">
             <textarea id="chat-input" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+            <button id="btn-like">👍</button>
             <button id="btn-send">Gửi</button>
         </footer>
     </main>

@@ -217,11 +217,14 @@ function renderCartItems(items) {
 			<div class="cart-item-content">
 				<h4 href = "/product_detail?id=${item.id}">${item.model}</h4>
 				<p>${formatCurrency(item.finalPrice)}</p>
-			</div>
-            <a id="view-detail-cart" href="/product_detail?id=${item.id}"> Xem thông tin</a>
-			<button type="button" class="cart-remove" data-action="remove" data-id="${item.id}">
-				<i class="fa-regular fa-trash-can"></i>
-			</button>
+		
+                <div class = "detail-actions2">
+                    <a id="view-detail-cart"  href="/product_detail?id=${item.id}"> Xem thông tin</a>
+			        <button type="button" class="cart-remove" data-action="remove" data-id="${item.id}">
+				       <i class="fa-regular fa-trash-can"></i>
+			        </button>
+                 </div>
+            </div>
 		</article>
 	`).join("");
 

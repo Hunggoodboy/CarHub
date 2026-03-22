@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .successHandler((request, response, authentication) -> {
+                            request.getSession().setAttribute("justLoggedIn", true);
 
                             var savedRequest = new org.springframework.security.web.savedrequest.HttpSessionRequestCache()
                             .getRequest(request, response);

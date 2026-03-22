@@ -20,6 +20,12 @@
                     <a href="#" title="Giỏ hàng"><i class="fa-solid fa-cart-shopping"></i></a>
                     <a href="#" title="Thông tin tài khoản"><i class="fa-solid fa-user"></i></a>
                 </nav>
+                <div id="welcome-message"
+                th:if="${session.justLoggedIn}"
+                class="welcome-message">
+     
+                    Xin chào </span> 👋
+                </div>
         </header>
 
         <section class="hero">
@@ -56,7 +62,6 @@
 
                     <div class="detail-actions">
                         <a id="buy-now-btn" href="#" class="btn">Mua ngay</a>
-                        <a href="#" class="btn"><i class="fa-solid fa-cart-plus"></i> Thêm giỏ hàng</a>
                         <button class="btn-consult" onclick="
                                 if(document.getElementById('chat-widget')) {
                                     ChatWidget.openWidget();
@@ -161,6 +166,7 @@
         </div>
 
         <script src="/js/car.js"></script>
+        <script th:src="@{/js/welcome.js}"></script>
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
         <script th:src="@{/js/chat-widget.js}"></script>

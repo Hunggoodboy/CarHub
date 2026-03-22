@@ -2,9 +2,15 @@ package com.carhub.controller;
 
 import com.carhub.dto.Response.AuthResponse;
 import com.carhub.dto.CarDTO;
+import com.carhub.dto.UserDTO;
+import com.carhub.entity.Car;
+import com.carhub.entity.User;
 import com.carhub.dto.Request.RegisterRequest;
 import com.carhub.service.AuthService;
 import com.carhub.service.CarService;
+import com.carhub.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -25,14 +36,28 @@ public class WebController {
 
     private final CarService carService;
     private final AuthService authService;
+    private final UserService userService;
 
     // Trang chủ
     @GetMapping({ "/", "/index" })
-    public String index(Model model) {
-        List<CarDTO> cars = carService.getAllCars();
-        model.addAttribute("cars", cars);
-        return "index";
+public String index(Model model, Authentication authentication) {
+
+    List<CarDTO> cars = carService.getAllCars();
+    model.addAttribute("cars", cars);
+
+    if (authentication != null && authentication.isAuthenticated()
+            && !"anonymousUser".equals(authentication.getPrincipal())) {
+
+        Long userId = userService.getId(authentication);
+        UserDTO user = userService.getUserById(userId).orElse(null);
+
+        if (user != null) {
+            model.addAttribute("fullName", user.getFullName());
+        }
     }
+
+    return "index";
+}
 
     // Trang chi tiết xe
     // Trang chi tiết xe

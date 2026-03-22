@@ -6,6 +6,8 @@ class ChatApplication {
         this.stompClient = null;
         this.currentPage = 0;
         this.pageSize = 20;
+        this.reconnectAttempts = 0;
+        this.isConnecting = false;
 
         // Các thành phần DOM (Encapsulation)
         this.ui = {
@@ -13,11 +15,13 @@ class ChatApplication {
             chatMessages: document.getElementById('chat-messages'),
             chatInput: document.getElementById('chat-input'),
             btnSend: document.getElementById('btn-send'),
+            btnLike: document.getElementById('btn-like'),
             chatHeader: document.getElementById('chat-header'),
             chatInputArea: document.getElementById('chat-input-area'),
             partnerName: document.getElementById('partner-name'),
             partnerAvatar: document.getElementById('partner-avatar'),
-            emptyState: document.getElementById('empty-state')
+            emptyState: document.getElementById('empty-state'),
+            connectionStatus: document.getElementById('connection-status')
         };
 
         // Ràng buộc (bind) ngữ cảnh this cho các sự kiện
@@ -37,11 +41,29 @@ class ChatApplication {
         this.connectWebSocket();
         await this.loadRecentChats();
     }
+    filterChats() {
+        const searchInput = document.getElementById('chat-search');
+        const filter = searchInput.value.toLowerCase();
+        const chatItems = this.ui.recentChatsList.querySelectorAll('.chat-item');
+
+        chatItems.forEach(item => {
+            const userNameEl = item.querySelector('.user-name');
+            if (userNameEl) {
+                const userName = userNameEl.innerText.toLowerCase();
+                item.style.display = userName.includes(filter) ? "" : "none";
+            }
+        });
+    }
 
     // Gắn các sự kiện (Listeners)
     attachEventListeners() {
         this.ui.btnSend.addEventListener('click', this.sendMessage);
         this.ui.chatInput.addEventListener('keydown', this.handleKeyPress);
+        this.ui.btnLike.addEventListener('click',() => this.sendLike());
+        const searchInput = document.getElementById('chat-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => this.filterChats());
+        }
 
         // Bắt sự kiện cuộn chuột để làm chức năng Pagination (Load tin nhắn cũ)
         this.ui.chatMessages.addEventListener('scroll', async () => {
@@ -78,7 +100,7 @@ class ChatApplication {
                 li.innerHTML = `
                     <div class="avatar">${chat.partnerName.charAt(0).toUpperCase()}</div>
                     <div class="chat-item-details">
-                        <h4>${this.escapeHtml(chat.partnerName)}</h4>
+                        <h4 class="user-name">${this.escapeHtml(chat.partnerName)}</h4>
                         <p>${this.escapeHtml(chat.lastMessage || '')}</p>
                     </div>
                 `;
@@ -137,14 +159,37 @@ class ChatApplication {
             console.error("Lỗi load history:", error);
         }
     }
+    updateStatus(type){
+        const el=this.ui.connectionStatus;
+        if(!el) return;
+        if (type === 'connected'){
+            el.textContent = '🟢 Đã kết nối';
+            el.className = 'status connected';
+        } else if (type === 'disconnected'){
+            el.textContent = '🔴 Mất kết nối';
+            el.className = 'status disconnected';
+        } else if (type === 'reconnecting'){
+            el.textContent = '🟡 Đang kết nối lại...';
+            el.className = 'status reconnecting';
+        }
+    }
 
     // WebSocket: Kết nối và cấu hình kênh
     connectWebSocket() {
+        if (this.isConnecting) return;
+        this.isConnecting = true;
+        if (this.stompClient && this.stompClient.connected) {
+            this.stompClient.disconnect();
+        }
         const socket = new SockJS('/gs-guide-websocket'); // Đổi endpoint cho đúng với config backend
         this.stompClient = Stomp.over(socket);
         this.stompClient.debug = null; // Tắt log rác của Stomp
 
         this.stompClient.connect({}, (frame) => {
+            console.log("Đã kết nối WebSocket");
+            this.updateStatus('connected');
+            this.reconnectAttempts = 0;
+            this.isConnecting = false;
             // Lắng nghe tin nhắn tới
             this.stompClient.subscribe('/user/queue/private', (message) => {
                 const msg = JSON.parse(message.body);
@@ -160,6 +205,17 @@ class ChatApplication {
             });
         }, (error) => {
             console.error("Mất kết nối WebSocket:", error);
+            this.updateStatus('disconnected')
+            this.isConnecting = false;
+            if (this.reconnectAttempts < 5) {
+                this.reconnectAttempts++;
+
+                setTimeout(() => {
+                    console.log("Đang kết nối lại ....");
+                    this.updateStatus('reconnecting');
+                    this.connectWebSocket();
+                }, 3000);
+            }
             // Có thể viết thêm logic auto-reconnect ở đây
         });
     }
@@ -184,6 +240,16 @@ class ChatApplication {
             event.preventDefault();
             this.sendMessage();
         }
+    }
+    sendLike(){
+        if(!this.currentPartnerId || !this.stompClient) return;
+        const chatMessageRequest= {
+            senderId: this.currentUserId,
+            receiverId: this.currentPartnerId,
+            content :"👍",
+            
+        };
+        this.stompClient.send('/app/chat.private',{},JSON.stringify(chatMessageRequest));
     }
 
     // Render 1 bong bóng tin nhắn ra màn hình
