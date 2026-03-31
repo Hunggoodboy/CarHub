@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded",function(){
     loadUserProfile();
 });
 function loadPurchasedCars(){
-    fetch("/api/orders/my-cars")
+    fetch("/api/cars/purchased")
     .then(res => res.json())
     .then(data =>{
         document.getElementById("loading-msg").style.display="none";

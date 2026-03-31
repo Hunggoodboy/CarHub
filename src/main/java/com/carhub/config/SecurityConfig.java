@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index", "/register", "/login", "/ChatAI","/chat", "/error").permitAll()
                         .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
                         .requestMatchers("/api/password/**").authenticated()
+                        .requestMatchers("/api/favorites/**").authenticated()
                         .requestMatchers("/customer-view").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )

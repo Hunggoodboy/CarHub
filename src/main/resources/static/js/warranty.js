@@ -1,8 +1,11 @@
 document.getElementById("submit-warranty-btn").addEventListener("click",function() {
+    const carIdField = document.getElementById("car_id");
+    if (!carIdField || !carIdField.value) {
+        alert("Không xác định được xe cần bảo hành.");
+        return;
+    }
     const data ={
-        nameCar : document.getElementById("name_car").value,
-        branchCar : document.getElementById("branch_car").value,
-        yearCar : document.getElementById("year_car").value,
+        carId : carIdField.value,
         street : document.getElementById("street").value ,
         ward : document.getElementById("ward").value,
         city : document.getElementById("city").value,

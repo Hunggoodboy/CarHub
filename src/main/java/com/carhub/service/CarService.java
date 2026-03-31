@@ -3,11 +3,11 @@ package com.carhub.service;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.entity.Car;
-import com.carhub.repository.BrandRepository;
-import com.carhub.repository.CarRepository;
-import com.carhub.repository.ReviewsRepository;
+import com.carhub.repository.*;
 import com.carhub.service.ai.VectorStoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,10 +26,11 @@ import java.util.stream.Collectors;
 public class CarService {
 
     private final CarRepository carRepository;
-    private final BrandRepository brandRepository;
-    private final ReviewsRepository reviewsRepository;
+    private final CarImagesSubRepository carImagesSubRepository;
     private final VectorStoreService vectorStoreService;
     private final ReviewService reviewService;
+    private final OrderDetailRepository orderDetailRepository;
+    private final UserService userService;
     // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()
@@ -40,9 +41,11 @@ public class CarService {
 
     // Lấy thông tin xe theo ID
     public CarDTO getCarById(Long id) {
-        Optional<CarDTO> car = carRepository.findById(id)
-                .map(CarDTO::fromEntity);
-        return car.orElse(null);
+        CarDTO car = carRepository.findById(id)
+                .map(CarDTO::fromEntity)
+                .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
+        car.setSubImageUrls(carImagesSubRepository.findAllImageUrlsByCarId(car.getId()));
+        return car;
     }
     // Lấy Reviews theo id xe
     // Lấy Các Mẫu Xe Tương Tự
@@ -94,6 +97,16 @@ public class CarService {
     // Lấy xe còn hàng
     public List<CarDTO> getAvailableCars() {
         return carRepository.findByStockQuantityGreaterThan(0)
+                .stream()
+                .map(CarDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // Lấy tất cả xe mà người dùng hiện tại đã mua (không lọc theo trạng thái đơn hàng)
+    public List<CarDTO> getPurchasedCarsForCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userService.getId(authentication);
+        return orderDetailRepository.findPurchasedCarsByUserId(userId)
                 .stream()
                 .map(CarDTO::fromEntity)
                 .collect(Collectors.toList());
@@ -161,8 +174,10 @@ public class CarService {
         car.setColor(color);
         car.setImageUrl("car-images/" + fileName);
         car.setModel(model);
+        vectorStoreService.loadCar(car);
         carRepository.save(car);
     }
+
     public List<CarDTO> searchByModel(String model) {
         return carRepository.findByModelContainingIgnoreCase(model)
                 .stream()
