@@ -108,7 +108,7 @@ function loadCarDetail(carId) {
 
             document.getElementById("car-img").src = car.imageUrl
                 ? `/${car.imageUrl.replace("car_images", "car-images")}`
-                : "/images/default-car.png";
+                : "/images/default-car.jpeg";
 
             const formatter = new Intl.NumberFormat("vi-VN");
 

@@ -500,7 +500,13 @@ footer {
 .payment-box {
     margin-bottom: 22px;
 }
-
+.payment-box1{
+    border : 1px solid red;
+    padding : 20px;
+    border-radius : 10px;
+    width : 400px;
+    margin : 0 auto;
+}
 .payment-box h3 {
     font-size: 18px;
     margin-bottom: 12px;
@@ -981,6 +987,56 @@ footer {
 }
 
 .login-btn:hover {
+    background: #0056b3;
+}
+.user-infor {
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-family: Arial, sans-serif;
+}
+
+/* mỗi dòng thông tin */
+.user-infor p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+}
+
+/* label bên trái */
+.user-infor p strong {
+    color: #555;
+    font-weight: 500;
+}
+
+/* value bên phải */
+.user-infor span {
+    color: #111;
+    font-weight: 600;
+}
+
+/* nút chỉnh sửa */
+.user-infor button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.user-infor button:hover {
     background: #0056b3;
 }
 html {
