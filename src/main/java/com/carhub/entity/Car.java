@@ -12,7 +12,11 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String name, model, color, description, imageUrl;
+    private String name, model, color;
+    @Column(columnDefinition = "Text", name = "image_url")
+    private String imageUrl;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     private double price, discount;
     private int manufactureYear, stockQuantity;
     //Kết nối qua BrandEntity

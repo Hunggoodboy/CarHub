@@ -68,6 +68,7 @@ public class VectorStoreService {
                 .ifPresent(v -> carDTO.setImageUrl(v.toString()));
         return carDTO;
     }
+
     @PostConstruct
     public void loadAllCars() {
         boolean vectorEmpty = vectorStore.similaritySearch(SearchRequest.builder().query("Xe").topK(1).build()).isEmpty();
@@ -80,6 +81,7 @@ public class VectorStoreService {
             System.out.println(String.format("Đã nạp %s dữ liệu  xe vào VectorStore",  documentList.size()));
         }
     }
+
 
     public void loadCar(Car car) {
         Document docCar = carToDocument(car);

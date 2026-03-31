@@ -174,8 +174,10 @@ public class CarService {
         car.setColor(color);
         car.setImageUrl("car-images/" + fileName);
         car.setModel(model);
+        vectorStoreService.loadCar(car);
         carRepository.save(car);
     }
+
     public List<CarDTO> searchByModel(String model) {
         return carRepository.findByModelContainingIgnoreCase(model)
                 .stream()
