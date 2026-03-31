@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded",function(){
             msg.style.opacity="0";
             msg.style.top="0px";
             setTimeout(() => msg.remove(),500);
-        },10000);
+        },1000);
         fetch("/clear-login-flag",{method:"POST"});
     }
 

@@ -1039,6 +1039,48 @@ footer {
 .user-infor button:hover {
     background: #0056b3;
 }
+/* ===== Slider ảnh xe ===== */
+.detail-image {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+.detail-image img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+}
+
+/* Nút trái phải */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+/* Hover đẹp hơn */
+.nav-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Vị trí */
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
 html {
     scroll-behavior: smooth;
 }

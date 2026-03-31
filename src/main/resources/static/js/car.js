@@ -41,10 +41,32 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     }
+    const nextBtn = document.getElementById("nextBtn");
+const prevBtn = document.getElementById("prevBtn");
+
+if (nextBtn) {
+    nextBtn.onclick = function () {
+        if (images.length === 0) return;
+
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+    };
+}
+
+if (prevBtn) {
+    prevBtn.onclick = function () {
+        if (images.length === 0) return;
+
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+    };
+}
 
 });
 
 let selectedRating = 0;
+let images = [];
+let currentIndex = 0;
 
 function setupRating() {
 
@@ -69,7 +91,12 @@ function setupRating() {
     });
 
 }
+function showImage(index) {
+    const img = document.getElementById("car-img");
+    if (!img || images.length === 0) return;
 
+    img.src = images[index];
+}
 
 function loadCarDetail(carId) {
 
@@ -106,14 +133,23 @@ function loadCarDetail(carId) {
             document.getElementById("car-desc").innerText =
                 car.description || "Đang cập nhật...";
 
-            document.getElementById("car-img").src = car.imageUrl
-                ? `/${car.imageUrl.replace("car_images", "car-images")}`
-                : "/images/default-car.jpeg";
+            
+            const mainImg = car.imageUrl
+                ? `/${car.imageUrl.replace("car_images", "car-images")}` 
+                : "/images/default-car.png";
+
+            const subImgs = (car.subImageUrls || []).map(img => "/" + img); 
+
+            images = [mainImg, ...subImgs];
+
+            currentIndex = 0;
+            showImage(currentIndex);
+
 
             const formatter = new Intl.NumberFormat("vi-VN");
 
             document.getElementById("car-final-price").innerText =
-                formatter.format(car.finalPrice || car.price) + " ₫";
+                formatter.format(car.finalPrice || car.price) 
 
             const oldPriceEl = document.getElementById("car-old-price");
 
@@ -124,21 +160,17 @@ function loadCarDetail(carId) {
                 oldPriceEl.style.display = "none";
             }
 
-            // --- PHẦN CHỈNH SỬA THÊM: Xử lý nút Tư vấn ---
             const consultBtn = document.querySelector(".btn-consult");
             if (consultBtn) {
                 consultBtn.onclick = function() {
                     if (typeof ChatWidget !== 'undefined') {
-                        // Lưu tên xe vào bộ nhớ tạm
                         sessionStorage.setItem("pending_car_name", car.model);
-                        // Mở khung chat
                         ChatWidget.openWidget();
                     } else {
                         alert('Đang kết nối, vui lòng thử lại!');
                     }
                 };
             }
-            // --------------------------------------------
 
             renderReviews(data.reviews);
 

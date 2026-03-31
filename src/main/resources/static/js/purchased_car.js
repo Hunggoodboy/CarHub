@@ -14,12 +14,12 @@ function loadPurchasedCars(){
     });
 }
 function loadUserProfile(){
-    fetch("/api/user/profile")
+    fetch("/api/users/me/profile")
     .then(res => res.json())
     .then(data => {
         document.getElementById("username").innerText = data.username;
         document.getElementById("email").innerText = data.email;
-        document.getElementById("phone").innerText = data.phone;
+        document.getElementById("phone").innerText = data.phoneNumber;
     })
     .catch(err => {
         console.error(err);

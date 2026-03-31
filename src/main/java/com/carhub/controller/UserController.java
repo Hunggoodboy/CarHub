@@ -34,6 +34,10 @@ public class UserController {
     public ResponseEntity<?> getCurrentUserId(Authentication authentication) {
         return ResponseEntity.ok(userService.getCurrentUser(authentication).getId());
     }
+    @GetMapping("/me/profile")
+        public ResponseEntity<UserDTO> getCurrentUserProfile(Authentication authentication) {
+        return ResponseEntity.ok(userService.getCurrentUser(authentication));
+    }
     /**
      * Lấy thông tin user theo username
      * GET /api/users/username/{username}

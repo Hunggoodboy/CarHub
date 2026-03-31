@@ -42,6 +42,14 @@ public class CarDTO {
             dto.setBrandName(car.getBrand().getName());
             dto.setBrandOrigin(car.getBrand().getOrigin());
         }
+        if (car.getSubImages() != null) {
+            dto.setSubImageUrls(
+            car.getSubImages()
+               .stream()
+            .map(img -> img.getImageUrl())
+               .toList()
+        );
+}
         return dto;
     }
 }
