@@ -4,6 +4,8 @@ import lombok.*;
 import com.carhub.entity.Car;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 public class CarDTO {
     private Long id;
@@ -21,8 +23,8 @@ public class CarDTO {
     private String brandOrigin;
     private Long brandId;
     private Long SellerId;
+    private List<String> subImageUrls;
     public static CarDTO fromEntity(Car car) {
-
         CarDTO dto = new CarDTO();
         dto.setId(car.getId());
         dto.setModel(car.getModel());
@@ -40,7 +42,6 @@ public class CarDTO {
             dto.setBrandName(car.getBrand().getName());
             dto.setBrandOrigin(car.getBrand().getOrigin());
         }
-
         return dto;
     }
 }

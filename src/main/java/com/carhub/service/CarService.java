@@ -3,10 +3,7 @@ package com.carhub.service;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.entity.Car;
-import com.carhub.repository.BrandRepository;
-import com.carhub.repository.CarRepository;
-import com.carhub.repository.OrderDetailRepository;
-import com.carhub.repository.ReviewsRepository;
+import com.carhub.repository.*;
 import com.carhub.service.ai.VectorStoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -29,8 +26,7 @@ import java.util.stream.Collectors;
 public class CarService {
 
     private final CarRepository carRepository;
-    private final BrandRepository brandRepository;
-    private final ReviewsRepository reviewsRepository;
+    private final CarImagesSubRepository carImagesSubRepository;
     private final VectorStoreService vectorStoreService;
     private final ReviewService reviewService;
     private final OrderDetailRepository orderDetailRepository;
@@ -45,9 +41,11 @@ public class CarService {
 
     // Lấy thông tin xe theo ID
     public CarDTO getCarById(Long id) {
-        Optional<CarDTO> car = carRepository.findById(id)
-                .map(CarDTO::fromEntity);
-        return car.orElse(null);
+        CarDTO car = carRepository.findById(id)
+                .map(CarDTO::fromEntity)
+                .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
+        car.setSubImageUrls(carImagesSubRepository.findAllImageUrlsByCarId(car.getId()));
+        return car;
     }
     // Lấy Reviews theo id xe
     // Lấy Các Mẫu Xe Tương Tự
