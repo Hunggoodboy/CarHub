@@ -45,7 +45,7 @@ public class CarService {
         CarDTO car = carRepository.findById(id)
                 .map(CarDTO::fromEntity)
                 .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
-        car.setSubImageUrls(carImagesSubRepository.findAllImageUrlsByCarId(car.getId()));
+        car.setSubImageUrls(carImagesSubRepository.findAllImageUrlsByCarId(id));
         return car;
     }
     // Lấy Reviews theo id xe

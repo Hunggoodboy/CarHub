@@ -11,12 +11,12 @@ public class CarImagesSub {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @Column(name = "imageurl")
+    @Column(name = "image_url")
     private String imageUrl;
 
     private Integer sortOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "carid")
+    @JoinColumn(name = "car_id")
     private Car car;
 }
