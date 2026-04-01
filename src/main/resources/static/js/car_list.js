@@ -61,7 +61,7 @@ function renderCars(cars) {
     cars.forEach(car => {
         const imgPath = car.imageUrl
             ? `/${car.imageUrl.replace("car_images", "car-images")}`
-            : "/images/default-car.png";
+            : "/images/default-car.jpeg";
 
         const price = car.finalPrice && car.finalPrice > 0
             ? car.finalPrice

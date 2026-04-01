@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded",function(){
     loadPurchasedCars();
+    loadUserProfile();
 });
 function loadPurchasedCars(){
     fetch("/api/cars/purchased")
@@ -9,6 +10,18 @@ function loadPurchasedCars(){
         renderPurchasedCars(data);
     })
     .catch(err =>{
+        console.error(err);
+    });
+}
+function loadUserProfile(){
+    fetch("/api/users/me/profile")
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("username").innerText = data.username;
+        document.getElementById("email").innerText = data.email;
+        document.getElementById("phone").innerText = data.phoneNumber;
+    })
+    .catch(err => {
         console.error(err);
     });
 }

@@ -19,8 +19,7 @@
     <nav>
         <a href="#">Trang chủ</a>
         <a th:href="@{/customer-view}">Bán xe</a>
-        <a th:href="@{/warranty}">Bảo hành</a>
-        <a th:href="@{/my-cars}">Xe đã mua</a>
+        <a th:href="@{/my-cars}">Hồ Sơ</a>
         <a th:if="${#authentication.name == 'anonymousUser'}"
          th:href="@{/login}">
             Đăng nhập
