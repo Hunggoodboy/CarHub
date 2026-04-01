@@ -22,18 +22,20 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     @Autowired
     private Oauth2UserService oauth2UserService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**","/js/**", "/images/**","/car-images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI","/chat", "/error").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/car-images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/login", "/forgot-password", "/ChatAI", "/chat",
+                                "/error")
+                        .permitAll()
                         .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
                         .requestMatchers("/api/password/**").authenticated()
                         .requestMatchers("/api/favorites/**").authenticated()
                         .requestMatchers("/customer-view").hasRole("CUSTOMER")
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
@@ -41,18 +43,17 @@ public class SecurityConfig {
                             request.getSession().setAttribute("justLoggedIn", true);
 
                             var savedRequest = new org.springframework.security.web.savedrequest.HttpSessionRequestCache()
-                            .getRequest(request, response);
+                                    .getRequest(request, response);
 
                             if (savedRequest != null) {
-                               response.sendRedirect(savedRequest.getRedirectUrl());
+                                response.sendRedirect(savedRequest.getRedirectUrl());
                             } else {
                                 response.sendRedirect("/");
                             }
 
-                            })
+                        })
                         .failureUrl("/login?error=true")
-                        .permitAll()
-                )
+                        .permitAll())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .userInfoEndpoint(info -> info.userService(oauth2UserService))
@@ -60,8 +61,7 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")
-                        .permitAll()
-                )
+                        .permitAll())
                 .csrf(csrf -> csrf.disable());
 
         return http.build();

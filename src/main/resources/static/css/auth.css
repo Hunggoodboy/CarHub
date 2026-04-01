@@ -1,5 +1,7 @@
 /* --- 1. CẤU HÌNH CHUNG --- */
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     height: 100vh;
@@ -7,49 +9,54 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #2c2c2c; /* Nền tối màu để làm nổi bật cái card */
+    background-color: #111;
+    /* Nền tối màu để làm nổi bật cái card */
     font-family: 'Segoe UI', sans-serif;
 }
 
 .auth-card {
-    display: flex; /* Chia đôi trái phải */
+    display: flex;
+    /* Chia đôi trái phải */
     width: 800px;
-    height: 500px;
+    min-height: 500px;
     background: white;
-    border-radius: 20px; /* Bo tròn góc to */
-    overflow: hidden;    /* Để phần màu hồng không bị tràn ra ngoài góc bo */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Đổ bóng đậm */
+    border-radius: 20px;
+    /* Bo tròn góc to */
+    overflow: auto;
+    /* Cho phép scroll nếu content vượt quá */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* Đổ bóng đậm */
 }
 
-/* --- 3. BÊN TRÁI (MÀU HỒNG) --- */
+/* --- 3. BÊN TRÁI (MÀU ĐỎ) --- */
 .auth-card__left {
     width: 40%;
-    background: linear-gradient(135deg, #ff9a9e 0%, #ff5e62 100%);
+    background: linear-gradient(135deg, #111 0%, #ff3b3b 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end; 
+    align-items: flex-end;
     padding-right: 0px;
     position: relative;
-    
+
 }
 
 .auth-card__tab {
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: bold;
     margin-bottom: 20px;
     cursor: pointer;
     padding: 10px 30px 10px 20px;
-    width: 150px; 
+    width: 150px;
     text-align: center;
 
 }
 
 .auth-card__tab.active {
-    color: #ff5e62;
+    color: #ff3b3b;
     background: white;
-    border-radius: 30px 0 0 30px; 
-    box-shadow: -5px 5px 10px rgba(0,0,0,0.1);
+    border-radius: 30px 0 0 30px;
+    box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -58,7 +65,9 @@ body {
     padding: 40px;
     display: flex;
     flex-direction: column;
-    position: relative; 
+    position: relative;
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 .auth-card__header {
@@ -68,12 +77,12 @@ body {
 
 .auth-card__logo-icon {
     font-size: 50px;
-    color: #ff5e62;
+    color: #ff3b3b;
     margin-bottom: 10px;
 }
 
 .auth-card__title {
-    color: #ff5e62;
+    color: #ff3b3b;
     font-size: 24px;
     font-weight: bold;
     letter-spacing: 2px;
@@ -94,9 +103,9 @@ body {
 
 .auth-card__input {
     width: 100%;
-    padding: 10px 10px 10px 30px; 
+    padding: 10px 10px 10px 30px;
     border: none;
-    border-bottom: 1px solid #ddd; 
+    border-bottom: 1px solid #ddd;
     outline: none;
     font-size: 14px;
     color: #555;
@@ -104,7 +113,7 @@ body {
 }
 
 .auth-card__input:focus {
-    border-bottom-color: #ff5e62; 
+    border-bottom-color: #ff3b3b;
 }
 
 .auth-card__actions {
@@ -116,7 +125,7 @@ body {
 
 .auth-card__forgot {
     font-size: 12px;
-    color: #ff5e62;
+    color: #ff3b3b;
     text-decoration: none;
 }
 
@@ -124,16 +133,16 @@ body {
     padding: 10px 40px;
     border: none;
     border-radius: 50px;
-    background: linear-gradient(to right, #ff9a9e, #ff5e62);
+    background: linear-gradient(to right, #111, #ff3b3b);
     color: white;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 94, 98, 0.4); 
+    box-shadow: 0 4px 15px rgba(255, 59, 59, 0.4);
 }
 
 
 .auth-card__social-footer {
-    margin-top: auto; 
+    margin-top: auto;
     border-top: 1px solid #eee;
     padding-top: 20px;
     display: flex;
@@ -164,19 +173,19 @@ body {
 }
 
 .auth-card__tab {
-    text-decoration: none; 
-    display: block;       
+    text-decoration: none;
+    display: block;
 }
 
 a.auth-card__tab {
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 a.auth-card__tab:hover {
-    color: red;
+    color: #ff3b3b;
 }
 
 .auth-card__tab.active {
-    color: #ff5e62;
+    color: #ff3b3b;
     background: white;
 }
