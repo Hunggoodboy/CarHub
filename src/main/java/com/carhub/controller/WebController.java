@@ -3,14 +3,11 @@ package com.carhub.controller;
 import com.carhub.dto.Response.AuthResponse;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.UserDTO;
-import com.carhub.entity.Car;
-import com.carhub.entity.User;
 import com.carhub.dto.Request.RegisterRequest;
-import com.carhub.service.AuthService;
+import com.carhub.service.authentication.AuthService;
 import com.carhub.service.CarService;
-import com.carhub.service.UserService;
+import com.carhub.service.authentication.UserService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,9 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 
 

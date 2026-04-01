@@ -7,6 +7,7 @@ import com.carhub.entity.User;
 import com.carhub.repository.CarRepository;
 import com.carhub.repository.FavoriteCarRepository;
 import com.carhub.repository.UserRepository;
+import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service

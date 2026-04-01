@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.authentication;
 
 import com.carhub.entity.User;
 import com.carhub.repository.UserRepository;

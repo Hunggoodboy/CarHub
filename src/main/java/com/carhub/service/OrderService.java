@@ -3,6 +3,7 @@ package com.carhub.service;
 import com.carhub.dto.Request.OrderRequest;
 import com.carhub.entity.*;
 import com.carhub.repository.*;
+import com.carhub.service.authentication.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ public class OrderService {
         Payment payment = convertOrderRequestToPayment(orderRequest , order);
         paymentRepository.save(payment);
     }
+
     public Order convertOrderRequestToOrder(OrderRequest orderRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long buyerId = userService.getId(authentication);
@@ -47,6 +49,7 @@ public class OrderService {
         order.setStatus(Order.Status.PENDING);
         return order;
     }
+
     public OrderDetail convertOrderRequestToOrderDetail(OrderRequest orderRequest, Car car, Order order) {
         OrderDetail detail = new OrderDetail();
         detail.setQuantity((long) orderRequest.getQuantity());

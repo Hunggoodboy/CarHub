@@ -3,7 +3,7 @@ package com.carhub.controller;
 import com.carhub.dto.Response.AuthResponse;
 import com.carhub.dto.Request.LoginRequest;
 import com.carhub.dto.Request.RegisterRequest;
-import com.carhub.service.AuthService;
+import com.carhub.service.authentication.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

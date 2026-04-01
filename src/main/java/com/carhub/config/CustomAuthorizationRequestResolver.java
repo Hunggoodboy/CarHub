@@ -1,0 +1,36 @@
+package com.carhub.config;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+
+public class CustomAuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
+
+    private final DefaultOAuth2AuthorizationRequestResolver defaultResolver;
+
+    public CustomAuthorizationRequestResolver(
+            ClientRegistrationRepository clientRegistrationRepository,
+            String authorizationRequestBaseUri) {
+        this.defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(
+                clientRegistrationRepository, authorizationRequestBaseUri);
+    }
+
+    @Override
+    public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
+        return customize(defaultResolver.resolve(request));
+    }
+
+    @Override
+    public OAuth2AuthorizationRequest resolve(HttpServletRequest request, String clientRegistrationId) {
+        return customize(defaultResolver.resolve(request, clientRegistrationId));
+    }
+
+    private OAuth2AuthorizationRequest customize(OAuth2AuthorizationRequest request) {
+        if (request == null) return null;
+        return OAuth2AuthorizationRequest.from(request)
+                .additionalParameters(params -> params.put("prompt", "select_account"))
+                .build();
+    }
+}

@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.oauth2;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

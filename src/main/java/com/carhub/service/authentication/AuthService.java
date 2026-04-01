@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.authentication;
 
 import com.carhub.dto.Response.AuthResponse;
 import com.carhub.dto.Request.LoginRequest;

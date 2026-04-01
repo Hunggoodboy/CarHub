@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.oauth2;
 
 
 import com.carhub.entity.User;
@@ -13,16 +13,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class Oauth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
-    public OAuth2User loadUser(OAuth2UserRequest request){
+
+    @Override
+    public OAuth2User loadUser(OAuth2UserRequest request) {
         OAuth2User oAuth2User = super.loadUser(request);
-        if( userRepository.findByEmail(oAuth2User.getAttribute("email")).isEmpty()) {
-            String name = oAuth2User.getAttribute("name");
-            String email = oAuth2User.getAttribute("email");
+
+        String email = oAuth2User.getAttribute("email");
+        String name  = oAuth2User.getAttribute("name");
+
+        userRepository.findByEmail(email).orElseGet(() -> {
             User user = new User();
             user.setFullName(name);
             user.setEmail(email);
-            userRepository.save(user);
-        }
+            user.setUsername(email);
+            user.setPassword("");
+            user.setRole(User.Role.CUSTOMER);      // ✅ gán role mặc định
+            return userRepository.save(user);
+        });
+
         return oAuth2User;
     }
 }

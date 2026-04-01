@@ -5,6 +5,7 @@ import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.entity.Car;
 import com.carhub.repository.*;
 import com.carhub.service.ai.VectorStoreService;
+import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

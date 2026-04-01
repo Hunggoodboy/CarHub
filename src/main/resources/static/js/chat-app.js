@@ -178,45 +178,50 @@ class ChatApplication {
     connectWebSocket() {
         if (this.isConnecting) return;
         this.isConnecting = true;
+
+        if (this.privateSubscription) {
+            this.privateSubscription.unsubscribe();
+            this.privateSubscription = null;
+        }
+
         if (this.stompClient && this.stompClient.connected) {
             this.stompClient.disconnect();
         }
-        const socket = new SockJS('/gs-guide-websocket'); // Đổi endpoint cho đúng với config backend
+
+        const socket = new SockJS('/gs-guide-websocket');
         this.stompClient = Stomp.over(socket);
-        this.stompClient.debug = null; // Tắt log rác của Stomp
+        this.stompClient.debug = null;
 
         this.stompClient.connect({}, (frame) => {
             console.log("Đã kết nối WebSocket");
             this.updateStatus('connected');
             this.reconnectAttempts = 0;
             this.isConnecting = false;
-            // Lắng nghe tin nhắn tới
-            this.stompClient.subscribe('/user/queue/private', (message) => {
+
+            this.privateSubscription = this.stompClient.subscribe('/user/queue/private', (message) => {
                 const msg = JSON.parse(message.body);
 
-                // Chỉ hiển thị tin nhắn nếu đang mở khung chat với người đó
                 if (msg.senderId === this.currentPartnerId || msg.receiverId === this.currentPartnerId) {
                     this.renderMessage(msg, false);
                     this.scrollToBottom();
                 }
 
-                // Cập nhật lại sidebar bên trái bất kể đang mở chat với ai
                 this.loadRecentChats();
             });
+
         }, (error) => {
             console.error("Mất kết nối WebSocket:", error);
-            this.updateStatus('disconnected')
+            this.updateStatus('disconnected');
             this.isConnecting = false;
+
             if (this.reconnectAttempts < 5) {
                 this.reconnectAttempts++;
-
                 setTimeout(() => {
                     console.log("Đang kết nối lại ....");
                     this.updateStatus('reconnecting');
                     this.connectWebSocket();
                 }, 3000);
             }
-            // Có thể viết thêm logic auto-reconnect ở đây
         });
     }
 

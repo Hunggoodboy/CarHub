@@ -4,7 +4,7 @@ import com.carhub.entity.OrderDetail;
 import com.carhub.entity.WarrantyTicket;
 import com.carhub.repository.OrderDetailRepository;
 import com.carhub.repository.WarrantyTicketRepository;
-import com.carhub.service.UserService;
+import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
