@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="UTF-8">
         <title>Chi tiết xe | CarShop</title>
@@ -12,6 +12,7 @@
         <header>
             <div class="logo">CarShop</div>
                 <nav>
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}">Admin</a>
                     <a th:href="@{/index}">Trang chủ</a>
                     <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
                     <a th:href="@{/chat}" title="Tin nhắn">

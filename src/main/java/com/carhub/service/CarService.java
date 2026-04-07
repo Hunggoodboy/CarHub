@@ -2,8 +2,17 @@ package com.carhub.service;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
+import com.carhub.entity.Brand;
 import com.carhub.entity.Car;
-import com.carhub.repository.*;
+import com.carhub.entity.User;
+import com.carhub.repository.BrandRepository;
+import com.carhub.repository.CarImagesSubRepository;
+import com.carhub.repository.CarRepository;
+import com.carhub.repository.CartItemRepository;
+import com.carhub.repository.FavoriteCarRepository;
+import com.carhub.repository.OrderDetailRepository;
+import com.carhub.repository.ReviewsRepository;
+import com.carhub.repository.UserRepository;
 import com.carhub.service.ai.VectorStoreService;
 import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +26,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,11 +38,16 @@ public class CarService {
 
     private final CarRepository carRepository;
     private final CarImagesSubRepository carImagesSubRepository;
+    private final BrandRepository brandRepository;
+    private final CartItemRepository cartItemRepository;
+    private final FavoriteCarRepository favoriteCarRepository;
+    private final ReviewsRepository reviewsRepository;
     private final VectorStoreService vectorStoreService;
     private final ReviewService reviewService;
     private final OrderDetailRepository orderDetailRepository;
     private final UserService userService;
-    // Lấy tất cả xe
+    private final UserRepository userRepository;
+
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()
                 .stream()
@@ -40,7 +55,6 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Lấy thông tin xe theo ID
     public CarDTO getCarById(Long id) {
         CarDTO car = carRepository.findById(id)
                 .map(CarDTO::fromEntity)
@@ -48,13 +62,12 @@ public class CarService {
         car.setSubImageUrls(carImagesSubRepository.findAllImageUrlsByCarId(id));
         return car;
     }
-    // Lấy Reviews theo id xe
-    // Lấy Các Mẫu Xe Tương Tự
+
     public List<CarDTO> getCarsSimilarByCarId(Long id) {
         return vectorStoreService.getCarsSimilar(id);
     }
 
-    public CarDetailResponse getCarDetail(Long id){
+    public CarDetailResponse getCarDetail(Long id) {
         CarDetailResponse carDetail = new CarDetailResponse();
         carDetail.setCar(getCarById(id));
         carDetail.setReviews(reviewService.getReviewsByCarId(id));
@@ -62,8 +75,6 @@ public class CarService {
         return carDetail;
     }
 
-
-    // Tìm xe theo hãng
     public List<CarDTO> getCarsByBrand(String brandName) {
         return carRepository.findByBrandName(brandName)
                 .stream()
@@ -71,7 +82,6 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Tìm xe theo khoảng giá
     public List<CarDTO> getCarsByPriceRange(double minPrice, double maxPrice) {
         return carRepository.findByPriceBetween(minPrice, maxPrice)
                 .stream()
@@ -79,7 +89,6 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Tìm xe theo giá sau khi giảm giá
     public List<CarDTO> getCarsByFinalPriceRange(double minPrice, double maxPrice) {
         return carRepository.findByFinalPriceBetween(minPrice, maxPrice)
                 .stream()
@@ -87,7 +96,6 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Tìm xe theo năm sản xuất
     public List<CarDTO> getCarsByYear(int year) {
         return carRepository.findByManufactureYear(year)
                 .stream()
@@ -95,7 +103,6 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Lấy xe còn hàng
     public List<CarDTO> getAvailableCars() {
         return carRepository.findByStockQuantityGreaterThan(0)
                 .stream()
@@ -103,7 +110,6 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Lấy tất cả xe mà người dùng hiện tại đã mua (không lọc theo trạng thái đơn hàng)
     public List<CarDTO> getPurchasedCarsForCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = userService.getId(authentication);
@@ -113,8 +119,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Tìm kiếm xe theo nhiều tiêu chí
-    public List<CarDTO> searchCars(String brandName,Integer year, Double minPrice, Double maxPrice) {
+    public List<CarDTO> searchCars(String brandName, Integer year, Double minPrice, Double maxPrice) {
         List<Car> cars;
 
         if (brandName != null && !brandName.isEmpty()) {
@@ -123,7 +128,6 @@ public class CarService {
             cars = carRepository.findAll();
         }
 
-        // Lọc theo giá nếu có
         if (minPrice != null && maxPrice != null) {
             cars = cars.stream()
                     .filter(car -> {
@@ -133,9 +137,9 @@ public class CarService {
                     .collect(Collectors.toList());
         }
         if (year != null) {
-             cars = cars.stream()
-                   .filter(car -> car.getManufactureYear() == year)
-                   .collect(Collectors.toList());
+            cars = cars.stream()
+                    .filter(car -> car.getManufactureYear() == year)
+                    .collect(Collectors.toList());
         }
 
         return cars.stream()
@@ -143,13 +147,87 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    // Kiểm tra xe còn trong kho
+    public List<CarDTO> getCarsForAdmin(String keyword, Long brandId) {
+        return carRepository.searchForAdmin(normalize(keyword), brandId)
+                .stream()
+                .map(CarDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<Brand> getBrandsForAdmin() {
+        return brandRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Brand::getName, String.CASE_INSENSITIVE_ORDER))
+                .toList();
+    }
+
+    @Transactional
+    public CarDTO updateCarForAdmin(Long id, CarDTO carDTO) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("KhÃ´ng tÃ¬m tháº¥y xe."));
+
+        String model = normalize(carDTO.getModel());
+        String color = normalize(carDTO.getColor());
+        String description = normalize(carDTO.getDescription());
+
+        if (model == null) {
+            throw new IllegalStateException("Model xe khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.");
+        }
+        if (color == null) {
+            throw new IllegalStateException("MÃ u xe khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.");
+        }
+        if (carDTO.getBrandId() == null) {
+            throw new IllegalStateException("Vui lÃ²ng chá»n hÃ£ng xe.");
+        }
+        if (carDTO.getPrice() < 0) {
+            throw new IllegalStateException("GiÃ¡ xe khÃ´ng há»£p lá»‡.");
+        }
+        if (carDTO.getDiscount() < 0 || carDTO.getDiscount() > 100) {
+            throw new IllegalStateException("Giáº£m giÃ¡ pháº£i náº±m trong khoáº£ng 0-100.");
+        }
+        if (carDTO.getManufactureYear() <= 0) {
+            throw new IllegalStateException("NÄƒm sáº£n xuáº¥t khÃ´ng há»£p lá»‡.");
+        }
+        if (carDTO.getStockQuantity() < 0) {
+            throw new IllegalStateException("Tá»“n kho khÃ´ng Ä‘Æ°á»£c Ã¢m.");
+        }
+
+        Brand brand = brandRepository.findById(carDTO.getBrandId())
+                .orElseThrow(() -> new IllegalStateException("KhÃ´ng tÃ¬m tháº¥y hÃ£ng xe."));
+
+        car.setModel(model);
+        car.setName(model);
+        car.setColor(color);
+        car.setDescription(description);
+        car.setPrice(carDTO.getPrice());
+        car.setDiscount(carDTO.getDiscount());
+        car.setManufactureYear(carDTO.getManufactureYear());
+        car.setStockQuantity(carDTO.getStockQuantity());
+        car.setBrand(brand);
+
+        return CarDTO.fromEntity(carRepository.save(car));
+    }
+
+    @Transactional
+    public void deleteCarForAdmin(Long carId) {
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new IllegalArgumentException("KhÃ´ng tÃ¬m tháº¥y xe."));
+
+        if (orderDetailRepository.existsByCarId(carId)
+                || cartItemRepository.existsByCarId(carId)
+                || reviewsRepository.existsByCarId(carId)
+                || favoriteCarRepository.existsByCarId(carId)) {
+            throw new IllegalStateException("KhÃ´ng thá»ƒ xÃ³a xe vÃ¬ váº«n cÃ²n dá»¯ liá»‡u liÃªn quan.");
+        }
+
+        carRepository.delete(car);
+    }
+
     public boolean isCarAvailable(Long carId, int quantity) {
         Optional<Car> carOpt = carRepository.findById(carId);
         return carOpt.map(car -> car.getStockQuantity() >= quantity).orElse(false);
     }
 
-    // Cập nhật số lượng xe trong kho
     @Transactional
     public boolean updateStock(Long carId, int quantity) {
         Optional<Car> carOpt = carRepository.findById(carId);
@@ -164,19 +242,31 @@ public class CarService {
         }
         return false;
     }
-    public void saveCarService(String model, Long price, int manufactureYear, String color, String description, MultipartFile imageFile) throws IOException {
+
+    public void saveCarService(String model, Long price, int manufactureYear, String color, String description, MultipartFile imageFile)
+            throws IOException {
         String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
         String filePath = Paths.get("src/main/resources/static/car-images/", fileName).toString();
         Files.copy(imageFile.getInputStream(), Path.of(filePath));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long sellerId = userService.getId(authentication);
+        User seller = userRepository.findById(sellerId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Car car = new Car();
+        car.setName(normalize(model));
+        car.setModel(normalize(model));
         car.setManufactureYear(manufactureYear);
         car.setPrice(price);
-        car.setDescription(description);
-        car.setColor(color);
+        car.setDescription(normalize(description));
+        car.setColor(normalize(color));
         car.setImageUrl("car-images/" + fileName);
-        car.setModel(model);
-        vectorStoreService.loadCar(car);
-        carRepository.save(car);
+        car.setStockQuantity(1);
+        car.setSeller(seller);
+
+        Car savedCar = carRepository.save(car);
+        vectorStoreService.loadCar(savedCar);
     }
 
     public List<CarDTO> searchByModel(String model) {
@@ -184,5 +274,13 @@ public class CarService {
                 .stream()
                 .map(CarDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 }

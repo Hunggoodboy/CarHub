@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinh sua nguoi dung | CarShop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-panel.css}">
+</head>
+<body class="admin-page">
+<header>
+    <div class="logo">CarShop</div>
+    <nav>
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/admin/users}"
+           class="active">Admin</a>
+        <a th:href="@{/index}">Trang chu</a>
+        <a th:href="@{/customer-view}">Ban xe</a>
+        <a th:href="@{/my-cars}">Ho so</a>
+        <a th:href="@{/logout}">Dang xuat</a>
+    </nav>
+</header>
+
+<main class="admin-main">
+    <section class="admin-shell">
+        <div class="admin-page-head">
+            <div>
+                <p class="admin-eyebrow">Khu vuc quan tri</p>
+                <h1>Chinh sua nguoi dung</h1>
+                <p class="admin-lead">Cap nhat cac truong thong tin cho phep ma van giu cam giac thong nhat voi giao dien cong khai.</p>
+            </div>
+            <nav class="admin-section-nav" aria-label="Dieu huong admin">
+                <a th:href="@{/admin/users}" class="active">Nguoi dung</a>
+                <a th:href="@{/admin/cars}">Xe</a>
+            </nav>
+        </div>
+
+        <section class="admin-card">
+            <div th:if="${successMessage}" class="admin-alert success" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="admin-alert error" th:text="${errorMessage}"></div>
+
+            <div class="admin-toolbar">
+                <div>
+                    <h2>Nguoi dung #<span th:text="${user.id}"></span></h2>
+                    <p>Username va vai tro chi dung de tham chieu, khong chinh sua trong phien ban nay.</p>
+                </div>
+                <div class="admin-actions">
+                    <a th:href="@{/admin/users}" class="btn-admin-secondary">Quay lai danh sach</a>
+                </div>
+            </div>
+
+            <form th:action="@{|/admin/users/${user.id}/update|}" th:object="${user}" method="post">
+                <div class="admin-form-grid">
+                    <div>
+                        <label>Username</label>
+                        <div class="readonly-field" th:text="*{username} ?: '-'"></div>
+                    </div>
+                    <div>
+                        <label>Vai tro</label>
+                        <div class="readonly-field" th:text="*{role} ?: '-'"></div>
+                    </div>
+                    <div>
+                        <label for="fullName">Ho ten</label>
+                        <input id="fullName" type="text" th:field="*{fullName}" required>
+                    </div>
+                    <div>
+                        <label for="email">Email</label>
+                        <input id="email" type="email" th:field="*{email}" required>
+                    </div>
+                    <div>
+                        <label for="phoneNumber">So dien thoai</label>
+                        <input id="phoneNumber" type="text" th:field="*{phoneNumber}">
+                    </div>
+                    <div>
+                        <label for="address">Dia chi</label>
+                        <input id="address" type="text" th:field="*{address}">
+                    </div>
+                </div>
+
+                <div class="admin-actions admin-form-actions">
+                    <button type="submit" class="btn-admin">Luu thay doi</button>
+                    <a th:href="@{/admin/users}" class="btn-admin-secondary">Huy</a>
+                </div>
+            </form>
+        </section>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>CarShop</h3>
+            <p>
+                Nen tang mua ban xe uy tin,
+                mang den nhung mau xe chat luong
+                va trai nghiem mua sam an toan.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Dieu huong</h4>
+            <ul>
+                <li><a th:href="@{/index}">Trang chu</a></li>
+                <li><a th:href="@{/admin/users}">Quan ly nguoi dung</a></li>
+                <li><a th:href="@{/admin/cars}">Quan ly xe</a></li>
+                <li><a th:href="@{/my-cars}">Ho so</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Lien he</h4>
+            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
+            <p>Hotline: 0999 999 999</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Ghi chu</h4>
+            <p>Admin va frontend cong khai nay dung chung nhan dien de han che cam giac tach biet giua hai khu vuc.</p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 CarShop. All rights reserved.
+    </div>
+</footer>
+</body>
+</html>

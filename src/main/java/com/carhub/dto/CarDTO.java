@@ -23,7 +23,9 @@ public class CarDTO {
     private String brandOrigin;
     private Long brandId;
     private Long SellerId;
+    private String sellerName;
     private List<String> subImageUrls;
+
     public static CarDTO fromEntity(Car car) {
         CarDTO dto = new CarDTO();
         dto.setId(car.getId());
@@ -36,7 +38,14 @@ public class CarDTO {
         dto.setFinalPrice(car.getPrice() * (1 - car.getDiscount() / 100));
         dto.setManufactureYear(car.getManufactureYear());
         dto.setStockQuantity(car.getStockQuantity());
-        dto.setSellerId(car.getSeller().getId());
+        if (car.getSeller() != null) {
+            dto.setSellerId(car.getSeller().getId());
+            dto.setSellerName(
+                    car.getSeller().getFullName() != null && !car.getSeller().getFullName().isBlank()
+                            ? car.getSeller().getFullName()
+                            : car.getSeller().getUsername()
+            );
+        }
         if (car.getBrand() != null) {
             dto.setBrandId(car.getBrand().getId());
             dto.setBrandName(car.getBrand().getName());
@@ -44,12 +53,12 @@ public class CarDTO {
         }
         if (car.getSubImages() != null) {
             dto.setSubImageUrls(
-            car.getSubImages()
-               .stream()
-            .map(img -> img.getImageUrl())
-               .toList()
-        );
-}
+                    car.getSubImages()
+                            .stream()
+                            .map(img -> img.getImageUrl())
+                            .toList()
+            );
+        }
         return dto;
     }
 }

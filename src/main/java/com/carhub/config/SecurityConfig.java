@@ -2,7 +2,6 @@ package com.carhub.config;
 
 import com.carhub.service.oauth2.Oauth2UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -27,12 +26,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**","/js/**", "/images/**","/car-images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/car-images/**", "/car_images/**",
+                                "/car_images_sub/**", "/webjars/**").permitAll()
                         .requestMatchers("/", "/index", "/register", "/login", "/ChatAI","/chat", "/error").permitAll()
-                        .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/users/check-username", "/api/users/check-email").permitAll()
+                        .requestMatchers("/api/cars/purchased").authenticated()
+                        .requestMatchers("/api/cars/**").permitAll()
+                        .requestMatchers("/api/users/me", "/api/users/me/profile", "/api/users/me/change-password").authenticated()
+                        .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/password/**").authenticated()
                         .requestMatchers("/api/favorites/**").authenticated()
-                        .requestMatchers("/customer-view").hasRole("CUSTOMER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/customer-view", "/car/save").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

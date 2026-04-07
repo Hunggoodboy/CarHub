@@ -8,4 +8,8 @@ import java.util.List;
 
 public interface ReviewsRepository extends JpaRepository<Reviews, Long>, JpaSpecificationExecutor<Reviews> {
     List<Reviews> getReviewsByCarId(Long id);
+
+    boolean existsByUserId(Long userId);
+
+    boolean existsByCarId(Long carId);
 }

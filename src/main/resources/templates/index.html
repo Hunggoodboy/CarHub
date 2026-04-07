@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -17,6 +17,7 @@
 <header>
     <div class="logo">CarShop</div>
     <nav>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}">Admin</a>
         <a href="#">Trang chủ</a>
         <a th:href="@{/customer-view}">Bán xe</a>
         <a th:href="@{/my-cars}">Hồ Sơ</a>

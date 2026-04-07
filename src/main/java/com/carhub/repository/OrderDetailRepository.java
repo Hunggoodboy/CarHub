@@ -14,14 +14,19 @@ import java.util.Optional;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
     List<OrderDetail> findByOrder(Order order);
-    List<OrderDetail> findByOrderId(Long orderId);
-    List<OrderDetail> findByCar(Car car);
-    List<OrderDetail> findByCarId(Long carId);
-    //Tìm xe theo user_id và car_
-    @Query("SELECT od FROM OrderDetail od WHERE od.order.customer.id = :user_id AND od.car.id = :car_id")
-    Optional<OrderDetail> findOrderDetailByCarIdAndUserId(@Param("user_id") Long user_id, @Param("car_id") Long car_id);
 
-    // Tìm OrderDetail với đơn hàng đã hoàn tất cho 1 xe cụ thể của user (dùng cho bảo hành)
+    List<OrderDetail> findByOrderId(Long orderId);
+
+    List<OrderDetail> findByCar(Car car);
+
+    List<OrderDetail> findByCarId(Long carId);
+
+    boolean existsByCarId(Long carId);
+
+    @Query("SELECT od FROM OrderDetail od WHERE od.order.customer.id = :user_id AND od.car.id = :car_id")
+    Optional<OrderDetail> findOrderDetailByCarIdAndUserId(@Param("user_id") Long user_id,
+                                                           @Param("car_id") Long car_id);
+
     @Query("SELECT od FROM OrderDetail od " +
             "WHERE od.order.customer.id = :user_id " +
             "AND od.car.id = :car_id " +
@@ -29,7 +34,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     Optional<OrderDetail> findCompletedOrderDetailByCarIdAndUserId(@Param("user_id") Long user_id,
                                                                     @Param("car_id") Long car_id);
 
-    // Lấy tất cả xe mà người dùng đã mua (không phụ thuộc trạng thái đơn hàng)
     @Query("SELECT DISTINCT od.car FROM OrderDetail od WHERE od.order.customer.id = :user_id")
     List<Car> findPurchasedCarsByUserId(@Param("user_id") Long user_id);
 }

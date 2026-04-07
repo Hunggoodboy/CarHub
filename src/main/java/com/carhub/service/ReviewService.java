@@ -41,7 +41,7 @@ public class ReviewService {
 
     public void createReview(ReviewsDTO reviewsDTO, Long CarId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(true || userBuyThisCarId(CarId)) {
+        if(userBuyThisCarId(CarId)) {
             Car car = carRepository.findById(CarId).orElseThrow(() -> new RuntimeException("Car not found"));
             User user = userRepository.findById(userService.getId(authentication)).orElseThrow(() -> new RuntimeException("User not found"));
             Reviews reviews = new Reviews();
