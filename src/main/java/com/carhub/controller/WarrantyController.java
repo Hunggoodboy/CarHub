@@ -1,12 +1,17 @@
 package com.carhub.controller;
 
+import com.carhub.dto.Request.WarrantyRequest;
+import com.carhub.entity.Customer;
 import com.carhub.entity.OrderDetail;
 import com.carhub.entity.WarrantyTicket;
 import com.carhub.repository.OrderDetailRepository;
 import com.carhub.repository.WarrantyTicketRepository;
 import com.carhub.service.UserService;
+import com.carhub.service.WarrantyService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import com.carhub.dto.Response.WarrantyResponseDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,21 +19,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.List;
 
 @Controller
+@RequestMapping("/api/warranty")
 @RequiredArgsConstructor
 public class WarrantyController {
 
     private final OrderDetailRepository orderDetailRepository;
     private final WarrantyTicketRepository warrantyTicketRepository;
     private final UserService userService;
-
+    private final WarrantyService warrantyService;
     // Trang tạo yêu cầu bảo hành cho 1 xe cụ thể (chỉ cho xe đã mua và đơn đã hoàn tất)
-    @GetMapping("/warranty/request")
+    @GetMapping("/request")
     public String warrantyRequestPage(@RequestParam("carId") Long carId, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = userService.getId(authentication);
@@ -46,29 +55,33 @@ public class WarrantyController {
         return "warranty";
     }
 
-    // API tạo phiếu bảo hành từ form trên trang warranty
-    @PostMapping("/warranty/create")
-    public ResponseEntity<?> createWarranty(@RequestBody Map<String, String> body) {
+    @PostMapping("/create")
+    @ResponseBody
+    public ResponseEntity<?> createWarranty(@RequestBody WarrantyRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = userService.getId(authentication);
 
-        Long carId = Long.valueOf(body.get("carId"));
-        String errorCar = body.get("errorCar");
+        Customer customer = userService.getCurrentCustomer(); // bạn cần có hàm này
 
-        OrderDetail orderDetail = orderDetailRepository
-                .findCompletedOrderDetailByCarIdAndUserId(userId, carId)
-                .orElseThrow(() -> new RuntimeException("Bạn chưa mua xe này hoặc đơn hàng chưa được hoàn tất, không thể bảo hành."));
+        warrantyService.createWarrantyTicket(request, userId, customer);
 
-        WarrantyTicket ticket = new WarrantyTicket();
-        ticket.setDefectDescription(errorCar);
-        ticket.setStatus("PENDING");
-        ticket.setReceivedDate(new Date());
-        ticket.setCustomer(orderDetail.getOrder().getCustomer());
-        ticket.setPayment(orderDetail.getOrder().getPayment());
+        return ResponseEntity.ok(Map.of("message","Tạo yêu cầu bảo hành thành công"));
+    }
+    @GetMapping("/my")
+    @ResponseBody
+    public List<WarrantyResponseDTO> getMyWarranty() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userService.getId(auth);
 
-        warrantyTicketRepository.save(ticket);
+        return warrantyService.getMyWarranty(userId);
+    }
+    @GetMapping("/seller")
+    @ResponseBody
+    public List<WarrantyResponseDTO> getSellerWarranty() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long sellerId = userService.getId(auth);
 
-        return ResponseEntity.ok(Map.of("message", "Tạo yêu cầu bảo hành thành công"));
+        return warrantyService.getSellerWarranty(sellerId);
     }
 }
 

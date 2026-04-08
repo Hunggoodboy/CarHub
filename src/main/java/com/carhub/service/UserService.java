@@ -1,10 +1,13 @@
 package com.carhub.service;
 
 import com.carhub.dto.UserDTO;
+import com.carhub.entity.Customer;
 import com.carhub.entity.User;
+import com.carhub.repository.CustomerRepository;
 import com.carhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -21,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomerRepository customerRepository;
 
     //Lấy id của người dùng hiện tại
     public UserDTO getCurrentUser(Authentication authentication) {
@@ -40,6 +44,10 @@ public class UserService {
 
     public Long getId(Authentication authentication) {
         return getCurrentUser(authentication).getId();
+    }
+    public User findByUsername(String username) {
+    return userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     // Lấy thông tin user theo ID
@@ -144,4 +152,11 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+    public Customer getCurrentCustomer() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+
+    return customerRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
+}
 }

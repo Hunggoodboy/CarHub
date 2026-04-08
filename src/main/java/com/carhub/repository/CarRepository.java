@@ -21,9 +21,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByPriceBetween(double minPrice, double maxPrice);
     List<Car> findByStockQuantityGreaterThan(int quantity);
     Optional<Car> findById(Long id);
+    List<Car> findBySellerId(Long sellerId);
+    List<Car> findBySellerIdNot(Long sellerId);
 
     @Query("SELECT c.seller FROM Car c WHERE c.id = :carId")
     User findSellerById(Long carId);
+    @Query("SELECT c FROM Car c WHERE c.seller.id <> :sellerId")
+     List<Car> findCarsExcludeSeller(@Param("sellerId") Long sellerId);
     //Tìm theo giá sau khi đã discount
     @Query("SELECT c FROM Car c WHERE c.price * (1 - c.discount) BETWEEN :minPrice AND :maxPrice")
     List<Car> findByFinalPriceBetween(@Param("minPrice") double minPrice, @Param("maxPrice") double maxPrice);

@@ -38,7 +38,21 @@ public class CarService {
                 .map(CarDTO::fromEntity)
                 .collect(Collectors.toList());
     }
-
+    public List<CarDTO> getCarsExcludeSeller(Long sellerId) {
+        return carRepository.findCarsExcludeSeller(sellerId)
+            .stream()
+            .map(CarDTO::fromEntity)
+            .toList();
+    }
+    // Lấy xe mà người đang đăng nhập bán
+    public List<CarDTO> getCarsByCurrentUser(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId= userService.getId(authentication);
+        return carRepository.findBySellerId(userId)
+               .stream()
+               .map(CarDTO::fromEntity)
+               .toList();
+    }
     // Lấy thông tin xe theo ID
     public CarDTO getCarById(Long id) {
         CarDTO car = carRepository.findById(id)
@@ -183,5 +197,23 @@ public class CarService {
                 .stream()
                 .map(CarDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+    @Transactional
+    public void updateCar(Long id , CarDTO dto){
+        Car car = carRepository.findById(id)
+                  .orElseThrow(()-> new RuntimeException("car not found"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userService.getId(auth);
+
+        if (!car.getSeller().getId().equals(userId)) {
+            throw new RuntimeException("Bạn không có quyền sửa xe này");
+        }
+        car.setModel(dto.getModel());
+        car.setPrice(dto.getPrice());
+        car.setColor(dto.getColor());
+        car.setManufactureYear(dto.getManufactureYear());
+        car.setDescription(dto.getDescription());
+
+        carRepository.save(car);
     }
 }

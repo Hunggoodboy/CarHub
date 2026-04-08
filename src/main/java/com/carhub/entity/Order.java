@@ -24,9 +24,10 @@ public class Order {
     private String phone;
     public enum Status{
         PENDING,
+        DELIVERING,
         DELIVERED,
+        COMPLETED,
         CANCELLED,
-        COMPLETED
     }
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -39,9 +40,11 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "seller_id")
-    private User seller;
+    @Column(nullable = false)
+    private Boolean buyerConfirmed = false;
+    
+    @Column(nullable = false)
+    private Boolean sellerConfirmed = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")

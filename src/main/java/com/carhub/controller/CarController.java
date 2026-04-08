@@ -1,15 +1,20 @@
 package com.carhub.controller;
 
+import com.carhub.entity.User;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.dto.ReviewsDTO;
 import com.carhub.service.CarService;
 import com.carhub.service.OrderService;
 import com.carhub.service.ReviewService;
+import com.carhub.service.UserService;
+
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -21,9 +26,25 @@ public class CarController {
     private final CarService carService;
     private final ReviewService reviewService;
     private final OrderService orderService;
+    private final UserService userService;
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {
-        List<CarDTO> cars = carService.getAllCars();
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        List<CarDTO> cars;
+
+        if (authentication == null || authentication.getName().equals("anonymousUser")) {
+            cars = carService.getAllCars();
+        } else {
+            String username = authentication.getName();
+
+            User user = userService.findByUsername(username);
+            Long userId = user.getId();
+
+            cars = carService.getCarsExcludeSeller(userId);
+        }
+
         return ResponseEntity.ok(cars);
     }
 
@@ -116,15 +137,6 @@ public class CarController {
         return ResponseEntity.ok(cars);
     }
 
-    /**
-     * Lấy tất cả xe mà người dùng hiện tại đã mua
-     * GET /api/cars/purchased
-     */
-    @GetMapping("/purchased")
-    public ResponseEntity<List<CarDTO>> getPurchasedCarsForCurrentUser() {
-        List<CarDTO> cars = carService.getPurchasedCarsForCurrentUser();
-        return ResponseEntity.ok(cars);
-    }
 
     /**
      * Tìm kiếm xe nâng cao với nhiều tiêu chí
@@ -150,5 +162,18 @@ public class CarController {
             @RequestParam int quantity) {
         boolean available = carService.isCarAvailable(id, quantity);
         return ResponseEntity.ok(available);
+    }
+    // Lay cac xe nguoi dung dang ban
+    @GetMapping("/car-pass")
+    public ResponseEntity<List<CarDTO>> getCarPass(){
+        return ResponseEntity.ok(carService.getCarsByCurrentUser());
+    }
+    // chinh sua thong tin xe 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateCar(
+        @PathVariable Long id,
+        @RequestBody CarDTO carDTO){
+            carService.updateCar(id,carDTO);
+            return ResponseEntity.ok().build();
     }
 }

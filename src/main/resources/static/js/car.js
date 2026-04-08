@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     }
-    const nextBtn = document.getElementById("nextBtn");
+const nextBtn = document.getElementById("nextBtn");
 const prevBtn = document.getElementById("prevBtn");
 
 if (nextBtn) {

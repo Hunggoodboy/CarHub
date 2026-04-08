@@ -17,6 +17,6 @@ public class CarImagesSub {
     private Integer sortOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "carid")
+    @JoinColumn(name = "car_id")
     private Car car;
 }

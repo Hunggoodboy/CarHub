@@ -4,6 +4,7 @@ import com.carhub.entity.Admin;
 import com.carhub.entity.Customer;
 import com.carhub.entity.WarrantyTicket;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -19,4 +20,6 @@ public interface WarrantyTicketRepository extends JpaRepository<WarrantyTicket, 
     List<WarrantyTicket> findByStatus(String status);
     Optional<WarrantyTicket> findByLicensePlate(String licensePlate);
     List<WarrantyTicket> findByReceivedDateBetween(Date startDate, Date endDate);
+    @Query("SELECT w FROM WarrantyTicket w WHERE w.car.seller.id = :sellerId")
+    List<WarrantyTicket> findBySellerId(Long sellerId);
 }
