@@ -30,28 +30,38 @@
 
                 <form action="#" th:action="@{/register}" th:object="${registerRequest}" method="post"
                     class="auth-card__form">
+                    <p class="auth-card__error" th:if="${error}" th:text="${error}"></p>
                     <div class="auth-card__group">
                         <i class="fa-solid fa-user auth-card__icon"></i>
-                        <input type="text" name="username" class="auth-card__input" placeholder="Username">
+                        <input type="text" th:field="*{username}" class="auth-card__input" placeholder="Username"
+                            required>
                     </div>
                     <div class="auth-card__group">
                         <i class="fa-solid fa-lock auth-card__icon"></i>
-                        <input type="password" name="password" class="auth-card__input" placeholder="Password">
+                        <input type="password" th:field="*{password}" class="auth-card__input" placeholder="Password"
+                            required>
+                    </div>
+
+                    <div class="auth-card__group">
+                        <i class="fa-solid fa-lock auth-card__icon"></i>
+                        <input type="password" th:field="*{confirmPassword}" class="auth-card__input"
+                            placeholder="Nhập lại mật khẩu" required>
                     </div>
 
                     <div class="auth-card__group">
                         <i class="fa-solid fa-envelope auth-card__icon"></i>
-                        <input type="text" name="email" class="auth-card__input" placeholder="Email">
+                        <input type="email" th:field="*{email}" class="auth-card__input" placeholder="Email" required>
                     </div>
 
                     <div class="auth-card__group">
                         <i class="fa-solid fa-signature auth-card__icon"></i>
-                        <input type="text" th:field="*{fullName}" class="auth-card__input" placeholder="Full Name">
+                        <input type="text" th:field="*{fullName}" class="auth-card__input" placeholder="Full Name"
+                            required>
                     </div>
                     <div class="auth-card__group">
                         <i class="fa-solid fa-phone auth-card__icon"></i>
-                        <input type="text" th:field="*{phoneNumber}" class="auth-card__input"
-                            placeholder="Phone Number">
+                        <input type="text" th:field="*{phoneNumber}" class="auth-card__input" placeholder="Phone Number"
+                            required>
                     </div>
                     <div class="auth-card__actions">
                         <button type="submit" class="btn btn--gradient">ĐĂNG KÍ</button>
