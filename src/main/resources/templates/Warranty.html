@@ -5,6 +5,9 @@
         <title>Bảo Hành | CarShop</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="stylesheet" th:href="@{/css/warranty.css}">
+        <script src="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.css" rel="stylesheet" />   
     </head>
     <body>
         <header>
@@ -45,23 +48,36 @@
                             <input type="number" id="year_car" name="year_car" placeholder="Nhập năm sản xuất" th:value="${carYear}" readonly>
                         </div>
                     </div>
-                    <h3>Địa chỉ</h3>
-                    <label>Địa chỉ cụ thể</label>
-                    <input type ="text" id="street" name="street" placeholder="Số nhà , tên đường,...">
-                    <div class="row-2"> 
-                        <div>
-                            <label>Xã/Phường</label>
-                            <input type="text" id="ward" name="ward" placeholder="Nhập xã/phường">
+                    <div class="payment-box">
+                        <h3>Địa chỉ cụ thể</h3>
+                        <label>Địa chỉ cụ thể (Số nhà, tên đường...)</label>
+                        <div class="address-container">
+                            <input type="text" id="street-input" name="street" placeholder="Nhập địa chỉ của bạn..." autocomplete="off">
+                            <div id="address-suggestions" class="address-suggestions"></div>
                         </div>
-                        <div>
-                            <label>Tỉnh/Thành phố</label>
-                            <input type="text" id="city" name="city" placeholder="Nhập tỉnh/thành phố">
+
+                        <div id="map-container">
+                            <div class="map-warning">
+                                <i class="fa-solid fa-location-crosshairs"></i> Vui lòng kiểm tra vị trí ghim chính xác để giao xe
+                            </div>
+                            <div id="map"></div>
                         </div>
+
+                        <div class="row-2">
+                            <div>
+                                <label>Xã / Phường</label>
+                                <input type="text" id="ward-input" name="ward" placeholder="Nhập xã / phường">
+                            </div>
+                            <div>
+                                <label>Tỉnh / Thành phố</label>
+                                <input type="text" id="city-input" name="city" placeholder="Nhập tỉnh/thành phố">
+                            </div>
+                        </div>
+                        <label>Số Điện Thoại Liên hệ</label>
+                        <input type="text" id="phone-input" name="phone" placeholder="Nhập Số Điện Thoại">
+                        <label>Lỗi xe đang gặp phải</label>
+                        <input type="text" id="err_car" name="err_car" placeholder="Nhập lỗi của xe">
                     </div>
-                    <label>Số Điện Thoại Liên Hệ</label>
-                    <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại">
-                    <label>Lỗi xe đang gặp phải</label>
-                    <input type="text" id="err_car" name="err_car" placeholder="Nhập lỗi của xe">
                 </div>
             </div>
         </section>
@@ -100,9 +116,9 @@
                         <a href="https://tiktok.com"><i class="fab-fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div class="footer-bottom">
+            </div>
+            <div class="footer-bottom">
                      © 2026 CarShop. All rights reserved.
-                </div>
             </div>
         </footer>
         <script th:src="@{/js/warranty.js}"></script>

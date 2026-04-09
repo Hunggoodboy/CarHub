@@ -12,19 +12,33 @@ public class WarrantyTicket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String licensePlate, defectDescription, status;
+    private String licensePlate,  status;
     private Date receivedDate, returnedDate;
     private Double repairCost;
+    private String street; 
+    private String ward;
+    private String city;
+    private String phone;
+    @Column(columnDefinition = "TEXT")
+    private String defectDescription;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id")
+    private Car car;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "admin_id")
     private Admin admin;
 }

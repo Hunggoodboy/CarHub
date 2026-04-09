@@ -1,17 +1,10 @@
 package com.carhub.service;
 
+import com.carhub.dto.PurchasedCarDTO;
 import com.carhub.dto.Request.OrderRequest;
-import com.carhub.entity.Car;
-import com.carhub.entity.Customer;
-import com.carhub.entity.Order;
-import com.carhub.entity.OrderDetail;
-import com.carhub.entity.Payment;
-import com.carhub.entity.User;
-import com.carhub.repository.CarRepository;
-import com.carhub.repository.CustomerRepository;
-import com.carhub.repository.OrderDetailRepository;
-import com.carhub.repository.OrderRepository;
-import com.carhub.repository.PaymentRepository;
+import com.carhub.dto.SellerOrderDTO;
+import com.carhub.entity.*;
+import com.carhub.repository.*;
 import com.carhub.service.authentication.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -27,6 +20,7 @@ import java.util.NoSuchElementException;
 @Service
 @AllArgsConstructor
 public class OrderService {
+
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final CarRepository carRepository;
@@ -67,16 +61,9 @@ public class OrderService {
         double totalDiscount = totalAmountOriginal - totalAmountFinal;
 
         Order order = convertOrderRequestToOrder(
-                customer,
-                car.getSeller(),
-                orderRequest,
-                street,
-                ward,
-                city,
-                deliveryAddress,
-                totalAmountOriginal,
-                totalDiscount,
-                totalAmountFinal
+                customer, car.getSeller(), orderRequest,
+                street, ward, city, deliveryAddress,
+                totalAmountOriginal, totalDiscount, totalAmountFinal
         );
         orderRepository.save(order);
 
@@ -114,6 +101,8 @@ public class OrderService {
         order.setStreet(street);
         order.setPhone(normalize(orderRequest.getPhone()));
         order.setStatus(Order.Status.PENDING);
+        order.setBuyerConfirmed(false);
+        order.setSellerConfirmed(false);
         return order;
     }
 
@@ -152,6 +141,73 @@ public class OrderService {
         return payment;
     }
 
+    @Transactional
+    public void confirmBuyer(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setBuyerConfirmed(true);
+        if (order.getSellerConfirmed()) {
+            order.setStatus(Order.Status.COMPLETED);
+        }
+        orderRepository.save(order);
+    }
+
+    @Transactional
+    public void confirmSeller(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setSellerConfirmed(true);
+        if (order.getBuyerConfirmed()) {
+            order.setStatus(Order.Status.COMPLETED);
+        }
+        orderRepository.save(order);
+    }
+
+    @Transactional
+    public void startDelivery(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(Order.Status.DELIVERING);
+        orderRepository.save(order);
+    }
+
+    public List<SellerOrderDTO> getOrdersForSeller(Long sellerId, Order.Status status) {
+        List<OrderDetail> list = orderDetailRepository.findBySellerAndStatus(sellerId, status);
+        return list.stream().map(od -> {
+            Order order = od.getOrder();
+            return new SellerOrderDTO(
+                    order.getId(),
+                    od.getCar().getModel(),
+                    od.getCar().getPrice(),
+                    od.getQuantity(),
+                    order.getCustomer().getFullName(),
+                    order.getPhone(),
+                    order.getStreet(),
+                    order.getStatus().name(),
+                    od.getCar().getImageUrl()
+            );
+        }).toList();
+    }
+
+    public List<PurchasedCarDTO> getPurchasedCarsByStatus(Order.Status status) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long buyerId = userService.getId(auth);
+        List<Order> orders = orderRepository.findByBuyerIdAndStatus(buyerId, status);
+        return orders.stream()
+                .flatMap(o -> o.getOrderDetails().stream().map(od -> {
+                    Car car = od.getCar();
+                    return new PurchasedCarDTO(
+                            o.getId(),
+                            car.getId(),
+                            car.getModel(),
+                            car.getPrice(),
+                            car.getImageUrl(),
+                            o.getStatus().name()
+                    );
+                }))
+                .toList();
+    }
+
     private void validateOrderRequest(OrderRequest orderRequest) {
         if (orderRequest == null) {
             throw new IllegalArgumentException("Yeu cau dat hang khong hop le.");
@@ -177,7 +233,6 @@ public class OrderService {
             }
             return String.join(", ", buildAddressParts(street, ward, city));
         }
-
         String deliveryAddress = normalize(orderRequest.getDeliveryAddress());
         if (deliveryAddress == null) {
             throw new IllegalArgumentException("Dia chi giao hang khong hop le.");
@@ -204,4 +259,5 @@ public class OrderService {
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
     }
+
 }

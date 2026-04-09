@@ -5,6 +5,7 @@
         <title>Chi tiết xe | CarShop</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="stylesheet" th:href="@{/css/product_detail.css}">
         <link rel="stylesheet" th:href="@{/css/chat-widget.css}">
 
     </head>
@@ -41,16 +42,16 @@
 
             <div class="detail-container" id="car-content" style="display: none;">
                 <div class="detail-image">
-    <button class="nav-btn prev-btn" id="prevBtn">
-        <i class="fa-solid fa-chevron-left"></i>
-    </button>
+                    <button class="nav-btn prev-btn" id="prevBtn">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
 
-    <img id="car-img" src="" alt="Car image">
+                    <img id="car-img" src="" alt="Car image">
 
-    <button class="nav-btn next-btn" id="nextBtn">
-        <i class="fa-solid fa-chevron-right"></i>
-    </button>
-</div>
+                    <button class="nav-btn next-btn" id="nextBtn">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
 
                 <div class="detail-info">
                     <h4 id="car-model">Tên xe</h4>
@@ -70,7 +71,7 @@
                     </ul>
 
                     <div class="detail-actions">
-                        <a id="buy-now-btn" href="#" class="btn">Mua ngay</a>
+                        <a id="buy-now-btn" href="#" class="btn1 view-detail">Mua ngay</a>
                         <button class="btn-consult" onclick="
                                 if(document.getElementById('chat-widget')) {
                                     ChatWidget.openWidget();

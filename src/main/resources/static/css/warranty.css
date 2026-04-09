@@ -1,0 +1,193 @@
+.warrenty_section{
+    width: 100%;
+    padding: 60px 20px;
+    background: #f5f6fa;
+    display: flex;
+    justify-content: center;
+}
+
+.warrenty_container{
+    width: 100%;
+    max-width: 700px;
+}
+
+.warrenty_container h2{
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+.warrenty-box{
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.warrenty-box h3{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
+}
+
+.warrenty-box label{
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #444;
+}
+
+.warrenty-box input{
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.warrenty-box input:focus{
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 3px rgba(0,123,255,0.3);
+}
+.payment-btn {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #ff5722, #ff784e);
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.payment-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+}
+.payment-box {
+    margin-bottom: 22px;
+}
+
+.payment-box h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #222;
+}
+
+.payment-box label {
+    display: block;
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.payment-box input[type="text"] {
+    width: 100%;
+    padding: 11px 13px;
+    border-radius: 9px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.payment-box input:focus {
+    border-color: #ff5722;
+    outline: none;
+}
+@media (max-width: 600px) {
+    .row-2 {
+        flex-direction: column;
+    }
+
+    .payment-box:last-of-type {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+.address-container {
+    position: relative;
+    width: 100%;
+}
+
+.address-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    z-index: 9999; 
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 0 0 8px 8px;
+}
+
+.suggestion-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #f1f1f1;
+    transition: all 0.2s ease;
+    line-height: 1.4;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f8f9fa;
+    color: #ee4d2d; 
+}
+
+
+#map-container {
+    margin: 15px 0;
+    display: none; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.map-warning {
+    background: #fff9e6;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #856404;
+    border-bottom: 1px solid #ffeeba;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+#map {
+    height: 280px;
+    width: 100%;
+    background-color: #eee;
+}
+.payment-box input[type="text"] {
+    margin-bottom: 10px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.payment-box input[type="text"]:focus {
+    border-color: #ee4d2d;
+    outline: none;
+}

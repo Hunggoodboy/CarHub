@@ -2,19 +2,9 @@ package com.carhub.service;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
-import com.carhub.entity.Brand;
 import com.carhub.entity.Car;
-import com.carhub.entity.User;
-import com.carhub.repository.BrandRepository;
-import com.carhub.repository.CarImagesSubRepository;
-import com.carhub.repository.CarRepository;
-import com.carhub.repository.CartItemRepository;
-import com.carhub.repository.FavoriteCarRepository;
-import com.carhub.repository.OrderDetailRepository;
-import com.carhub.repository.ReviewsRepository;
-import com.carhub.repository.UserRepository;
+import com.carhub.repository.*;
 import com.carhub.service.ai.VectorStoreService;
-import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +16,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,23 +27,33 @@ public class CarService {
 
     private final CarRepository carRepository;
     private final CarImagesSubRepository carImagesSubRepository;
-    private final BrandRepository brandRepository;
-    private final CartItemRepository cartItemRepository;
-    private final FavoriteCarRepository favoriteCarRepository;
-    private final ReviewsRepository reviewsRepository;
     private final VectorStoreService vectorStoreService;
     private final ReviewService reviewService;
     private final OrderDetailRepository orderDetailRepository;
     private final UserService userService;
-    private final UserRepository userRepository;
-
+    // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()
                 .stream()
                 .map(CarDTO::fromEntity)
                 .collect(Collectors.toList());
     }
-
+    public List<CarDTO> getCarsExcludeSeller(Long sellerId) {
+        return carRepository.findCarsExcludeSeller(sellerId)
+            .stream()
+            .map(CarDTO::fromEntity)
+            .toList();
+    }
+    // Lấy xe mà người đang đăng nhập bán
+    public List<CarDTO> getCarsByCurrentUser(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId= userService.getId(authentication);
+        return carRepository.findBySellerId(userId)
+               .stream()
+               .map(CarDTO::fromEntity)
+               .toList();
+    }
+    // Lấy thông tin xe theo ID
     public CarDTO getCarById(Long id) {
         CarDTO car = carRepository.findById(id)
                 .map(CarDTO::fromEntity)
@@ -62,12 +61,13 @@ public class CarService {
         car.setSubImageUrls(carImagesSubRepository.findAllImageUrlsByCarId(id));
         return car;
     }
-
+    // Lấy Reviews theo id xe
+    // Lấy Các Mẫu Xe Tương Tự
     public List<CarDTO> getCarsSimilarByCarId(Long id) {
         return vectorStoreService.getCarsSimilar(id);
     }
 
-    public CarDetailResponse getCarDetail(Long id) {
+    public CarDetailResponse getCarDetail(Long id){
         CarDetailResponse carDetail = new CarDetailResponse();
         carDetail.setCar(getCarById(id));
         carDetail.setReviews(reviewService.getReviewsByCarId(id));
@@ -75,6 +75,8 @@ public class CarService {
         return carDetail;
     }
 
+
+    // Tìm xe theo hãng
     public List<CarDTO> getCarsByBrand(String brandName) {
         return carRepository.findByBrandName(brandName)
                 .stream()
@@ -82,6 +84,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    // Tìm xe theo khoảng giá
     public List<CarDTO> getCarsByPriceRange(double minPrice, double maxPrice) {
         return carRepository.findByPriceBetween(minPrice, maxPrice)
                 .stream()
@@ -89,6 +92,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    // Tìm xe theo giá sau khi giảm giá
     public List<CarDTO> getCarsByFinalPriceRange(double minPrice, double maxPrice) {
         return carRepository.findByFinalPriceBetween(minPrice, maxPrice)
                 .stream()
@@ -96,6 +100,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    // Tìm xe theo năm sản xuất
     public List<CarDTO> getCarsByYear(int year) {
         return carRepository.findByManufactureYear(year)
                 .stream()
@@ -103,6 +108,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    // Lấy xe còn hàng
     public List<CarDTO> getAvailableCars() {
         return carRepository.findByStockQuantityGreaterThan(0)
                 .stream()
@@ -110,6 +116,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    // Lấy tất cả xe mà người dùng hiện tại đã mua (không lọc theo trạng thái đơn hàng)
     public List<CarDTO> getPurchasedCarsForCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = userService.getId(authentication);
@@ -119,7 +126,8 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public List<CarDTO> searchCars(String brandName, Integer year, Double minPrice, Double maxPrice) {
+    // Tìm kiếm xe theo nhiều tiêu chí
+    public List<CarDTO> searchCars(String brandName,Integer year, Double minPrice, Double maxPrice) {
         List<Car> cars;
 
         if (brandName != null && !brandName.isEmpty()) {
@@ -128,6 +136,7 @@ public class CarService {
             cars = carRepository.findAll();
         }
 
+        // Lọc theo giá nếu có
         if (minPrice != null && maxPrice != null) {
             cars = cars.stream()
                     .filter(car -> {
@@ -137,9 +146,9 @@ public class CarService {
                     .collect(Collectors.toList());
         }
         if (year != null) {
-            cars = cars.stream()
-                    .filter(car -> car.getManufactureYear() == year)
-                    .collect(Collectors.toList());
+             cars = cars.stream()
+                   .filter(car -> car.getManufactureYear() == year)
+                   .collect(Collectors.toList());
         }
 
         return cars.stream()
@@ -228,6 +237,7 @@ public class CarService {
         return carOpt.map(car -> car.getStockQuantity() >= quantity).orElse(false);
     }
 
+    // Cập nhật số lượng xe trong kho
     @Transactional
     public boolean updateStock(Long carId, int quantity) {
         Optional<Car> carOpt = carRepository.findById(carId);
@@ -242,9 +252,7 @@ public class CarService {
         }
         return false;
     }
-
-    public void saveCarService(String model, Long price, int manufactureYear, String color, String description, MultipartFile imageFile)
-            throws IOException {
+    public void saveCarService(String model, Long price, int manufactureYear, String color, String description, MultipartFile imageFile) throws IOException {
         String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
         String filePath = Paths.get("src/main/resources/static/car-images/", fileName).toString();
         Files.copy(imageFile.getInputStream(), Path.of(filePath));
@@ -282,5 +290,23 @@ public class CarService {
         }
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
+    }
+    @Transactional
+    public void updateCar(Long id , CarDTO dto){
+        Car car = carRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("car not found"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userService.getId(auth);
+
+        if (!car.getSeller().getId().equals(userId)) {
+            throw new RuntimeException("Bạn không có quyền sửa xe này");
+        }
+        car.setModel(dto.getModel());
+        car.setPrice(dto.getPrice());
+        car.setColor(dto.getColor());
+        car.setManufactureYear(dto.getManufactureYear());
+        car.setDescription(dto.getDescription());
+
+        carRepository.save(car);
     }
 }
