@@ -2,9 +2,12 @@ package com.carhub.service;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
+import com.carhub.entity.Brand;
 import com.carhub.entity.Car;
+import com.carhub.entity.User;
 import com.carhub.repository.*;
 import com.carhub.service.ai.VectorStoreService;
+import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,6 +35,11 @@ public class CarService {
     private final ReviewService reviewService;
     private final OrderDetailRepository orderDetailRepository;
     private final UserService userService;
+    private final BrandRepository brandRepository;
+    private final UserRepository userRepository;
+    private final CartItemRepository cartItemRepository;
+    private final ReviewsRepository reviewsRepository;
+    private final FavoriteCarRepository favoriteCarRepository;
     // Lấy tất cả xe
     public List<CarDTO> getAllCars() {
         return carRepository.findAll()

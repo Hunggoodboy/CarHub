@@ -1,18 +1,12 @@
 package com.carhub.service.authentication;
 
 import com.carhub.dto.UserDTO;
+import com.carhub.entity.Customer;
 import com.carhub.entity.User;
-import com.carhub.repository.CarRepository;
-import com.carhub.repository.CartRepository;
-import com.carhub.repository.ChatMessageRepository;
-import com.carhub.repository.ConsultationRequestRepository;
-import com.carhub.repository.FavoriteCarRepository;
-import com.carhub.repository.OrderRepository;
-import com.carhub.repository.ReviewsRepository;
-import com.carhub.repository.UserRepository;
-import com.carhub.repository.WarrantyTicketRepository;
+import com.carhub.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -30,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomerRepository customerRepository;
     private final CarRepository carRepository;
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
@@ -39,23 +34,36 @@ public class UserService {
     private final ReviewsRepository reviewsRepository;
     private final ChatMessageRepository chatMessageRepository;
 
+    // ==================== CURRENT USER ====================
+
     public UserDTO getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("Báº¡n chÆ°a Ä‘Äƒng nháº­p!");
+            throw new RuntimeException("Bạn chưa đăng nhập!");
         }
         if (authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
             String email = oAuth2User.getAttribute("email");
-            return getUserByEmail(email).orElseThrow(() -> new RuntimeException("KhÃ´ng tÃ¬m tháº¥y Ä‘á»‹a chá»‰ email"));
+            return getUserByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ email"));
         } else if (authentication.getPrincipal() instanceof UserDetails) {
             String username = authentication.getName();
-            return getUserByUsername(username).orElseThrow(() -> new RuntimeException("Báº¡n chÆ°a Ä‘Äƒng nháº­p!"));
+            return getUserByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
         }
-        throw new RuntimeException("NgÆ°á»i dÃ¹ng chÆ°a Ä‘Äƒng nháº­p");
+        throw new RuntimeException("Người dùng chưa đăng nhập");
     }
 
     public Long getId(Authentication authentication) {
         return getCurrentUser(authentication).getId();
     }
+
+    public Customer getCurrentCustomer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return customerRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
+    }
+
+    // ==================== QUERY ====================
 
     public Optional<UserDTO> getUserById(Long id) {
         return userRepository.findById(id)
@@ -65,6 +73,11 @@ public class UserService {
     public Optional<UserDTO> getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(UserDTO::fromEntity);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public Optional<Long> getIdByUsername(String username) {
@@ -98,46 +111,33 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    // ==================== UPDATE ====================
+
     @Transactional
     public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
         Optional<User> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) {
             return Optional.empty();
         }
-
         User user = userOpt.get();
         mergeEditableFields(user, userDTO);
-        User updatedUser = userRepository.save(user);
-        return Optional.of(UserDTO.fromEntity(updatedUser));
+        return Optional.of(UserDTO.fromEntity(userRepository.save(user)));
     }
 
     @Transactional
     public UserDTO updateUserForAdmin(Long id, UserDTO userDTO) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("KhÃ´ng tÃ¬m tháº¥y user."));
-
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user."));
         applyEditableFields(user, userDTO);
         return UserDTO.fromEntity(userRepository.save(user));
-    }
-
-    @Transactional
-    public void deleteCustomerByAdmin(Long adminId, Long targetUserId) {
-        if (Objects.equals(adminId, targetUserId)) {
-            throw new IllegalStateException("KhÃ´ng thá»ƒ tá»± xÃ³a tÃ i khoáº£n cá»§a chÃ­nh mÃ¬nh.");
-        }
-
-        User targetUser = userRepository.findById(targetUserId)
-                .orElseThrow(() -> new IllegalArgumentException("KhÃ´ng tÃ¬m tháº¥y user."));
-
-        if (targetUser.getRole() != User.Role.CUSTOMER) {
-            throw new IllegalStateException("Chá»‰ Ä‘Æ°á»£c xÃ³a tÃ i khoáº£n CUSTOMER.");
-        }
-
-        if (hasRelatedData(targetUserId)) {
-            throw new IllegalStateException("KhÃ´ng thá»ƒ xÃ³a user vÃ¬ váº«n cÃ²n dá»¯ liá»‡u liÃªn quan.");
-        }
-
-        userRepository.delete(targetUser);
     }
 
     @Transactional
@@ -145,7 +145,6 @@ public class UserService {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-
             if (passwordEncoder.matches(oldPassword, user.getPassword())) {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 userRepository.save(user);
@@ -154,6 +153,8 @@ public class UserService {
         }
         return false;
     }
+
+    // ==================== DELETE ====================
 
     @Transactional
     public boolean deleteUser(Long id) {
@@ -164,13 +165,23 @@ public class UserService {
         return false;
     }
 
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+    @Transactional
+    public void deleteCustomerByAdmin(Long adminId, Long targetUserId) {
+        if (Objects.equals(adminId, targetUserId)) {
+            throw new IllegalStateException("Không thể tự xóa tài khoản của chính mình.");
+        }
+        User targetUser = userRepository.findById(targetUserId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user."));
+        if (targetUser.getRole() != User.Role.CUSTOMER) {
+            throw new IllegalStateException("Chỉ được xóa tài khoản CUSTOMER.");
+        }
+        if (hasRelatedData(targetUserId)) {
+            throw new IllegalStateException("Không thể xóa user vì vẫn còn dữ liệu liên quan.");
+        }
+        userRepository.delete(targetUser);
     }
 
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
+    // ==================== PRIVATE HELPERS ====================
 
     private void applyEditableFields(User user, UserDTO userDTO) {
         String fullName = normalize(userDTO.getFullName());
@@ -179,7 +190,7 @@ public class UserService {
         String address = normalize(userDTO.getAddress());
 
         if (email != null && !email.equalsIgnoreCase(user.getEmail()) && existsByEmail(email)) {
-            throw new IllegalStateException("Email Ä‘Ã£ Ä‘Æ°á»£c sá»­ dá»¥ng.");
+            throw new IllegalStateException("Email đã được sử dụng.");
         }
 
         user.setFullName(fullName);
@@ -195,7 +206,7 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             String email = normalize(userDTO.getEmail());
             if (email != null && !email.equalsIgnoreCase(user.getEmail()) && existsByEmail(email)) {
-                throw new IllegalStateException("Email Ä‘Ã£ Ä‘Æ°á»£c sá»­ dá»¥ng.");
+                throw new IllegalStateException("Email đã được sử dụng.");
             }
             user.setEmail(email);
         }
@@ -219,9 +230,7 @@ public class UserService {
     }
 
     private String normalize(String value) {
-        if (value == null) {
-            return null;
-        }
+        if (value == null) return null;
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
     }

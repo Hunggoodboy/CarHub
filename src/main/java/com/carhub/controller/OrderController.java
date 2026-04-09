@@ -5,18 +5,17 @@ import com.carhub.dto.Request.OrderRequest;
 import com.carhub.service.OrderService;
 import com.carhub.entity.Order;
 import com.carhub.entity.User;
-import com.carhub.service.UserService;
 import com.carhub.repository.OrderRepository;
 
+import com.carhub.service.authentication.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -50,12 +49,11 @@ public class OrderController {
         body.put("message", message);
         return ResponseEntity.status(status).body(body);
     }
-
     @GetMapping("/purchased")
-public ResponseEntity<?> getPurchasedCars(@RequestParam String status) {
-    Order.Status st = Order.Status.valueOf(status.toUpperCase());
-    return ResponseEntity.ok(orderService.getPurchasedCarsByStatus(st));
-}
+    public ResponseEntity<?> getPurchasedCars(@RequestParam String status) {
+        Order.Status st = Order.Status.valueOf(status.toUpperCase());
+        return ResponseEntity.ok(orderService.getPurchasedCarsByStatus(st));
+    }
 
     @GetMapping("/seller/orders")
     public ResponseEntity<List<SellerOrderDTO>> getSellerOrders(

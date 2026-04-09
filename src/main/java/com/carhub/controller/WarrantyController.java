@@ -3,12 +3,11 @@ package com.carhub.controller;
 import com.carhub.dto.Request.WarrantyRequest;
 import com.carhub.entity.Customer;
 import com.carhub.entity.OrderDetail;
-import com.carhub.entity.WarrantyTicket;
 import com.carhub.repository.OrderDetailRepository;
 import com.carhub.repository.WarrantyTicketRepository;
-import com.carhub.service.UserService;
 import com.carhub.service.WarrantyService;
 
+import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import com.carhub.dto.Response.WarrantyResponseDTO;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.List;
 
