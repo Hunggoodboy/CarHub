@@ -2,6 +2,7 @@ package com.carhub.config;
 
 import com.carhub.service.oauth2.Oauth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -28,7 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/car-images/**", "/car_images/**",
                                 "/car_images_sub/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI","/chat", "/error").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/login","/forgot-password", "/ChatAI","/chat", "/error").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/users/check-username", "/api/users/check-email").permitAll()
                         .requestMatchers("/api/cars/purchased").authenticated()
