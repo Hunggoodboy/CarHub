@@ -23,23 +23,43 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final Oauth2UserService oauth2UserService;
     private final ClientRegistrationRepository clientRegistrationRepository;
+
+    private static final String[] PUBLIC_RESOURCES = {
+            "/css/**", "/js/**", "/images/**", "/car-images/**", "/car_images/**",
+            "/car_images_sub/**", "/webjars/**"
+    };
+
+    private static final String[] PUBLIC_URLS = {
+            "/", "/index", "/register", "/login", "/forgot-password", "/ChatAI", "/chat", "/error",
+            "/api/auth/**", "/api/password/**", "/api/users/check-username", "/api/users/check-email"
+    };
+
+    private static final String[] AUTHENTICATED_URLS = {
+            "/api/cars/purchased", // Phải đặt riêng ra đây để check trước
+            "/api/users/me", "/api/users/me/profile", "/api/users/me/change-password",
+            "/api/favorites/**"
+    };
+
+    private static final String[] ADMIN_URLS = {
+            "/api/users/**", "/admin/**"
+    };
+
+    private static final String[] CUSTOMER_URLS = {
+            "/customer-view", "/car/save"
+    };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/car-images/**", "/car_images/**",
-                                "/car_images_sub/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login","/forgot-password", "/ChatAI","/chat", "/error").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users/check-username", "/api/users/check-email").permitAll()
-                        .requestMatchers("/api/cars/purchased").authenticated()
+                        .requestMatchers(PUBLIC_RESOURCES).permitAll()
+                        .requestMatchers(PUBLIC_URLS).permitAll()
+
+                        .requestMatchers(AUTHENTICATED_URLS).authenticated()
                         .requestMatchers("/api/cars/**").permitAll()
-                        .requestMatchers("/api/users/me", "/api/users/me/profile", "/api/users/me/change-password").authenticated()
-                        .requestMatchers("/api/users/**").hasRole("ADMIN")
-                        .requestMatchers("/api/password/**").authenticated()
-                        .requestMatchers("/api/favorites/**").authenticated()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/customer-view", "/car/save").hasRole("CUSTOMER")
+
+                        .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
+                        .requestMatchers(CUSTOMER_URLS).hasRole("CUSTOMER")
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

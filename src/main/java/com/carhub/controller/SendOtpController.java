@@ -1,11 +1,9 @@
 package com.carhub.controller;
 
 import com.carhub.dto.Request.EmailRequest;
-import com.carhub.dto.Request.OtpRequest;
-import com.carhub.dto.Request.ResetPasswordRequest;
+import com.carhub.dto.Request.ResetPassWordRequest;
 import com.carhub.repository.UserRepository;
 import com.carhub.service.oauth2.OtpTokenService;
-import com.carhub.service.oauth2.ResetTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +15,6 @@ import java.util.Map;
 @RequestMapping("/api/password")
 public class SendOtpController {
     private final OtpTokenService otpTokenService;
-    private final ResetTokenService resetTokenService;
-    private final UserRepository userRepository;
     @PostMapping("/RequestOTP")
     public ResponseEntity<?> requestOtp(@RequestBody EmailRequest email) {
         try {
@@ -30,28 +26,32 @@ public class SendOtpController {
         }
     }
 
-    @PostMapping("/verifyOtp")
-    public ResponseEntity<?> sendOtp(@RequestBody OtpRequest otpRequest) {
-        if (otpRequest.getOtp() == null) {
-            return ResponseEntity.badRequest().body("Bạn chưa gửi mã OTP");
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody ResetPassWordRequest request) {
+        if (!otpTokenService.validateOtpToken(request.getOtp(), request.getEmail())) {
+            return ResponseEntity.badRequest().body("Mã OTP không hợp lệ hoặc đã hết hạn");
         }
-        else if(otpRequest.getEmail() == null){
-            return ResponseEntity.badRequest().body("Bạn chưa nhập Email");
-        }
-        else if(otpTokenService.verifyOtpToken(otpRequest.getEmail(), otpRequest.getOtp())) {
-            String resetToken = resetTokenService.generateToken(otpRequest.getEmail());
-            return ResponseEntity.ok(Map.of(
-                    "message", "OTP hợp lệ!",
-                    "resetToken", resetToken  // ← Frontend nhận, lưu lại
-            ));
-        }
-        return ResponseEntity.badRequest().body("Lỗi");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
-            String newPassword = resetPasswordRequest.getNewPassword();
-            otpTokenService.setPasswordEncoder(newPassword, resetPasswordRequest.getEmail());
-            return ResponseEntity.ok().build();
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPassWordRequest request) {
+        if (request.getOtp() == null) {
+            return ResponseEntity.badRequest().body("Bạn chưa gửi mã OTP");
+        }
+        else if(request.getEmail() == null){
+            return ResponseEntity.badRequest().body("Bạn chưa nhập Email");
+        }
+        System.out.println(request.getOtp());
+        System.out.println(request.getEmail());
+        System.out.println(request.getNewPassword());
+        if(otpTokenService.validateOtpToken( request.getOtp(), request.getEmail())) {
+            return ResponseEntity.ok(otpTokenService.resetPassword(request.getEmail(), request.getNewPassword()));
+        }
+        else{
+            otpTokenService.invalidateOtpToken(request.getOtp(), request.getEmail());
+             return ResponseEntity.badRequest().body("Mã OTP không hợp lệ hoặc đã hết hạn" );
+        }
     }
+
 }
