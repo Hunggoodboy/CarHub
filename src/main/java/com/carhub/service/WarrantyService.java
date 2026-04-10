@@ -61,6 +61,8 @@ public class WarrantyService {
         dto.setDefectDescription(w.getDefectDescription());
         dto.setStatus(w.getStatus());
         dto.setReceivedDate(w.getReceivedDate());
+        dto.setCustomerConfirmed(w.getCustomerConfirmed());
+        dto.setSellerConfirmed(w.getSellerConfirmed());
 
         return dto;
     }
@@ -79,4 +81,35 @@ public class WarrantyService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+    @Transactional
+public void confirmSeller(Long id) {
+    WarrantyTicket ticket = warrantyRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Not found"));
+
+    ticket.setSellerConfirmed(true);
+
+    // Khi seller xác nhận → bảo hành thành công
+    ticket.setStatus("SUCCESS");
+
+    // Nếu cả 2 đã xác nhận → COMPLETED
+    if (Boolean.TRUE.equals(ticket.getCustomerConfirmed())) {
+        ticket.setStatus("COMPLETED");
+    }
+
+    warrantyRepository.save(ticket);
+}
+@Transactional
+public void confirmCustomer(Long id) {
+    WarrantyTicket ticket = warrantyRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Not found"));
+
+    ticket.setCustomerConfirmed(true);
+
+    // Nếu cả 2 đã xác nhận → COMPLETED
+    if (Boolean.TRUE.equals(ticket.getSellerConfirmed())) {
+        ticket.setStatus("COMPLETED");
+    }
+
+    warrantyRepository.save(ticket);
+}
 }

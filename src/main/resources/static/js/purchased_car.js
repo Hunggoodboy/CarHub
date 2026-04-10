@@ -11,8 +11,45 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(loadSellerOrders, 5000);
 
     showSection("profile");
+
+    // ✅ active mặc định menu
+    const firstMenu = document.querySelector('.sidebar ul li');
+    if (firstMenu) firstMenu.classList.add('active');
 });
 
+// ================= MENU ACTIVE =================
+function handleMenuClick(el, section) {
+    document.querySelectorAll('.sidebar ul li').forEach(li => {
+        li.classList.remove('active');
+    });
+
+    el.classList.add('active');
+
+    if (section === 'warranty') {
+        showWarranty();
+    } else if (section === 'warrantySeller') {
+        showWarrantySeller();
+    } else {
+        showSection(section);
+    }
+}
+
+// ================= TAB ACTIVE =================
+function handleTabClick(btn, status) {
+    btn.parentElement.querySelectorAll('button').forEach(b => {
+        b.classList.remove('active');
+    });
+
+    btn.classList.add('active');
+
+    if (document.getElementById("orders-section").style.display === "block") {
+        loadOrders(status);
+    } else {
+        loadPurchasedCars(status);
+    }
+}
+
+// ================= SECTION =================
 function showSection(section) {
     document.getElementById("profile-section").style.display = "none";
     document.getElementById("purchased-section").style.display = "none";
@@ -35,6 +72,7 @@ function showSection(section) {
     }
 }
 
+// ================= SELLER ORDERS =================
 function loadSellerOrders() {
     fetch("/api/orders/seller/orders?status=PENDING")
         .then(res => res.json())
@@ -84,7 +122,6 @@ function renderSellerOrders(orders) {
     let html = "";
 
     orders.forEach(o => {
-
         let statusClass = "";
         if(o.status === "PENDING") statusClass = "status-pending";
         if(o.status === "DELIVERING") statusClass = "status-delivering";
@@ -99,16 +136,14 @@ function renderSellerOrders(orders) {
 
         if (o.status === 'PENDING') {
             actionButtons = `
-                <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERING')">🚚 Bắt đầu giao</button>
+                <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERING')">🚚 Nhận cọc & giao hàng</button>
                 <button onclick="updateOrderStatus(${o.orderId}, 'CANCELLED')">❌ Hủy</button>
             `;
-        } 
-        else if (o.status === 'DELIVERING') {
+        } else if (o.status === 'DELIVERING') {
             actionButtons = `
                 <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERED')">📦 Đã giao</button>
             `;
-        }
-        else if (o.status === 'DELIVERED') {
+        } else if (o.status === 'DELIVERED') {
             actionButtons = `
                 <button onclick="confirmSeller(${o.orderId})">✔ Xác nhận đã giao</button>
             `;
@@ -133,13 +168,14 @@ function renderSellerOrders(orders) {
     container.innerHTML = html;
 }
 
+// ================= UPDATE =================
 function updateOrderStatus(orderId, status) {
     fetch(`/api/orders/${orderId}/status?status=${status}`, {
         method: "PUT"
     })
     .then(res => {
         if (res.ok) {
-            alert("Cập nhật thành công");
+            showToast("Cập nhật thành công");
             loadOrders(currentTabStatus);
             loadSellerOrders();
         }
@@ -152,11 +188,12 @@ function confirmSeller(id) {
         method: "PUT"
     })
     .then(() => {
-        alert("Đã xác nhận!");
+        showToast("Đã xác nhận!");
         loadOrders(currentTabStatus);
     });
 }
 
+// ================= PROFILE =================
 function loadUserProfile() {
     fetch("/api/users/me/profile")
         .then(res => res.json())
@@ -164,16 +201,24 @@ function loadUserProfile() {
             document.getElementById("username").innerText = data.username || "";
             document.getElementById("email").innerText = data.email || "";
             document.getElementById("phone").innerText = data.phoneNumber || "";
+            const avatarImg = document.getElementById("avatar-img");
+            if(data.avatar){
+                avatarImg.src = "/uploads/" + data.avatar;
+            }else {
+                avatarImg.src = "/img/default-avatar.png";
+            }
         })
         .catch(err => console.error(err));
 }
 
+// ================= PURCHASED =================
 function loadPurchasedCars(status = "PENDING") {
     fetch(`/api/orders/purchased?status=${status}`)
         .then(res => res.json())
         .then(data => renderPurchasedCars(data))
         .catch(err => console.error(err));
 }
+
 function renderPurchasedCars(cars) {
     const container = document.getElementById("purchased-car-list");
     if (!container) return;
@@ -192,24 +237,20 @@ function renderPurchasedCars(cars) {
             : "/images/default-car.png";
 
         let statusLabel = "";
-        if (car.status === "PENDING") {
-            statusLabel = `<span class="status pending">Đã đặt</span>`;
-        } else if (car.status === "DELIVERING") {
-            statusLabel = `<span class="status delivering">Đang giao</span>`;
-        } else if (car.status === "COMPLETED") {
-            statusLabel = `<span class="status completed">Đã nhận</span>`;
-        }
+        if (car.status === "PENDING") statusLabel = `<span class="status pending">Đã đặt</span>`;
+        else if (car.status === "DELIVERING") statusLabel = `<span class="status delivering">Đang giao</span>`;
+        else if (car.status === "COMPLETED") statusLabel = `<span class="status completed">Đã nhận</span>`;
 
         let button = "";
         if (car.status === "DELIVERED"){
-            button = `<button class="btn-confirm" onclick="confirmBuyerOrder(${car.orderId})">Xác nhận đã nhận xe</button>`;
+            button = `<button onclick="confirmBuyerOrder(${car.orderId})">Xác nhận đã nhận xe</button>`;
         } else if (car.status === "COMPLETED"){
-            button = `<a href="/api/warranty/request?carId=${car.carId}" class="btn">Yêu cầu bảo hành</a>`;
+            button = `<a href="/api/warranty/request?carId=${car.carId}">Yêu cầu bảo hành</a>`;
         }
 
         html += `
         <div class="card">
-            <img src="${imgPath}" alt="${car.model}">
+            <img src="${imgPath}">
             <div class="info">
                 <h4>${car.model}</h4>
                 <p class="price">${formatter.format(car.price)} ₫</p>
@@ -221,23 +262,22 @@ function renderPurchasedCars(cars) {
 
     container.innerHTML = html;
 }
+
 function confirmBuyerOrder(orderId) {
-    if (!confirm("Bạn xác nhận đã nhận được xe và kiểm tra kỹ lưỡng?")) return;
+    if (!confirm("Bạn xác nhận đã nhận được xe?")) return;
 
     fetch(`/api/orders/${orderId}/confirm-buyer`, {
         method: "PUT"
     })
     .then(res => {
         if (res.ok) {
-            alert("Xác nhận thành công!");
+            showToast("Xác nhận thành công!");
             loadPurchasedCars('DELIVERED'); 
-        } else {
-            alert("Có lỗi xảy ra khi xác nhận.");
         }
-    })
-    .catch(err => console.error("Lỗi confirm buyer:", err));
+    });
 }
 
+// ================= SELLING =================
 function loadSellingCars() {
     fetch("/api/cars/car-pass")
         .then(res => res.json())
@@ -252,6 +292,7 @@ function loadSellingCars() {
 function renderSellingCars(cars) {
     const container = document.getElementById("passed-car-list");
     if (!container) return;
+
     if (!Array.isArray(cars) || cars.length == 0) {
         container.innerHTML = "<p>Bạn chưa bán xe nào cả</p>";
         return;
@@ -267,11 +308,11 @@ function renderSellingCars(cars) {
 
         html += `
             <div class="card">
-                <img src="${imgPath}" alt="${car.model}">
+                <img src="${imgPath}">
                 <div class="info">
                     <h4>${car.model}</h4>
                     <p class="price">${formatter.format(car.price)} đ</p>
-                    <button class="btn" onclick="openDetail(${car.id})">Xem chi tiết</button>
+                    <button onclick="openDetail(${car.id})">Xem chi tiết</button>
                 </div>
             </div>`;
     });
@@ -279,6 +320,7 @@ function renderSellingCars(cars) {
     container.innerHTML = html;
 }
 
+// ================= DETAIL =================
 function openDetail(carId) {
     currentCarId = carId;
     fetch(`/api/cars/${carId}`)
@@ -296,8 +338,7 @@ function openDetail(carId) {
             document.getElementById("detail-year").innerText = car.manufactureYear;
             document.getElementById("detail-description").innerText = car.description;
             document.getElementById("detail-modal").style.display = "flex";
-        })
-        .catch(err => console.error(err));
+        });
 }
 
 function closeDetail() {
@@ -309,6 +350,7 @@ function openEditFromDetail() {
     openEditForm(currentCarId);
 }
 
+// ================= EDIT =================
 function openEditForm(carId) {
     currentCarId = carId;
     fetch(`/api/cars/${carId}`)
@@ -340,25 +382,28 @@ function saveEdit() {
     })
     .then(res => {
         if (res.ok) {
-            alert("Cập nhật thành công");
+            showToast("Cập nhật thành công");
             closeEdit();
             loadSellingCars();
         }
-    })
-    .catch(err => console.error(err));
+    });
 }
 
 function closeEdit() {
     document.getElementById("edit-modal").style.display = "none";
 }
+
+// ================= WARRANTY =================
 function showWarranty() {
     showSection("warranty");
     loadWarranty();
 }
+
 function showWarrantySeller() {
     showSection("warranty-seller");
     loadWarrantySeller();
 }
+
 function loadWarranty() {
     fetch("/api/warranty/my")
         .then(res => res.json())
@@ -366,21 +411,31 @@ function loadWarranty() {
             const container = document.getElementById("warranty-list");
             container.innerHTML = "";
 
+            if (!Array.isArray(data)) return;
+
             data.forEach(w => {
                 const div = document.createElement("div");
                 div.className = "warranty-card";
+
+                let button = "";
+
+                if (!w.customerConfirmed && w.status === "SUCCESS") {
+                    button = `<button onclick="confirmCustomerWarranty(${w.id})">Xác nhận nhận xe</button>`;
+                }
 
                 div.innerHTML = `
                     <h3>${w.carModel}</h3>
                     <p>Lỗi: ${w.defectDescription}</p>
                     <p>Ngày gửi: ${new Date(w.receivedDate).toLocaleDateString()}</p>
                     <p>Trạng thái: ${w.status}</p>
+                    ${button}
                 `;
 
                 container.appendChild(div);
             });
         });
 }
+
 function loadWarrantySeller() {
     fetch("/api/warranty/seller")
         .then(res => res.json())
@@ -388,9 +443,17 @@ function loadWarrantySeller() {
             const container = document.getElementById("warranty-seller-list");
             container.innerHTML = "";
 
+            if (!Array.isArray(data)) return;
+
             data.forEach(w => {
                 const div = document.createElement("div");
                 div.className = "warranty-card";
+
+                let button = "";
+
+                if (!w.sellerConfirmed && w.status !== "COMPLETED") {
+                    button = `<button onclick="confirmSellerWarranty(${w.id})">Xác nhận bảo hành</button>`;
+                }
 
                 div.innerHTML = `
                     <h3>${w.carModel}</h3>
@@ -399,9 +462,57 @@ function loadWarrantySeller() {
                     <p>SĐT: ${w.phone}</p>
                     <p>Địa chỉ: ${w.street}, ${w.ward}, ${w.city}</p>
                     <p>Trạng thái: ${w.status}</p>
+                    ${button}
                 `;
 
                 container.appendChild(div);
             });
         });
 }
+
+function confirmSellerWarranty(id) {
+    fetch(`/api/warranty/${id}/confirm-seller`, {
+        method: "PUT"
+    })
+    .then(() => {
+        showToast("Đã xác nhận bảo hành!");
+        loadWarrantySeller();
+    });
+}
+
+function confirmCustomerWarranty(id) {
+    fetch(`/api/warranty/${id}/confirm-customer`, {
+        method: "PUT"
+    })
+    .then(() => {
+        showToast("Hoàn tất bảo hành!");
+        loadWarranty();
+    });
+}
+// ===== AVATAR =====
+const avatarInput = document.getElementById("avatar-input");
+const avatarImg = document.getElementById("avatar-img");
+
+avatarInput?.addEventListener("change", () => {
+    const file = avatarInput.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("/api/users/upload-avatar", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Upload fail");
+        return res.text();
+    })
+    .then(fileName => {
+        avatarImg.src = "/uploads/" + fileName;
+        showToast("Upload avatar thành công");
+    })
+    .catch(() => {
+        showToast("Upload thất bại");
+    });
+});

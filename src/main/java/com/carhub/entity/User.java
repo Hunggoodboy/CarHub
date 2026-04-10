@@ -29,6 +29,8 @@ public class User implements UserDetails {
     private String phoneNumber;
     @Column(nullable = true)
     private String address;
+    @Column(name = "avatar")
+    private String avatar;
 
     public enum Role {
         ADMIN, CUSTOMER

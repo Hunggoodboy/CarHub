@@ -4,11 +4,13 @@ import com.carhub.dto.AppPrincipal;
 import com.carhub.dto.UserDTO;
 import com.carhub.entity.User;
 import com.carhub.service.UserService;
+import com.carhub.repository.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     /**
      * Lấy thông tin user theo ID
@@ -147,4 +150,35 @@ public class UserController {
         private String oldPassword;
         private String newPassword;
     }
+    @PostMapping("upload-avatar")
+public ResponseEntity<?> uploadAvatar(
+        @RequestParam("file") MultipartFile file,
+        Authentication authentication) {
+
+    try {
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        String fileName = "avatar_" + user.getId() + "_" + file.getOriginalFilename();
+
+        // 🔥 THÊM ĐOẠN NÀY (QUAN TRỌNG NHẤT)
+        String uploadDir = System.getProperty("user.dir") + "/uploads/";
+        java.io.File dir = new java.io.File(uploadDir);
+        if (!dir.exists()) dir.mkdirs();
+
+        file.transferTo(new java.io.File(uploadDir + fileName));
+
+        // lưu DB
+        user.setAvatar(fileName);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(fileName);
+
+    } catch (Exception e) {
+        e.printStackTrace(); // 👉 để debug
+        return ResponseEntity.status(500).body("Upload fail");
+    }
+}
+    
+    
 }

@@ -12,6 +12,7 @@ public class UserDTO {
     private String phoneNumber;
     private String address;
     private String role;
+    private String avatar;
 
     public static UserDTO fromEntity(User user) {
         UserDTO dto = new UserDTO();
@@ -22,6 +23,7 @@ public class UserDTO {
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setAddress(user.getAddress());
         dto.setRole(user.getRole() != null ? user.getRole().name() : null);
+        dto.setAvatar(user.getAvatar());
         return dto;
     }
 }
