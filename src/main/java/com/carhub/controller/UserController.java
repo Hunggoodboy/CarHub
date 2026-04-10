@@ -151,34 +151,32 @@ public class UserController {
         private String newPassword;
     }
     @PostMapping("upload-avatar")
-public ResponseEntity<?> uploadAvatar(
+    public ResponseEntity<?> uploadAvatar(
         @RequestParam("file") MultipartFile file,
         Authentication authentication) {
 
-    try {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username).orElseThrow();
+        try {
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username).orElseThrow();
 
-        String fileName = "avatar_" + user.getId() + "_" + file.getOriginalFilename();
+            String fileName = "avatar_" + user.getId() + "_" + file.getOriginalFilename();
+            String uploadDir = System.getProperty("user.dir") + "/uploads/";
+            java.io.File dir = new java.io.File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
 
-        // 🔥 THÊM ĐOẠN NÀY (QUAN TRỌNG NHẤT)
-        String uploadDir = System.getProperty("user.dir") + "/uploads/";
-        java.io.File dir = new java.io.File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
+            file.transferTo(new java.io.File(uploadDir + fileName));
 
-        file.transferTo(new java.io.File(uploadDir + fileName));
+            // lưu DB
+            user.setAvatar(fileName);
+            userRepository.save(user);
 
-        // lưu DB
-        user.setAvatar(fileName);
-        userRepository.save(user);
+            return ResponseEntity.ok(fileName);
 
-        return ResponseEntity.ok(fileName);
-
-    } catch (Exception e) {
-        e.printStackTrace(); // 👉 để debug
-        return ResponseEntity.status(500).body("Upload fail");
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return ResponseEntity.status(500).body("Upload fail");
+        }
     }
-}
     
     
 }

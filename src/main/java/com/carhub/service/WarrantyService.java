@@ -88,10 +88,10 @@ public void confirmSeller(Long id) {
 
     ticket.setSellerConfirmed(true);
 
-    // Khi seller xác nhận → bảo hành thành công
+    // Khi seller xác nhận ->bảo hành thành công
     ticket.setStatus("SUCCESS");
 
-    // Nếu cả 2 đã xác nhận → COMPLETED
+    // Nếu cả 2 đã xác nhận ->COMPLETED
     if (Boolean.TRUE.equals(ticket.getCustomerConfirmed())) {
         ticket.setStatus("COMPLETED");
     }
@@ -105,7 +105,7 @@ public void confirmCustomer(Long id) {
 
     ticket.setCustomerConfirmed(true);
 
-    // Nếu cả 2 đã xác nhận → COMPLETED
+    // Nếu cả 2 đã xác nhận -> COMPLETED
     if (Boolean.TRUE.equals(ticket.getSellerConfirmed())) {
         ticket.setStatus("COMPLETED");
     }

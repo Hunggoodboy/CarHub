@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const qrBox = document.getElementById("qr-box");
     const submitBtn = document.getElementById("submit-order-btn");
 
-    // 🔥 SỬA: dùng modal deposit mới
     const depositModal = document.getElementById("deposit-modal");
     const depositOverlay = document.getElementById("deposit-overlay");
     const confirmDepositBtn = document.getElementById("confirm-deposit-btn");
@@ -37,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formatter = new Intl.NumberFormat('vi-VN');
 
-    // 1. MAP (giữ nguyên)
+    // 1. MAP 
     goongjs.accessToken = GOONG_MAP_KEY;
     const map = new goongjs.Map({
         container: 'map',
@@ -61,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // 2. LOAD XE + TÍNH TIỀN (giữ nguyên)
+    // load xe , tinh tiền 
     if (carId) {
         fetch(`/api/cars/${carId}`)
             .then(res => res.json())
@@ -107,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => console.error("Lỗi tải dữ liệu xe:", err));
     }
 
-    // 3. AUTOCOMPLETE (giữ nguyên)
+    // 3. AUTOCOMPLETE 
     let searchTimeout = null;
     streetInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
@@ -149,7 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 300);
     });
 
-    // 🔥 CLICK THANH TOÁN
     confirmBtn?.addEventListener("click", () => {
         const address = streetInput.value.trim();
         const ward = wardInput.value.trim();
@@ -158,24 +156,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!address || !ward || !city || !phone) {
             showToast("điền thông tin , sdt")
-            //alert("Vui lòng điền đầy đủ địa chỉ và số điện thoại!");
             return;
         }
 
         const methodSelected = document.querySelector('input[name="paymentMethod"]:checked');
-
-        // 👉 CASH → hiện popup đặt cọc
         if (methodSelected.value === "CASH") {
             depositOverlay.style.display = "block";
             depositModal.style.display = "block";
             return;
         }
-
-        // 👉 BANK → mở bill luôn
         showBill();
     });
 
-    // 🔥 HIỂN THỊ BILL
     function showBill() {
         const address = streetInput.value.trim();
         const ward = wardInput.value.trim();
@@ -196,7 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "block";
     }
 
-    // 🔥 CLICK "ĐÃ CHUYỂN KHOẢN"
     confirmDepositBtn?.addEventListener("click", () => {
         depositModal.style.display = "none";
         depositOverlay.style.display = "none";
@@ -204,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
         showBill();
     });
 
-    // 🔥 ĐÓNG POPUP ĐẶT CỌC
     closeDepositBtn?.addEventListener("click", () => {
         depositModal.style.display = "none";
         depositOverlay.style.display = "none";
@@ -215,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
         depositOverlay.style.display = "none";
     });
 
-    // 5. SUBMIT (giữ nguyên)
+    // 5. SUBMIT 
     submitBtn?.addEventListener("click", () => {
         const data = {
             carId: carId,

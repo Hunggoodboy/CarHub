@@ -37,7 +37,7 @@ public class User implements UserDetails {
     }
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.CUSTOMER; // Enum: ADMIN, CUSTOMER, USER
+    private Role role = Role.CUSTOMER; 
 
     public Collection<? extends GrantedAuthority> getAuthorities(){
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
