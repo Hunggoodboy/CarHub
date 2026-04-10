@@ -15,4 +15,6 @@ public class WarrantyResponseDTO {
     private String defectDescription;
     private String status;
     private Date receivedDate;
+    private Boolean customerConfirmed;
+    private Boolean sellerConfirmed;
 }

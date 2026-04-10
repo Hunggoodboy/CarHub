@@ -19,6 +19,8 @@ public class WarrantyTicket {
     private String ward;
     private String city;
     private String phone;
+    private Boolean customerConfirmed = false;
+    private Boolean sellerConfirmed = false;
     @Column(columnDefinition = "TEXT")
     private String defectDescription;
 

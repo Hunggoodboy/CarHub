@@ -1,0 +1,59 @@
+/* nền mờ */
+.toast-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(3px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+/* ẩn */
+.hidden {
+    display: none;
+}
+
+/* box */
+.toast-box {
+    background: #fff;
+    padding: 25px 40px;
+    border-radius: 16px;
+    text-align: center;
+    min-width: 320px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+/* hiện */
+.toast-overlay.show .toast-box {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* icon */
+.toast-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* message */
+.toast-message {
+    font-size: 16px;
+}
+
+/* màu */
+.toast-box.success .toast-icon { color: #4CAF50; }
+.toast-box.error .toast-icon { color: #f44336; }
+.toast-box.warning .toast-icon { color: #ff9800; }

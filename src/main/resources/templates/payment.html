@@ -6,6 +6,8 @@
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/payment.css}">
+    <link rel="stylesheet" th:href="@{/css/toast.css}">
+    <script th:src="@{/js/toast.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@goongmaps/goong-js/dist/goong-js.css" rel="stylesheet" />
 </head>
@@ -92,7 +94,7 @@
         <div class="payment-box">
             <h3>Phương thức thanh toán</h3>
             <label class="radio">
-                <input type="radio" name="paymentMethod" value="CASH" checked> Thanh toán bằng tiền mặt 
+                <input type="radio" name="paymentMethod" value="CASH" checked> Đặt cọc & thanh toán khi nhận xe
             </label>
             <label class="radio">
                 <input type="radio" name="paymentMethod" value="BANK"> Chuyển khoản ngân hàng
@@ -102,8 +104,25 @@
         <button class="payment-btn">Xác nhận thanh toán</button>
     </div>
 </section>
+<div id="deposit-overlay"></div>
 
+<div id="deposit-modal">
+    <span id="close-deposit">&times;</span>
 
+    <h3>Đặt cọc đơn hàng</h3>
+
+    <p style="color:red; font-weight:bold;">
+        ⚠ Vui lòng chuyển khoản trước 10% để đặt cọc
+    </p>
+
+    <img src="/car-images/qr_bank.jpg" width="180" 
+         style="margin:10px 0; border:1px solid #ddd; padding:5px;">
+
+    <button id="confirm-deposit-btn" class="payment-btn" 
+            style="width:100%; margin-top:15px;">
+        Đã chuyển khoản
+    </button>
+</div>
 <div id="bill-overlay"></div>
 <div id="bill-modal">
     <span id="close-bill">&times;</span>
@@ -167,5 +186,6 @@
 </footer>
 
 <script th:src="@{/js/payment.js}"></script>
+<div th:replace="toast :: toast"></div>
 </body>
 </html>

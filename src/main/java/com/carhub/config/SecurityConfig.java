@@ -26,7 +26,7 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_RESOURCES = {
             "/css/**", "/js/**", "/images/**", "/car-images/**", "/car_images/**",
-            "/car_images_sub/**", "/webjars/**"
+            "/car_images_sub/**", "/webjars/**", "/upload/**"
     };
 
     private static final String[] PUBLIC_URLS = {
@@ -84,17 +84,7 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .userInfoEndpoint(info -> info.userService(oauth2UserService))
-                        .defaultSuccessUrl("/", false)
-                        .failureUrl("/login?error=true")
-                        .authorizationEndpoint(endpoint -> endpoint
-                                .authorizationRequestResolver(
-                                        new CustomAuthorizationRequestResolver(
-                                                clientRegistrationRepository,
-                                                "/oauth2/authorization"
-                                        )
-                                )
-                        )
-                )
+                        .defaultSuccessUrl("/", false))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")

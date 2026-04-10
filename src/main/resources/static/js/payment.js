@@ -14,14 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const suggestionsBox = document.getElementById('address-suggestions');
     const mapContainer = document.getElementById('map-container');
 
-    // Elements đơn hàng (Cần thiết cho tính toán)
+    // Elements đơn hàng
     const quantityInput = document.getElementById("quantity-input");
     const unitPriceEl = document.getElementById("unit-price");
     const originalPriceEl = document.getElementById("original-price");
     const discountPriceEl = document.getElementById("discount-price");
     const finalPriceTotalEl = document.getElementById("finalPrice");
 
-    // Elements Modal
+    // Elements Modal BILL
     const confirmBtn = document.querySelector(".payment-btn");
     const modal = document.getElementById("bill-modal");
     const overlay = document.getElementById("bill-overlay");
@@ -29,9 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const qrBox = document.getElementById("qr-box");
     const submitBtn = document.getElementById("submit-order-btn");
 
+    const depositModal = document.getElementById("deposit-modal");
+    const depositOverlay = document.getElementById("deposit-overlay");
+    const confirmDepositBtn = document.getElementById("confirm-deposit-btn");
+    const closeDepositBtn = document.getElementById("close-deposit");
+
     const formatter = new Intl.NumberFormat('vi-VN');
 
-    // 1. KHỞI TẠO MAP GOONG (Giữ nguyên logic cũ)
+    // 1. MAP 
     goongjs.accessToken = GOONG_MAP_KEY;
     const map = new goongjs.Map({
         container: 'map',
@@ -55,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // xu ly du lieu xe , tinh toan
+    // load xe , tinh tiền 
     if (carId) {
         fetch(`/api/cars/${carId}`)
             .then(res => res.json())
@@ -63,12 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const car = data.car;
                 if (!car) return;
 
-                // lay gia
                 const unitPriceValue = car.finalPrice || car.price; 
                 const originalPriceValue = car.price;              
                 const discountPerUnit = originalPriceValue - unitPriceValue;
 
-                // cap nhat gia
                 function updateCalculation() {
                     const qty = parseInt(quantityInput.value) || 1;
                     if (qty < 1) { quantityInput.value = 1; return; }
@@ -77,39 +80,33 @@ document.addEventListener("DOMContentLoaded", () => {
                     const discountPriceRow = discountPriceEl.parentElement; 
 
                     if (discountPerUnit > 0) {
-                    // neu ko giam gia thi hien tat ca
-                    originalPriceRow.style.display = "flex";
-                    discountPriceRow.style.display = "flex";
+                        originalPriceRow.style.display = "flex";
+                        discountPriceRow.style.display = "flex";
 
-                    unitPriceEl.innerText = formatter.format(unitPriceValue) + ' ₫';
-                    originalPriceEl.innerText = formatter.format(originalPriceValue) + ' ₫';
-                    originalPriceEl.style.textDecoration = "line-through"; // Hiện gạch ngang
+                        unitPriceEl.innerText = formatter.format(unitPriceValue) + ' ₫';
+                        originalPriceEl.innerText = formatter.format(originalPriceValue) + ' ₫';
+                        originalPriceEl.style.textDecoration = "line-through";
 
-                    const totalDiscount = discountPerUnit * qty;
-                    discountPriceEl.innerText = "- " + formatter.format(totalDiscount) + " ₫";
+                        const totalDiscount = discountPerUnit * qty;
+                        discountPriceEl.innerText = "- " + formatter.format(totalDiscount) + " ₫";
                     } else {
-                        // ẩn giá gốc và giảm giá
                         originalPriceRow.style.display = "none";
                         discountPriceRow.style.display = "none";
 
                         unitPriceEl.innerText = formatter.format(unitPriceValue) + ' ₫';
                     }
 
-                     // hien thi tong thanh toan
                     const totalFinal = unitPriceValue * qty;
                     finalPriceTotalEl.innerHTML = `<b>${formatter.format(totalFinal)} ₫</b>`;
                 }
 
-                // Khởi tạo ban đầu
                 updateCalculation();
-
-                // Lắng nghe sự kiện đổi số lượng
                 quantityInput.addEventListener("input", updateCalculation);
             })
             .catch(err => console.error("Lỗi tải dữ liệu xe:", err));
     }
 
-    // 3. AUTOCOMPLETE ĐỊA CHỈ 
+    // 3. AUTOCOMPLETE 
     let searchTimeout = null;
     streetInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
@@ -150,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         }, 300);
     });
+
     confirmBtn?.addEventListener("click", () => {
         const address = streetInput.value.trim();
         const ward = wardInput.value.trim();
@@ -157,25 +155,57 @@ document.addEventListener("DOMContentLoaded", () => {
         const phone = phoneInput.value.trim();
 
         if (!address || !ward || !city || !phone) {
-            alert("Vui lòng điền đầy đủ địa chỉ và số điện thoại!");
+            showToast("điền thông tin , sdt")
             return;
         }
 
         const methodSelected = document.querySelector('input[name="paymentMethod"]:checked');
+        if (methodSelected.value === "CASH") {
+            depositOverlay.style.display = "block";
+            depositModal.style.display = "block";
+            return;
+        }
+        showBill();
+    });
+
+    function showBill() {
+        const address = streetInput.value.trim();
+        const ward = wardInput.value.trim();
+        const city = cityInput.value.trim();
+        const phone = phoneInput.value.trim();
+
+        const methodSelected = document.querySelector('input[name="paymentMethod"]:checked');
         const methodLabel = methodSelected.parentElement.innerText.trim();
 
-        // Gán dữ liệu vào Modal Bill
         document.getElementById("bill-price").innerText = finalPriceTotalEl.innerText;
         document.getElementById("bill-address").innerText = `${address}, ${ward}, ${city}`;
         document.getElementById("bill-phone").innerText = phone;
         document.getElementById("bill-method").innerText = methodLabel;
 
         qrBox.style.display = methodSelected.value === "BANK" ? "block" : "none";
+
         overlay.style.display = "block";
         modal.style.display = "block";
+    }
+
+    confirmDepositBtn?.addEventListener("click", () => {
+        depositModal.style.display = "none";
+        depositOverlay.style.display = "none";
+
+        showBill();
     });
 
-    // 5. GỬI ĐƠN HÀNG LÊN SERVER
+    closeDepositBtn?.addEventListener("click", () => {
+        depositModal.style.display = "none";
+        depositOverlay.style.display = "none";
+    });
+
+    depositOverlay?.addEventListener("click", () => {
+        depositModal.style.display = "none";
+        depositOverlay.style.display = "none";
+    });
+
+    // 5. SUBMIT 
     submitBtn?.addEventListener("click", () => {
         const data = {
             carId: carId,
@@ -197,9 +227,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return res.json();
         })
         .then(() => {
-            alert("Gửi yêu cầu mua xe thành công!");
+            showToast("Gửi yêu cầu mua xe thành công!");
             closeModal();
-            window.location.href = "/index"; // Chuyển trang khi xong
+            window.location.href = "/index";
         })
         .catch(err => alert("Có lỗi xảy ra, vui lòng thử lại!"));
     });
@@ -208,6 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "none";
         overlay.style.display = "none";
     }
+
     closeBtn?.addEventListener("click", closeModal);
     overlay?.addEventListener("click", closeModal);
 });

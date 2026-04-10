@@ -29,13 +29,15 @@ public class User implements UserDetails {
     private String phoneNumber;
     @Column(nullable = true)
     private String address;
+    @Column(name = "avatar")
+    private String avatar;
 
     public enum Role {
         ADMIN, CUSTOMER
     }
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.CUSTOMER; // Enum: ADMIN, CUSTOMER, USER
+    private Role role = Role.CUSTOMER; 
 
     public Collection<? extends GrantedAuthority> getAuthorities(){
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
