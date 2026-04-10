@@ -1,6 +1,8 @@
 // ===================== CHAT WIDGET =====================
 const ChatWidget = (() => {
 
+    const carCardPrefix = '__CAR_CARD__';
+
     let stompClient = null;
     let currentUserId = null;
     let sellerId = null;
@@ -13,7 +15,7 @@ const ChatWidget = (() => {
 
         try {
             const res = await fetch('/api/users/me');
-            if (!res.ok) return; 
+            if (!res.ok) return;
             currentUserId = await res.json();
         } catch (e) {
             console.log('Chưa đăng nhập');
@@ -33,9 +35,7 @@ const ChatWidget = (() => {
         const initial = (sellerName || 'S').charAt(0).toUpperCase();
 
         document.body.insertAdjacentHTML('beforeend', `
-            <!-- Floating bubble - ĐÃ SỬA ONCLICK ĐỂ TỰ LẤY TÊN XE -->
-            <div id="chat-bubble" title="Tư vấn với người bán" 
-                 onclick="const name = document.getElementById('car-model')?.innerText; if(name) sessionStorage.setItem('pending_car_name', name); ChatWidget.openWidget();">
+            <div id="chat-bubble" title="Tư vấn với người bán" onclick="ChatWidget.openWidget();">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
                 </svg>
@@ -86,13 +86,128 @@ const ChatWidget = (() => {
         document.getElementById('chat-widget-input-text').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                ChatWidget.sendMessage(); 
+                ChatWidget.sendMessage();
             }
         });
 
         document.getElementById('chat-widget-input-text').addEventListener('input', function () {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+        });
+    }
+
+    function formatCurrency(value) {
+        return Number(value || 0).toLocaleString('vi-VN') + ' đ';
+    }
+
+    function buildImagePath(imageUrl) {
+        if (!imageUrl) {
+            return 'https://via.placeholder.com/160x90?text=Car';
+        }
+
+        if (imageUrl.startsWith('http')) {
+            return imageUrl;
+        }
+
+        return `/${imageUrl.replace('car_images', 'car-images')}`;
+    }
+
+    function buildCarCardMessageFromSession() {
+        const raw = sessionStorage.getItem('pending_car_info');
+        if (!raw) {
+            return '';
+        }
+
+        try {
+            const parsed = JSON.parse(raw);
+            if (!parsed || !parsed.carId) {
+                return '';
+            }
+
+            const payload = {
+                carId: Number(parsed.carId),
+                carModel: parsed.carModel || 'Xe quan tâm',
+                carPrice: Number(parsed.carPrice || 0),
+                carImageUrl: parsed.carImageUrl || '',
+                carYear: parsed.carYear || '',
+                carColor: parsed.carColor || ''
+            };
+
+            return carCardPrefix + encodeURIComponent(JSON.stringify(payload));
+        } catch (error) {
+            console.error('Dữ liệu xe không hợp lệ:', error);
+            return '';
+        }
+    }
+
+    function parseCarCardMessage(content) {
+        if (typeof content !== 'string' || !content.startsWith(carCardPrefix)) {
+            return null;
+        }
+
+        try {
+            const encoded = content.slice(carCardPrefix.length);
+            const parsed = JSON.parse(decodeURIComponent(encoded));
+            if (!parsed || !parsed.carId) {
+                return null;
+            }
+
+            return {
+                carId: Number(parsed.carId),
+                carModel: parsed.carModel || 'Xe quan tâm',
+                carPrice: Number(parsed.carPrice || 0),
+                carImageUrl: parsed.carImageUrl || '',
+                carYear: parsed.carYear || '',
+                carColor: parsed.carColor || ''
+            };
+        } catch (error) {
+            console.error('Không parse được card xe:', error);
+            return null;
+        }
+    }
+
+    function renderCarCardHtml(cardData) {
+        const detailUrl = `/product_detail?id=${encodeURIComponent(cardData.carId)}`;
+        const safeModel = escapeHtml(cardData.carModel || 'Xe quan tâm');
+        const safeImage = escapeHtml(buildImagePath(cardData.carImageUrl));
+        const metaParts = [
+            `Mã xe: #${cardData.carId}`,
+            `Giá: ${formatCurrency(cardData.carPrice)}`
+        ];
+
+        if (cardData.carYear) {
+            metaParts.push(`Năm: ${escapeHtml(String(cardData.carYear))}`);
+        }
+        if (cardData.carColor) {
+            metaParts.push(`Màu: ${escapeHtml(String(cardData.carColor))}`);
+        }
+
+        return `
+            <div class="chat-widget-car-card">
+                <img src="${safeImage}" alt="${safeModel}">
+                <div class="chat-widget-car-card-content">
+                    <h4>${safeModel}</h4>
+                    <p>${metaParts.join(' • ')}</p>
+                    <a href="${detailUrl}" target="_blank" rel="noopener noreferrer">Xem chi tiết xe</a>
+                </div>
+            </div>
+        `;
+    }
+
+    function publishMessage(content) {
+        if (!content || !isConnected) {
+            return;
+        }
+
+        stompClient.publish({
+            destination: '/app/chat.private',
+            body: JSON.stringify({
+                senderId: currentUserId,
+                receiverId: sellerId,
+                content: content,
+                messageType: 'TEXT',
+                chatType: 'PRIVATE'
+            })
         });
     }
 
@@ -146,7 +261,7 @@ const ChatWidget = (() => {
         const banner = document.getElementById('cw-banner');
         const status = document.getElementById('cw-status');
         if (connected) {
-            banner.style.display = 'none'; 
+            banner.style.display = 'none';
             status.textContent = 'Online';
             status.style.color = '#22c55e';
         } else {
@@ -168,29 +283,20 @@ const ChatWidget = (() => {
     function sendMessage() {
         const input = document.getElementById('chat-widget-input-text');
         let content = input.value.trim();
-        
+
         if (!content) return;
         if (!isConnected) {
             alert('Chưa kết nối WebSocket!');
             return;
         }
 
-        const pendingCar = sessionStorage.getItem("pending_car_name");
-        if (pendingCar) {
-            content = `[Sản phẩm: ${pendingCar}]\n${content}`;
-            sessionStorage.removeItem("pending_car_name");
+        const carCardMessage = buildCarCardMessageFromSession();
+        if (carCardMessage) {
+            publishMessage(carCardMessage);
+            sessionStorage.removeItem('pending_car_info');
         }
 
-        stompClient.publish({
-            destination: '/app/chat.private',
-            body: JSON.stringify({
-                senderId: currentUserId,
-                receiverId: sellerId,
-                content: content,
-                messageType: 'TEXT',
-                chatType: 'PRIVATE'
-            })
-        });
+        publishMessage(content);
 
         input.value = '';
         input.style.height = 'auto';
@@ -209,12 +315,18 @@ const ChatWidget = (() => {
         const empty = document.getElementById('cw-empty');
         if (empty) empty.style.display = 'none';
         const isMe = msg.senderId == currentUserId;
+        const carCardData = parseCarCardMessage(msg.content);
         const time = msg.sentAt
             ? new Date(msg.sentAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
             : new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
         const wrapper = document.createElement('div');
         wrapper.className = `chat-msg-wrapper ${isMe ? 'me' : 'them'}`;
-        wrapper.innerHTML = `<div class="chat-msg-bubble">${escapeHtml(msg.content)}</div><div class="chat-msg-time">${time}</div>`;
+
+        if (carCardData) {
+            wrapper.innerHTML = `<div class="chat-msg-bubble car-card-bubble">${renderCarCardHtml(carCardData)}</div><div class="chat-msg-time">${time}</div>`;
+        } else {
+            wrapper.innerHTML = `<div class="chat-msg-bubble">${escapeHtml(msg.content)}</div><div class="chat-msg-time">${time}</div>`;
+        }
         container.appendChild(wrapper);
         container.scrollTop = container.scrollHeight;
         if (document.getElementById('chat-widget').style.display === 'none') {

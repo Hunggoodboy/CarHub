@@ -18,8 +18,9 @@ function showSection(section) {
     document.getElementById("purchased-section").style.display = "none";
     document.getElementById("selling-section").style.display = "none";
     document.getElementById("orders-section").style.display = "none";
-    document.getElementById("warranty-section").style.display="none";
-    document.getElementById("warranty-seller-section").style.display="none";
+    document.getElementById("customer-request-section").style.display = "none";
+    document.getElementById("warranty-section").style.display = "none";
+    document.getElementById("warranty-seller-section").style.display = "none";
 
     const target = document.getElementById(section + "-section");
     if (target) target.style.display = "block";
@@ -33,6 +34,69 @@ function showSection(section) {
         isViewingOrders = false;
         loadSellerOrders();
     }
+
+    if (section === 'customer-request') {
+        const requestBadge = document.getElementById("customer-request-badge");
+        if (requestBadge) requestBadge.style.display = "none";
+    }
+}
+
+function showCustomerRequests() {
+    showSection("customer-request");
+    loadCustomerRequests();
+}
+
+function loadCustomerRequests() {
+    fetch("/api/messages/recent")
+        .then(res => res.json())
+        .then(data => {
+            renderCustomerRequests(data);
+
+            const requestBadge = document.getElementById("customer-request-badge");
+            if (!requestBadge) return;
+
+            if (Array.isArray(data) && data.length > 0) {
+                requestBadge.style.display = "inline-block";
+                requestBadge.innerText = data.length;
+            } else {
+                requestBadge.style.display = "none";
+            }
+        })
+        .catch(err => {
+            console.error("Lỗi tải yêu cầu khách hàng:", err);
+            renderCustomerRequests([]);
+        });
+}
+
+function renderCustomerRequests(requests) {
+    const container = document.getElementById("customer-request-list");
+    if (!container) return;
+
+    if (!Array.isArray(requests) || requests.length === 0) {
+        container.innerHTML = "<p>Hiện chưa có yêu cầu nào từ khách hàng.</p>";
+        return;
+    }
+
+    const html = requests.map(req => {
+        const sentAt = req.sentAt
+            ? new Date(req.sentAt).toLocaleString("vi-VN")
+            : "Vừa xong";
+        const partnerName = req.partnerName || "Khách hàng";
+        const lastMessage = req.lastMessage || "(Không có nội dung)";
+
+        return `
+            <div class="customer-request-card">
+                <div class="customer-request-card__top">
+                    <h4>${partnerName}</h4>
+                    <span>${sentAt}</span>
+                </div>
+                <p>${lastMessage}</p>
+                <a href="/chat" class="btn">Mở cuộc trò chuyện</a>
+            </div>
+        `;
+    }).join("");
+
+    container.innerHTML = html;
 }
 
 function loadSellerOrders() {
@@ -54,6 +118,8 @@ function loadSellerOrders() {
             }
         })
         .catch(err => console.error("Lỗi badge:", err));
+
+    loadCustomerRequests();
 
     if (isViewingOrders && currentTabStatus !== 'PENDING') {
         fetch(`/api/orders/seller/orders?status=${currentTabStatus}`)
@@ -86,13 +152,13 @@ function renderSellerOrders(orders) {
     orders.forEach(o => {
 
         let statusClass = "";
-        if(o.status === "PENDING") statusClass = "status-pending";
-        if(o.status === "DELIVERING") statusClass = "status-delivering";
-        if(o.status === "DELIVERED") statusClass = "status-delivered";
-        if(o.status === "COMPLETED") statusClass = "status-completed";
+        if (o.status === "PENDING") statusClass = "status-pending";
+        if (o.status === "DELIVERING") statusClass = "status-delivering";
+        if (o.status === "DELIVERED") statusClass = "status-delivered";
+        if (o.status === "COMPLETED") statusClass = "status-completed";
 
-        const imgPath = o.imageUrl 
-            ? `/${o.imageUrl.replace("car_images", "car-images")}` 
+        const imgPath = o.imageUrl
+            ? `/${o.imageUrl.replace("car_images", "car-images")}`
             : "/images/default-car.png";
 
         let actionButtons = "";
@@ -102,7 +168,7 @@ function renderSellerOrders(orders) {
                 <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERING')">🚚 Bắt đầu giao</button>
                 <button onclick="updateOrderStatus(${o.orderId}, 'CANCELLED')">❌ Hủy</button>
             `;
-        } 
+        }
         else if (o.status === 'DELIVERING') {
             actionButtons = `
                 <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERED')">📦 Đã giao</button>
@@ -137,24 +203,24 @@ function updateOrderStatus(orderId, status) {
     fetch(`/api/orders/${orderId}/status?status=${status}`, {
         method: "PUT"
     })
-    .then(res => {
-        if (res.ok) {
-            alert("Cập nhật thành công");
-            loadOrders(currentTabStatus);
-            loadSellerOrders();
-        }
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            if (res.ok) {
+                alert("Cập nhật thành công");
+                loadOrders(currentTabStatus);
+                loadSellerOrders();
+            }
+        })
+        .catch(err => console.error(err));
 }
 
 function confirmSeller(id) {
     fetch(`/api/orders/${id}/confirm-seller`, {
         method: "PUT"
     })
-    .then(() => {
-        alert("Đã xác nhận!");
-        loadOrders(currentTabStatus);
-    });
+        .then(() => {
+            alert("Đã xác nhận!");
+            loadOrders(currentTabStatus);
+        });
 }
 
 function loadUserProfile() {
@@ -187,8 +253,8 @@ function renderPurchasedCars(cars) {
     let html = "";
 
     cars.forEach(car => {
-        const imgPath = car.imageUrl 
-            ? `/${car.imageUrl.replace("car_images", "car-images")}` 
+        const imgPath = car.imageUrl
+            ? `/${car.imageUrl.replace("car_images", "car-images")}`
             : "/images/default-car.png";
 
         let statusLabel = "";
@@ -201,9 +267,9 @@ function renderPurchasedCars(cars) {
         }
 
         let button = "";
-        if (car.status === "DELIVERED"){
+        if (car.status === "DELIVERED") {
             button = `<button class="btn-confirm" onclick="confirmBuyerOrder(${car.orderId})">Xác nhận đã nhận xe</button>`;
-        } else if (car.status === "COMPLETED"){
+        } else if (car.status === "COMPLETED") {
             button = `<a href="/api/warranty/request?carId=${car.carId}" class="btn">Yêu cầu bảo hành</a>`;
         }
 
@@ -227,15 +293,15 @@ function confirmBuyerOrder(orderId) {
     fetch(`/api/orders/${orderId}/confirm-buyer`, {
         method: "PUT"
     })
-    .then(res => {
-        if (res.ok) {
-            alert("Xác nhận thành công!");
-            loadPurchasedCars('DELIVERED'); 
-        } else {
-            alert("Có lỗi xảy ra khi xác nhận.");
-        }
-    })
-    .catch(err => console.error("Lỗi confirm buyer:", err));
+        .then(res => {
+            if (res.ok) {
+                alert("Xác nhận thành công!");
+                loadPurchasedCars('DELIVERED');
+            } else {
+                alert("Có lỗi xảy ra khi xác nhận.");
+            }
+        })
+        .catch(err => console.error("Lỗi confirm buyer:", err));
 }
 
 function loadSellingCars() {
@@ -261,8 +327,8 @@ function renderSellingCars(cars) {
     let html = "";
 
     cars.forEach(car => {
-        const imgPath = car.imageUrl 
-            ? `/${car.imageUrl.replace("car_images", "car-images")}` 
+        const imgPath = car.imageUrl
+            ? `/${car.imageUrl.replace("car_images", "car-images")}`
             : "/images/default-car.png";
 
         html += `
@@ -285,8 +351,8 @@ function openDetail(carId) {
         .then(res => res.json())
         .then(data => {
             const car = data.car;
-            const imgPath = car.imageUrl 
-                ? `/${car.imageUrl.replace("car_images", "car-images")}` 
+            const imgPath = car.imageUrl
+                ? `/${car.imageUrl.replace("car_images", "car-images")}`
                 : "/images/default-car.png";
 
             document.getElementById("detail-image").src = imgPath;
@@ -338,14 +404,14 @@ function saveEdit() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
-    .then(res => {
-        if (res.ok) {
-            alert("Cập nhật thành công");
-            closeEdit();
-            loadSellingCars();
-        }
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            if (res.ok) {
+                alert("Cập nhật thành công");
+                closeEdit();
+                loadSellingCars();
+            }
+        })
+        .catch(err => console.error(err));
 }
 
 function closeEdit() {

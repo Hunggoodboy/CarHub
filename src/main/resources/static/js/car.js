@@ -18,55 +18,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const currentCarId = carId;
 
-    if(savedComment && savedCarId === currentCarId){
+    if (savedComment && savedCarId === currentCarId) {
 
         const commentInput = document.getElementById("comment-input");
 
-        if(commentInput){
+        if (commentInput) {
             commentInput.value = savedComment;
         }
 
-        if(savedRating){
+        if (savedRating) {
             selectedRating = savedRating;
 
             const stars = document.querySelectorAll(".star");
 
             stars.forEach(s => s.classList.remove("active"));
 
-            for(let i=0;i<savedRating;i++){
-                if(stars[i]){
+            for (let i = 0; i < savedRating; i++) {
+                if (stars[i]) {
                     stars[i].classList.add("active");
                 }
             }
         }
 
     }
-const nextBtn = document.getElementById("nextBtn");
-const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
 
-if (nextBtn) {
-    nextBtn.onclick = function () {
-        if (images.length === 0) return;
+    if (nextBtn) {
+        nextBtn.onclick = function () {
+            if (images.length === 0) return;
 
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
-    };
-}
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        };
+    }
 
-if (prevBtn) {
-    prevBtn.onclick = function () {
-        if (images.length === 0) return;
+    if (prevBtn) {
+        prevBtn.onclick = function () {
+            if (images.length === 0) return;
 
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
-    };
-}
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage(currentIndex);
+        };
+    }
 
 });
 
 let selectedRating = 0;
 let images = [];
 let currentIndex = 0;
+
+function savePendingCarInfo(car) {
+    if (!car || !car.id) {
+        return;
+    }
+
+    const payload = {
+        carId: car.id,
+        carModel: car.model || "Xe quan tâm",
+        carPrice: Number(car.finalPrice || car.price || 0),
+        carImageUrl: car.imageUrl || "",
+        carYear: car.manufactureYear || "",
+        carColor: car.color || ""
+    };
+
+    sessionStorage.setItem("pending_car_info", JSON.stringify(payload));
+}
 
 function setupRating() {
 
@@ -108,7 +125,7 @@ function loadCarDetail(carId) {
         .then(data => {
 
             const car = data.car;
-             setupRating();
+            setupRating();
 
 
             document.getElementById("loading-msg").style.display = "none";
@@ -133,12 +150,12 @@ function loadCarDetail(carId) {
             document.getElementById("car-desc").innerText =
                 car.description || "Đang cập nhật...";
 
-            
+
             const mainImg = car.imageUrl
-                ? `/${car.imageUrl.replace("car_images", "car-images")}` 
+                ? `/${car.imageUrl.replace("car_images", "car-images")}`
                 : "/images/default-car.png";
 
-            const subImgs = (car.subImageUrls || []).map(img => "/" + img); 
+            const subImgs = (car.subImageUrls || []).map(img => "/" + img);
 
             images = [mainImg, ...subImgs];
 
@@ -149,7 +166,7 @@ function loadCarDetail(carId) {
             const formatter = new Intl.NumberFormat("vi-VN");
 
             document.getElementById("car-final-price").innerText =
-                formatter.format(car.finalPrice || car.price) 
+                formatter.format(car.finalPrice || car.price)
 
             const oldPriceEl = document.getElementById("car-old-price");
 
@@ -162,15 +179,17 @@ function loadCarDetail(carId) {
 
             const consultBtn = document.querySelector(".btn-consult");
             if (consultBtn) {
-                consultBtn.onclick = function() {
+                consultBtn.onclick = function () {
                     if (typeof ChatWidget !== 'undefined') {
-                        sessionStorage.setItem("pending_car_name", car.model);
+                        savePendingCarInfo(car);
                         ChatWidget.openWidget();
                     } else {
                         alert('Đang kết nối, vui lòng thử lại!');
                     }
                 };
             }
+
+            savePendingCarInfo(car);
 
             renderReviews(data.reviews);
 
@@ -241,7 +260,7 @@ function setupComment(carId) {
         })
             .then(res => {
 
-                if (res.status === 401 || res.redirected ) {
+                if (res.status === 401 || res.redirected) {
                     throw new Error("Bạn chưa đăng nhập");
                 }
 
@@ -258,7 +277,7 @@ function setupComment(carId) {
 
                 commentInput.value = "";
 
-                document.querySelectorAll(".star").forEach(s=>{
+                document.querySelectorAll(".star").forEach(s => {
                     s.classList.remove("active");
                 });
 
@@ -280,14 +299,14 @@ function setupComment(carId) {
             })
             .catch(err => {
 
-                    console.error(err);
-                    if(err.message === "Bạn chưa đăng nhập"){
-                        showLoginModal();
-                    }else if(err.message === "Bạn chưa mua xe nên không thể đánh giá"){
-                        showBuyCarModal();
-                    }else{
-                        showAlert(err.message);
-                    }
+                console.error(err);
+                if (err.message === "Bạn chưa đăng nhập") {
+                    showLoginModal();
+                } else if (err.message === "Bạn chưa mua xe nên không thể đánh giá") {
+                    showBuyCarModal();
+                } else {
+                    showAlert(err.message);
+                }
 
             });
 
@@ -310,11 +329,11 @@ function showAlert(message) {
     }
 }
 
-function showLoginModal(){
+function showLoginModal() {
     const modal = document.getElementById("login-modal");
     modal.style.display = "flex";
 
-    document.getElementById("go-login-btn").onclick = function(){
+    document.getElementById("go-login-btn").onclick = function () {
 
         // giữ cmt
         localStorage.setItem("pendingComment", document.getElementById("comment-input").value);
@@ -324,17 +343,17 @@ function showLoginModal(){
         window.location.href = "/login?redirect=" + encodeURIComponent(window.location.href);
     };
 
-    document.getElementById("close-login-modal").onclick=function(){
+    document.getElementById("close-login-modal").onclick = function () {
         modal.style.display = "none";
     };
 }
 
-function showBuyCarModal(){
-    const modal=document.getElementById("buy-car");
-    if(!modal) return;
-    modal.style.display="flex";
-    document.getElementById("close-buy-car-modal").onclick = function(){
-        modal.style.display="none";
+function showBuyCarModal() {
+    const modal = document.getElementById("buy-car");
+    if (!modal) return;
+    modal.style.display = "flex";
+    document.getElementById("close-buy-car-modal").onclick = function () {
+        modal.style.display = "none";
     };
 }
 
@@ -354,7 +373,7 @@ function renderReviews(reviews) {
 
     let html = "";
 
-    const firstReviews = reviews.slice(0,5);
+    const firstReviews = reviews.slice(0, 5);
 
     firstReviews.forEach(review => {
         html += `
@@ -384,13 +403,13 @@ function renderReviews(reviews) {
 
 }
 
-function setupShowAllReviews(reviews){
+function setupShowAllReviews(reviews) {
 
     const btn = document.getElementById("show-all-reviews");
 
-    if(!btn) return;
+    if (!btn) return;
 
-    btn.addEventListener("click",function(){
+    btn.addEventListener("click", function () {
 
         const reviewList = document.getElementById("comment-list");
 
@@ -419,7 +438,7 @@ function setupShowAllReviews(reviews){
 
         reviewList.innerHTML = html;
 
-        document.getElementById("hide-reviews").addEventListener("click", function(){
+        document.getElementById("hide-reviews").addEventListener("click", function () {
             renderReviews(reviews);
         });
 

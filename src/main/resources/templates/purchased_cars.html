@@ -37,6 +37,10 @@
                     Đơn hàng 
                     <span id="order-badge" class="badge" style="display:none;">0</span>
                 </li>
+                <li onclick="showCustomerRequests()" class="menu-item">
+                    Nhận yêu cầu từ khách hàng
+                    <span id="customer-request-badge" class="badge" style="display:none;">0</span>
+                </li>
                 <li href="#" onclick="showWarranty()">Phiếu bảo hành</li>
                 <li href="#" onclick="showWarrantySeller()">Xem yêu cầu bảo hành</li>
             </ul>
@@ -85,6 +89,13 @@
                 </div>
                 <div id="order-list"></div>
             </div>
+
+            <div id="customer-request-section" style="display: none;">
+                <h2>Yêu cầu từ khách hàng</h2>
+                <p class="customer-request-subtitle">Danh sách tin nhắn/yêu cầu gần đây từ khách hàng của bạn.</p>
+                <div id="customer-request-list"></div>
+            </div>
+
             <div id="warranty-section" style="display:none;">
                 <h2>Phiếu bảo hành của bạn</h2>
                 <div id="warranty-list"></div>
