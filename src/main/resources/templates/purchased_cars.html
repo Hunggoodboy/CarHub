@@ -6,6 +6,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="stylesheet" th:href="@{/css/style.css}">
         <link rel="stylesheet" th:href="@{/css/purchased_cars.css}">
+        <link rel="stylesheet" th:href="@{/css/toast.css}">
+        <script th:src="@{/js/toast.js}"></script>
     </head>
     
     <body>
@@ -28,19 +30,19 @@
         <div id="sidebar" class="sidebar">
             <h3>Hồ Sơ</h3>
             <ul>
-                <li onclick="showSection('profile')">Thông tin cá nhân</li>
-                <li onclick="showSection('purchased')">Xe đã mua</li>
-                <li onclick="showSection('selling')">Xe đang bán</li>
-                <li onclick="showSection('orders')" class="menu-item">
+                <li onclick="handleMenuClick(this, 'profile')">Thông tin cá nhân</li>
+                <li onclick="handleMenuClick(this, 'purchased')">Xe đã mua</li>
+                <li onclick="handleMenuClick(this, 'selling')">Xe đang bán</li>
+                <li onclick="handleMenuClick(this, 'orders')" class="menu-item">
                     Đơn hàng 
-                    <span id="order-badge" class="badge" style="display:none;">0</span>
+                   <span id="order-badge" class="badge" style="display:none;">0</span>
                 </li>
-                <li onclick="showCustomerRequests()" class="menu-item">
+                <li onclick="handleMenuClick(this, 'warranty')">Phiếu bảo hành</li>
+                <li onclick="handleMenuClick(this, 'warrantySeller')">Xem yêu cầu bảo hành</li>
+                <li onclick="handleMenuClick(this,'customer-request')" class="menu-item">
                     Nhận yêu cầu từ khách hàng
                     <span id="customer-request-badge" class="badge" style="display:none;">0</span>
                 </li>
-                <li href="#" onclick="showWarranty()">Phiếu bảo hành</li>
-                <li href="#" onclick="showWarrantySeller()">Xem yêu cầu bảo hành</li>
             </ul>
         </div>
         <div id="content" class="content">
@@ -63,10 +65,10 @@
             <div id="purchased-section">
                 <h2>Danh sách xe đã mua</h2>
                 <div class="order-tabs">
-                    <button onclick="loadPurchasedCars('PENDING')">Đã đặt</button>
-                    <button onclick="loadPurchasedCars('DELIVERING')">Đang giao</button>
-                    <button onclick="loadPurchasedCars('DELIVERED')">Chờ xác nhận</button>
-                    <button onclick="loadPurchasedCars('COMPLETED')">Đã nhận</button>
+                    <button onclick="handleTabClick(this, 'PENDING')">Đã đặt</button>
+                    <button onclick="handleTabClick(this, 'DELIVERING')">Đang giao</button>
+                    <button onclick="handleTabClick(this, 'DELIVERED')">Chờ xác nhận</button>
+                    <button onclick="handleTabClick(this, 'COMPLETED')">Đã nhận</button>
                 </div>
                 <div id="purchased-car-list" class="product-grid"></div>
             </div>
@@ -81,10 +83,10 @@
             <div id="orders-section" style="display: none;">
                 <h2>Đơn hàng của bạn</h2>
                 <div class="order-tabs">
-                    <button onclick="loadOrders('PENDING')">Đơn mới</button>
-                    <button onclick="loadOrders('DELIVERING')">Đang giao</button>
-                    <button onclick="loadOrders('DELIVERED')">Đã giao</button>
-                    <button onclick="loadOrders('COMPLETED')">Hoàn tất</button>
+                    <button onclick="handleTabClick(this, 'PENDING')">Đơn mới</button>
+                    <button onclick="handleTabClick(this, 'DELIVERING')">Đang giao</button>
+                    <button onclick="handleTabClick(this, 'DELIVERED')">Đã giao</button>
+                    <button onclick="handleTabClick(this, 'COMPLETED')">Hoàn tất</button>
 
                 </div>
                 <div id="order-list"></div>
@@ -209,5 +211,6 @@
             </div>
         </footer>
         <script th:src="@{/js/purchased_car.js}"></script>
+        <div th:replace="toast :: toast"></div>
     </body>
 </html>

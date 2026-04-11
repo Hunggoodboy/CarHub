@@ -11,10 +11,36 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(loadSellerOrders, 5000);
 
     showSection("profile");
-<<<<<<< HEAD
     const firstMenu = document.querySelector('.sidebar ul li');
     if (firstMenu) firstMenu.classList.add('active');
     document.getElementById("edit-btn")?.addEventListener("click",openEditProfile);
+    const avatarInput = document.getElementById("avatar-input");
+    const avatarImg = document.getElementById("avatar-img");
+
+    avatarInput?.addEventListener("change", () => {
+        const file = avatarInput.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("/api/users/upload-avatar", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Upload fail");
+            return res.text();
+        })
+        .then(fileName => {
+            avatarImg.src = "/uploads/" + fileName;
+            showToast("Cập nhật avatar thành công");
+        })
+        .catch(() => {
+            showToast("Cập nhật thất bại");
+        });
+    });
+
 });
 
 function handleMenuClick(el, section) {
@@ -47,10 +73,6 @@ function handleTabClick(btn, status) {
     }
 }
 
-=======
-});
-
->>>>>>> dev
 function showSection(section) {
     document.getElementById("profile-section").style.display = "none";
     document.getElementById("purchased-section").style.display = "none";
@@ -243,7 +265,7 @@ function updateOrderStatus(orderId, status) {
     })
         .then(res => {
             if (res.ok) {
-                alert("Cập nhật thành công");
+                showToast("Cập nhật thành công");
                 loadOrders(currentTabStatus);
                 loadSellerOrders();
             }
@@ -256,7 +278,7 @@ function confirmSeller(id) {
         method: "PUT"
     })
         .then(() => {
-            alert("Đã xác nhận!");
+            showToast("Đã xác nhận!");
             loadOrders(currentTabStatus);
         });
 }
@@ -268,6 +290,12 @@ function loadUserProfile() {
             document.getElementById("username").innerText = data.username || "";
             document.getElementById("email").innerText = data.email || "";
             document.getElementById("phone").innerText = data.phoneNumber || "";
+            const avatarImg = document.getElementById("avatar-img");
+            if(data.avatar){
+                avatarImg.src = "/uploads/" + data.avatar;
+            } else {
+                avatarImg.src = "/img/default-avatar.png";
+            }
         })
         .catch(err => console.error(err));
 }
@@ -333,10 +361,10 @@ function confirmBuyerOrder(orderId) {
     })
         .then(res => {
             if (res.ok) {
-                alert("Xác nhận thành công!");
+                showToast("Xác nhận thành công!");
                 loadPurchasedCars('DELIVERED');
             } else {
-                alert("Có lỗi xảy ra khi xác nhận.");
+                showToast("Có lỗi xảy ra khi xác nhận.");
             }
         })
         .catch(err => console.error("Lỗi confirm buyer:", err));
@@ -382,10 +410,7 @@ function renderSellingCars(cars) {
 
     container.innerHTML = html;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
 function openDetail(carId) {
     currentCarId = carId;
     fetch(`/api/cars/${carId}`)
@@ -447,7 +472,7 @@ function saveEdit() {
     })
         .then(res => {
             if (res.ok) {
-                alert("Cập nhật thành công");
+                showToast("Cập nhật thành công");
                 closeEdit();
                 loadSellingCars();
             }
@@ -458,10 +483,7 @@ function saveEdit() {
 function closeEdit() {
     document.getElementById("edit-modal").style.display = "none";
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> dev
 function showWarranty() {
     showSection("warranty");
     loadWarranty();
@@ -515,7 +537,6 @@ function loadWarrantySeller() {
                 container.appendChild(div);
             });
         });
-<<<<<<< HEAD
 }
 
 function confirmSellerWarranty(id) {
@@ -537,33 +558,6 @@ function confirmCustomerWarranty(id) {
         loadWarranty();
     });
 }
-
-const avatarInput = document.getElementById("avatar-input");
-const avatarImg = document.getElementById("avatar-img");
-
-avatarInput?.addEventListener("change", () => {
-    const file = avatarInput.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    fetch("/api/users/upload-avatar", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Upload fail");
-        return res.text();
-    })
-    .then(fileName => {
-        avatarImg.src = "/uploads/" + fileName;
-        showToast("Upload avatar thành công");
-    })
-    .catch(() => {
-        showToast("Upload thất bại");
-    });
-});
 
 function openEditProfile() {
     fetch("/api/users/me/profile")
@@ -601,6 +595,4 @@ function saveProfile() {
 }
 function closeEditProfile() {
     document.getElementById("edit-profile-modal").style.display = "none";
-=======
->>>>>>> dev
 }

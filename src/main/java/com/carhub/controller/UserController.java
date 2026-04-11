@@ -186,7 +186,6 @@ public class UserController {
             return ResponseEntity.status(500).body("Upload fail");
         }
     }
-<<<<<<< HEAD
     @PutMapping("/me")
     public ResponseEntity<UserDTO> updateCurrentUser(
         Authentication authentication,
@@ -197,8 +196,4 @@ public class UserController {
                    .orElse(ResponseEntity.notFound().build());
         }
     
-=======
-
-
->>>>>>> dev
 }
