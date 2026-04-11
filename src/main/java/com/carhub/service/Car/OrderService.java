@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.Car;
 
 import com.carhub.dto.PurchasedCarDTO;
 import com.carhub.dto.Request.OrderRequest;

@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.Car;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.entity.Car;

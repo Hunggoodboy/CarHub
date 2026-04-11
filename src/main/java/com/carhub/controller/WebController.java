@@ -5,7 +5,7 @@ import com.carhub.dto.CarDTO;
 import com.carhub.dto.UserDTO;
 import com.carhub.dto.Request.RegisterRequest;
 import com.carhub.service.authentication.AuthService;
-import com.carhub.service.CarService;
+import com.carhub.service.Car.CarService;
 import com.carhub.service.authentication.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -88,7 +88,7 @@ public class WebController {
     }
 
     // Trang xe đã mua
-    @GetMapping("/my-cars")
+    @GetMapping("/my-profile")
     public String myCarsPage() {
         return "purchased_cars";
     }
@@ -114,6 +114,7 @@ public class WebController {
     public String chat() {
         return "chat";
     }
+
 
     @PostMapping("/car/save")
     public String saveCar(@ModelAttribute CarDTO carDTO,

@@ -2,13 +2,10 @@ package com.carhub.controller;
 
 import com.carhub.dto.Request.EmailRequest;
 import com.carhub.dto.Request.ResetPassWordRequest;
-import com.carhub.repository.UserRepository;
-import com.carhub.service.oauth2.OtpTokenService;
+import com.carhub.service.authentication.OtpTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor

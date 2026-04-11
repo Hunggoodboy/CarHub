@@ -26,18 +26,18 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_RESOURCES = {
             "/css/**", "/js/**", "/images/**", "/car-images/**", "/car_images/**",
-            "/car_images_sub/**", "/webjars/**", "/upload/**"
+            "/car_images_sub/**", "/webjars/**"
     };
 
     private static final String[] PUBLIC_URLS = {
-            "/", "/index", "/register", "/login", "/forgot-password", "/ChatAI", "/chat", "/error",
-            "/api/auth/**", "/api/password/**", "/api/users/check-username", "/api/users/check-email"
+            "/", "/index", "/register", "/login", "/forgot-password", "/ChatAI", "/chat", "/error","/static/**",
+            "/api/auth/**", "/api/password/**", "/api/users/check-username", "/api/users/check-email", "/upload/**"
     };
 
     private static final String[] AUTHENTICATED_URLS = {
             "/api/cars/purchased", // Phải đặt riêng ra đây để check trước
-            "/api/users/me", "/api/users/me/profile", "/api/users/me/change-password",
-            "/api/favorites/**"
+            "/api/users/**", "/api/users/me/profile", "/api/users/me/change-password",
+            "/api/favorites/**", "/my-profile"
     };
 
     private static final String[] ADMIN_URLS = {

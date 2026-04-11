@@ -2,7 +2,7 @@ package com.carhub.controller;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.UserDTO;
-import com.carhub.service.CarService;
+import com.carhub.service.Car.CarService;
 import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

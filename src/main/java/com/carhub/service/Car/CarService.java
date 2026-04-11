@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.Car;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
@@ -175,6 +175,7 @@ public class CarService {
     public List<Brand> getBrandsForAdmin() {
         return brandRepository.findAll()
                 .stream()
+                .filter(brand -> brand.getName() != null)
                 .sorted(Comparator.comparing(Brand::getName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
     }

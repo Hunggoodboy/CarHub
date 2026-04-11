@@ -4,9 +4,9 @@ import com.carhub.entity.User;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
 import com.carhub.dto.ReviewsDTO;
-import com.carhub.service.CarService;
-import com.carhub.service.OrderService;
-import com.carhub.service.ReviewService;
+import com.carhub.service.Car.CarService;
+import com.carhub.service.Car.OrderService;
+import com.carhub.service.Car.ReviewService;
 
 import com.carhub.service.authentication.UserService;
 import lombok.AllArgsConstructor;

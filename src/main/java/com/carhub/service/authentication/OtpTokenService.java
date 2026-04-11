@@ -1,4 +1,4 @@
-package com.carhub.service.oauth2;
+package com.carhub.service.authentication;
 
 import com.carhub.entity.OtpToken;
 import com.carhub.entity.User;

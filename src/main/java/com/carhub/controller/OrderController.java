@@ -2,7 +2,7 @@ package com.carhub.controller;
 
 import com.carhub.dto.SellerOrderDTO;
 import com.carhub.dto.Request.OrderRequest;
-import com.carhub.service.OrderService;
+import com.carhub.service.Car.OrderService;
 import com.carhub.entity.Order;
 import com.carhub.entity.User;
 import com.carhub.repository.OrderRepository;

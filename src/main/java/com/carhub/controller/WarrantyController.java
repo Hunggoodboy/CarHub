@@ -5,7 +5,7 @@ import com.carhub.entity.Customer;
 import com.carhub.entity.OrderDetail;
 import com.carhub.repository.OrderDetailRepository;
 import com.carhub.repository.WarrantyTicketRepository;
-import com.carhub.service.WarrantyService;
+import com.carhub.service.Car.WarrantyService;
 
 import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
