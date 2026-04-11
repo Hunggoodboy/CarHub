@@ -119,6 +119,7 @@ async function hydrateCartItems() {
                 model: car.model || "Xe không tên",
                 imageUrl: car.imageUrl || "",
                 finalPrice: Number(car.finalPrice || 0),
+                sellerId: Number(car.sellerId || car.SellerId || 0),
                 quantity: item.quantity
             };
         } catch (error) {
@@ -179,7 +180,7 @@ function ensureCartShell() {
                     <span>Tổng tạm tính</span>
 					<strong id="cart-total">0 đ</strong>
 				</div>
-                <button type="button" class="cart-checkout-btn">Đặt lịch tư vấn</button>
+                <button type="button" class="cart-checkout-btn" id="cart-checkout-btn">Đặt lịch tư vấn</button>
 			</footer>
 		</section>
 	`;
@@ -191,9 +192,21 @@ function renderCartItems(items) {
     const cartItemsEl = document.getElementById("cart-items");
     const cartTotalEl = document.getElementById("cart-total");
     const cartCountEl = document.getElementById("cart-count");
-    const cartLinkEl = document.getElementById
     if (!cartItemsEl || !cartTotalEl || !cartCountEl) {
         return;
+    }
+
+    const checkoutBtn = document.getElementById("cart-checkout-btn");
+    const primaryItem = items.find(item => Number.isFinite(item.sellerId) && item.sellerId > 0) || null;
+    const primarySellerId = primaryItem ? primaryItem.sellerId : null;
+
+    if (checkoutBtn) {
+        checkoutBtn.dataset.sellerId = primarySellerId ? String(primarySellerId) : "";
+        checkoutBtn.dataset.carId = primaryItem ? String(primaryItem.id) : "";
+        checkoutBtn.dataset.carModel = primaryItem ? (primaryItem.model || "") : "";
+        checkoutBtn.dataset.carPrice = primaryItem ? String(primaryItem.finalPrice || 0) : "";
+        checkoutBtn.dataset.carImageUrl = primaryItem ? (primaryItem.imageUrl || "") : "";
+        checkoutBtn.disabled = !primarySellerId;
     }
 
     if (items.length === 0) {
@@ -278,7 +291,17 @@ function bindCartEvents() {
 
     if (checkoutBtn) {
         checkoutBtn.addEventListener("click", () => {
-            alert("Cảm ơn bạn! Chúng tôi sẽ liên hệ để tư vấn đơn hàng sớm nhất.");
+            const sellerId = checkoutBtn.dataset.sellerId;
+            const carId = checkoutBtn.dataset.carId;
+            const carModel = checkoutBtn.dataset.carModel;
+            const carPrice = checkoutBtn.dataset.carPrice;
+            const carImageUrl = checkoutBtn.dataset.carImageUrl;
+            if (!sellerId) {
+                alert("Chưa có xe nào để bắt đầu cuộc tư vấn.");
+                return;
+            }
+
+            window.location.href = `/chat?partnerId=${encodeURIComponent(sellerId)}&intent=schedule&carId=${encodeURIComponent(carId || "")}&carModel=${encodeURIComponent(carModel || "")}&carPrice=${encodeURIComponent(carPrice || "")}&carImageUrl=${encodeURIComponent(carImageUrl || "")}`;
         });
     }
 
