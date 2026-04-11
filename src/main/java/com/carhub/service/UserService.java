@@ -96,7 +96,10 @@ public class UserService {
         Optional<User> userOpt = userRepository.findById(id);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-
+            
+            if (userDTO.getUsername() != null) {
+                user.setUsername(userDTO.getUsername());
+            }
             if (userDTO.getFullName() != null) {
                 user.setFullName(userDTO.getFullName());
             }
@@ -158,5 +161,5 @@ public class UserService {
 
     return customerRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
-}
+    }
 }

@@ -177,6 +177,14 @@ public class UserController {
             return ResponseEntity.status(500).body("Upload fail");
         }
     }
-    
+    @PutMapping("/me")
+    public ResponseEntity<UserDTO> updateCurrentUser(
+        Authentication authentication,
+        @RequestBody UserDTO userDTO)  {
+            Long id = userService.getCurrentUser(authentication).getId();
+            return userService.updateUser(id, userDTO)
+                   .map(ResponseEntity::ok)
+                   .orElse(ResponseEntity.notFound().build());
+        }
     
 }

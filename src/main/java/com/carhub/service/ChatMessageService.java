@@ -100,6 +100,7 @@ public class ChatMessageService {
                     .partnerName(partner.getFullName())
                     .lastMessage(msg.getContent())
                     .sentAt(msg.getSentAt())
+                    .avatar(partner.getAvatar())
                     .build();
         }).toList();
     }

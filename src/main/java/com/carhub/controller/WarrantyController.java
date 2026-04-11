@@ -86,16 +86,16 @@ public class WarrantyController {
         return warrantyService.getSellerWarranty(sellerId);
     }
     @PutMapping("/{id}/confirm-seller")
-@ResponseBody
-public ResponseEntity<?> confirmSeller(@PathVariable Long id) {
-    warrantyService.confirmSeller(id);
-    return ResponseEntity.ok("Seller confirmed");
-}
-@PutMapping("/{id}/confirm-customer")
-@ResponseBody
-public ResponseEntity<?> confirmCustomer(@PathVariable Long id) {
-    warrantyService.confirmCustomer(id);
-    return ResponseEntity.ok("Customer confirmed");
-}
+    @ResponseBody
+    public ResponseEntity<?> confirmSeller(@PathVariable Long id) {
+        warrantyService.confirmSeller(id);
+        return ResponseEntity.ok("Seller confirmed");
+    }
+    @PutMapping("/{id}/confirm-customer")
+    @ResponseBody
+    public ResponseEntity<?> confirmCustomer(@PathVariable Long id) {
+        warrantyService.confirmCustomer(id);
+        return ResponseEntity.ok("Customer confirmed");
+    }
 }
 

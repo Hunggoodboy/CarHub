@@ -27,8 +27,6 @@
 
 
     <div class="dashboard">
-
-        <!-- SIDEBAR -->
         <div id="sidebar" class="sidebar">
             <h3>Hồ Sơ</h3>
             <ul>
@@ -43,11 +41,7 @@
                 <li onclick="handleMenuClick(this, 'warrantySeller')">Xem yêu cầu bảo hành</li>
             </ul>
         </div>
-
-        <!-- CONTENT -->
         <div id="content" class="content">
-
-            <!-- PROFILE -->
             <div id="profile-section">
                 <div class="user-infor">
                     <div class="avatar-box">
@@ -64,7 +58,6 @@
                 </div>
             </div>
 
-            <!-- PURCHASED -->
             <div id="purchased-section">
                 <h2>Danh sách xe đã mua</h2>
                 <div class="order-tabs">
@@ -106,7 +99,17 @@
         </div>
     </div>
 
-    <!-- MODAL EDIT -->
+    <div id="edit-profile-modal" class="modal" style="display:none">
+        <div class="modal-content">
+            <h3>Chỉnh sửa thông tin cá nhân </h3>
+            <input id="edit-email" placeholder="Email">
+            <input id="edit-phone" placeholder="Số điện thoại">
+
+            <button onclick="saveProfile()">Lưu</button>
+            <button onclick="closeEditProfile()">Hủy</button>
+        </div>
+    </div>
+
     <div id="edit-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <h3>Chỉnh sửa thông tin xe</h3>
@@ -127,8 +130,6 @@
             <button onclick="closeEdit()">Hủy</button>
         </div>
     </div>
-
-    <!-- MODAL DETAIL -->
     <div id="detail-modal" class="modal" style="display:none;">
         <div class="modal-content detail-box">
             <span class="close-btn" onclick="closeDetail()">×</span>

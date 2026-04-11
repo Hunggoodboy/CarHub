@@ -17,4 +17,5 @@ public class RecentChatResponse {
     private String partnerAvatar; // (Tùy chọn) Ảnh đại diện
     private String lastMessage;  // Nội dung tin nhắn cuối
     private LocalDateTime sentAt;
+    private String avatar;
 }

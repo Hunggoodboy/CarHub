@@ -11,13 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(loadSellerOrders, 5000);
 
     showSection("profile");
-
-    // ✅ active mặc định menu
     const firstMenu = document.querySelector('.sidebar ul li');
     if (firstMenu) firstMenu.classList.add('active');
+    document.getElementById("edit-btn")?.addEventListener("click",openEditProfile);
 });
 
-// ================= MENU ACTIVE =================
 function handleMenuClick(el, section) {
     document.querySelectorAll('.sidebar ul li').forEach(li => {
         li.classList.remove('active');
@@ -34,7 +32,6 @@ function handleMenuClick(el, section) {
     }
 }
 
-// ================= TAB ACTIVE =================
 function handleTabClick(btn, status) {
     btn.parentElement.querySelectorAll('button').forEach(b => {
         b.classList.remove('active');
@@ -49,7 +46,6 @@ function handleTabClick(btn, status) {
     }
 }
 
-// ================= SECTION =================
 function showSection(section) {
     document.getElementById("profile-section").style.display = "none";
     document.getElementById("purchased-section").style.display = "none";
@@ -72,7 +68,6 @@ function showSection(section) {
     }
 }
 
-// ================= SELLER ORDERS =================
 function loadSellerOrders() {
     fetch("/api/orders/seller/orders?status=PENDING")
         .then(res => res.json())
@@ -168,7 +163,6 @@ function renderSellerOrders(orders) {
     container.innerHTML = html;
 }
 
-// ================= UPDATE =================
 function updateOrderStatus(orderId, status) {
     fetch(`/api/orders/${orderId}/status?status=${status}`, {
         method: "PUT"
@@ -193,7 +187,6 @@ function confirmSeller(id) {
     });
 }
 
-// ================= PROFILE =================
 function loadUserProfile() {
     fetch("/api/users/me/profile")
         .then(res => res.json())
@@ -211,7 +204,6 @@ function loadUserProfile() {
         .catch(err => console.error(err));
 }
 
-// ================= PURCHASED =================
 function loadPurchasedCars(status = "PENDING") {
     fetch(`/api/orders/purchased?status=${status}`)
         .then(res => res.json())
@@ -277,7 +269,6 @@ function confirmBuyerOrder(orderId) {
     });
 }
 
-// ================= SELLING =================
 function loadSellingCars() {
     fetch("/api/cars/car-pass")
         .then(res => res.json())
@@ -319,8 +310,6 @@ function renderSellingCars(cars) {
 
     container.innerHTML = html;
 }
-
-// ================= DETAIL =================
 function openDetail(carId) {
     currentCarId = carId;
     fetch(`/api/cars/${carId}`)
@@ -350,7 +339,6 @@ function openEditFromDetail() {
     openEditForm(currentCarId);
 }
 
-// ================= EDIT =================
 function openEditForm(carId) {
     currentCarId = carId;
     fetch(`/api/cars/${carId}`)
@@ -393,7 +381,6 @@ function closeEdit() {
     document.getElementById("edit-modal").style.display = "none";
 }
 
-// ================= WARRANTY =================
 function showWarranty() {
     showSection("warranty");
     loadWarranty();
@@ -489,7 +476,7 @@ function confirmCustomerWarranty(id) {
         loadWarranty();
     });
 }
-// ===== AVATAR =====
+
 const avatarInput = document.getElementById("avatar-input");
 const avatarImg = document.getElementById("avatar-img");
 
@@ -516,3 +503,41 @@ avatarInput?.addEventListener("change", () => {
         showToast("Upload thất bại");
     });
 });
+
+function openEditProfile() {
+    fetch("/api/users/me/profile")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("edit-email").value = data.email || "";
+            document.getElementById("edit-phone").value = data.phoneNumber || "";
+
+            document.getElementById("edit-profile-modal").style.display = "flex";
+        });
+}
+function saveProfile() {
+    const data = {
+        email: document.getElementById("edit-email").value,
+        phoneNumber: document.getElementById("edit-phone").value
+    };
+
+    fetch("/api/users/me", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => {
+        if (res.ok) {
+            showToast("Cập nhật thành công");
+            closeEditProfile();
+            loadUserProfile(); // reload lại info
+        } else {
+            showToast("Cập nhật thất bại");
+        }
+    })
+    .catch(err => console.error(err));
+}
+function closeEditProfile() {
+    document.getElementById("edit-profile-modal").style.display = "none";
+}

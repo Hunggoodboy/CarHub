@@ -18,7 +18,6 @@ function showToast(message, type = "success") {
     }, 2000);
 }
 
-/* override alert */
 window.alert = function(message) {
     showToast(message, "success");
 };
