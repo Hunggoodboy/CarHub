@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.authentication;
 
 import com.carhub.dto.Response.AuthResponse;
 import com.carhub.dto.Request.LoginRequest;
@@ -24,6 +24,12 @@ public class AuthService {
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         try {
+            // Kiểm tra xác nhận mật khẩu
+            if (request.getPassword() == null || request.getConfirmPassword() == null
+                    || !request.getPassword().equals(request.getConfirmPassword())) {
+                return new AuthResponse(false, "Mật khẩu nhập lại không khớp", null);
+            }
+
             // Kiểm tra username đã tồn tại
             if (userRepository.existsByUsername(request.getUsername())) {
                 return new AuthResponse(false, "Tên đăng nhập đã tồn tại", null);

@@ -2,8 +2,8 @@ package com.carhub.controller;
 
 import com.carhub.dto.Response.ChatMessageResponse;
 import com.carhub.dto.Response.RecentChatResponse;
-import com.carhub.service.ChatMessageService;
-import com.carhub.service.UserService;
+import com.carhub.service.message.ChatMessageService;
+import com.carhub.service.authentication.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

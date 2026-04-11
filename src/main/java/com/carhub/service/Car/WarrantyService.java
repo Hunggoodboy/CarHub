@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.Car;
 
 import com.carhub.entity.WarrantyTicket;
 import com.carhub.entity.OrderDetail;

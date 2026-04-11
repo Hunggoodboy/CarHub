@@ -17,7 +17,9 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     List<OrderDetail> findByOrderId(Long orderId);
     List<OrderDetail> findByCar(Car car);
     List<OrderDetail> findByCarId(Long carId);
-    //Tìm xe theo user_id và car_
+
+    boolean existsByCarId(Long carId);
+
     @Query("SELECT od FROM OrderDetail od WHERE od.order.customer.id = :user_id AND od.car.id = :car_id")
     Optional<OrderDetail> findOrderDetailByCarIdAndUserId(@Param("user_id") Long user_id, @Param("car_id") Long car_id);
 
@@ -28,7 +30,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
        "AND od.car.id = :carId " +
        "AND o.status = 'COMPLETED'")
     Optional<OrderDetail> findCompletedOrderDetailByCarIdAndUserId(
-        @Param("userId") Long userId, 
+        @Param("userId") Long userId,
         @Param("carId") Long carId
     );
 

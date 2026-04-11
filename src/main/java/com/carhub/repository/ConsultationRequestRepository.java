@@ -13,6 +13,7 @@ import java.util.List;
 public interface ConsultationRequestRepository extends JpaRepository<ConsultationRequest, Long> {
     List<ConsultationRequest> findByCustomer(Customer customer);
     List<ConsultationRequest> findByCustomerId(Long customerId);
+    boolean existsByCustomerId(Long customerId);
     List<ConsultationRequest> findByAdmin(Admin admin);
     List<ConsultationRequest> findByAdminId(Long adminId);
     List<ConsultationRequest> findByStatus(String status);

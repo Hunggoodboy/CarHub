@@ -22,6 +22,10 @@ public interface FavoriteCarRepository extends JpaRepository<FavoriteCar, Long> 
 
     boolean existsByUserIdAndCarId(Long userId, Long carId);
 
+    boolean existsByUserId(Long userId);
+
+    boolean existsByCarId(Long carId);
+
     void deleteByUserIdAndCarId(Long userId, Long carId);
 
     @Query("SELECT fc.car FROM FavoriteCar fc WHERE fc.user.id = :userId ORDER BY fc.addedAt DESC")

@@ -3,12 +3,21 @@ package com.carhub.controller;
 import com.carhub.dto.AppPrincipal;
 import com.carhub.dto.UserDTO;
 import com.carhub.entity.User;
-import com.carhub.service.UserService;
+import com.carhub.service.authentication.UserService;
 import com.carhub.repository.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -173,10 +182,11 @@ public class UserController {
             return ResponseEntity.ok(fileName);
 
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Upload fail");
         }
     }
+<<<<<<< HEAD
     @PutMapping("/me")
     public ResponseEntity<UserDTO> updateCurrentUser(
         Authentication authentication,
@@ -187,4 +197,8 @@ public class UserController {
                    .orElse(ResponseEntity.notFound().build());
         }
     
+=======
+
+
+>>>>>>> dev
 }

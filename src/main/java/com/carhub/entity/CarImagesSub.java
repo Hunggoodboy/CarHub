@@ -11,7 +11,7 @@ public class CarImagesSub {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @Column(name = "imageurl")
+    @Column(name = "image_url")
     private String imageUrl;
 
     private Integer sortOrder;

@@ -1,4 +1,4 @@
-package com.carhub.service;
+package com.carhub.service.message;
 
 import com.carhub.dto.Request.ChatMessageRequest;
 import com.carhub.dto.Response.ChatMessageResponse;
@@ -43,22 +43,17 @@ public class ChatMessageService {
             response.setReceiverId(chatMessage.getReceiver().getId());
             response.setSenderName(sender.getFullName());
             response.setContent(chatMessage.getContent());
-            response.setSentAt(LocalDateTime.now());
+            response.setSentAt(chatMessage.getSentAt());
             return response;
         }).toList();
 
         String receiverUserName = userRepository.findUserById(userId2).orElseThrow().getUsername();
         simpMessagingTemplate.convertAndSendToUser(
                 sender.getUsername(),
-                "/queue/private",
+                "/queue/history",
                 responses
         );
 
-        simpMessagingTemplate.convertAndSendToUser(
-                receiverUserName,
-                "/queue/private",
-                responses
-        );
     }
 
     public void chatMessage(ChatMessageRequest chatMessageRequest) {

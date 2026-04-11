@@ -15,6 +15,7 @@ public class OtpToken {
     private Long id;
     private String email;
     private String otp;
-    private LocalDateTime expiryDate;
-    private boolean used;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime expiryAt;
+    private int countUsed;
 }

@@ -40,14 +40,17 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    @Column(nullable = false)
+    @Column(name = "buyer_confirmed")
     private Boolean buyerConfirmed = false;
     
-    @Column(nullable = false)
+    @Column(name = "seller_confirmed")
     private Boolean sellerConfirmed = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private User seller;
 }

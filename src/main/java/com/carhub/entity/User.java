@@ -50,4 +50,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private List<ChatMessage> receivedMessages;
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private List<Order> orders;
 }

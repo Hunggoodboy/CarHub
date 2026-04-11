@@ -17,7 +17,7 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     background: #fff;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 /* --- SIDEBAR --- */
@@ -39,24 +39,26 @@ body {
     align-items: center;
     gap: 10px;
 }
+
 #chat-search {
-    width:100%;
-    padding : 10px 15px 10px 35px;
-    border : none;
-    border-radius: 20px;
-    background-color: rgba(255,255,255,0.5);
-    outline : none;
+    width: 100%;
+    padding: 10px 15px 10px 35px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    outline: none;
     transition: all 0.3s;
 }
+
 #chat-search:focus {
     background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.search-container i{
+
+.search-container i {
     position: absolute;
-    left : 28px;
-    top : 27px;
-    color : #888;
+    left: 28px;
+    top: 27px;
+    color: #888;
 }
 
 .btn-back {
@@ -76,16 +78,18 @@ body {
 .btn-back:hover {
     background: #f0f2f5;
 }
+
 #btn-like {
-    background : #e4e6eb;
-    border : none;
+    background: #e4e6eb;
+    border: none;
     border-radius: 50%;
-    width:40px;
-    height : 50px;
+    width: 40px;
+    height: 50px;
     cursor: pointer;
     font-size: 18px;
 }
-#btn-like:hover{
+
+#btn-like:hover {
     background: #d8dadf;
 }
 
@@ -151,7 +155,7 @@ body {
 .chat-header {
     padding: 15px 20px;
     border-bottom: 1px solid #e4e6eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .chat-partner-info {
@@ -170,6 +174,7 @@ body {
     color: white;
     margin-right: 10px;
 }
+
 .status {
     font-size: 12px;
     margin-top: 2px;
@@ -206,51 +211,53 @@ body {
     text-align: center;
     color: white;
     margin-top: 100px;
-    font-size : 30px;
+    font-size: 30px;
 }
+
 .carhub-logo-container {
-    margin-bottom: 25px; 
-    position: relative; 
-    display: inline-block; 
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
 }
 
 .carhub-logo-text {
-    font-size: 32px; 
-    font-weight: 800; 
-    text-transform: uppercase; 
-    letter-spacing: 2px; 
-    color: #ffffff; 
-    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+    font-size: 32px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 
 .hub-highlight {
-    color: #e74c3c; 
+    color: #e74c3c;
 }
 
 
 .carhub-logo-underline {
-    height: 4px; 
-    background: linear-gradient(90deg, #ffffff 0%, #e74c3c 100%); 
-    width: 60%; 
-    margin: 8px auto 0; 
+    height: 4px;
+    background: linear-gradient(90deg, #ffffff 0%, #e74c3c 100%);
+    width: 60%;
+    margin: 8px auto 0;
     border-radius: 2px;
 }
 
 
 .welcome-text-container h3 {
-    font-size: 20px; 
+    font-size: 20px;
     font-weight: 600;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .welcome-text-container p {
-    font-size: 15px; 
+    font-size: 15px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.8); 
+    color: rgba(255, 255, 255, 0.8);
 }
+
 /* Bong bóng chat */
 .msg-wrapper {
     display: flex;
@@ -275,7 +282,7 @@ body {
     font-size: 15px;
     line-height: 1.4;
     word-wrap: break-word;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .me .msg-bubble {
@@ -288,6 +295,57 @@ body {
     background-color: #e4e6eb;
     color: black;
     border-bottom-left-radius: 6px;
+}
+
+.msg-bubble.car-card-bubble {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+.car-link-card {
+    width: 260px;
+    background: #ffffff;
+    border: 1px solid #d7e2f0;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.car-link-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+}
+
+.car-link-card-content {
+    padding: 10px;
+}
+
+.car-link-card-content h4 {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #0f172a;
+}
+
+.car-link-card-content p {
+    font-size: 12px;
+    color: #334155;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.car-link-card-content a {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0b6bcb;
+    text-decoration: none;
+}
+
+.car-link-card-content a:hover {
+    text-decoration: underline;
 }
 
 /* ⚠️ GIỮ NGUYÊN PHẦN NÀY NHƯ BẠN YÊU CẦU */
@@ -305,7 +363,7 @@ body {
     align-items: center;
     gap: 10px;
     background: #fff;
-    box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .chat-input-area textarea {
@@ -330,6 +388,53 @@ body {
     font-weight: bold;
 }
 
+.consultation-scheduler {
+    border-top: 1px solid #e4e6eb;
+    background: #f7fbff;
+    padding: 12px 15px;
+}
+
+.scheduler-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f4f8f;
+    margin-bottom: 10px;
+}
+
+.scheduler-fields {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#consultation-datetime {
+    min-width: 220px;
+    border: 1px solid #c8d9ef;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+}
+
+#btn-schedule-confirm,
+#btn-schedule-cancel {
+    border: none;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#btn-schedule-confirm {
+    background: #0b6bcb;
+    color: white;
+}
+
+#btn-schedule-cancel {
+    background: #dfe7f2;
+    color: #334155;
+}
+
 /* --- SCROLLBAR --- */
 .chat-messages::-webkit-scrollbar {
     width: 6px;
@@ -346,6 +451,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

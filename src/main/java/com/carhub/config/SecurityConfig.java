@@ -1,6 +1,6 @@
 package com.carhub.config;
 
-import com.carhub.service.Oauth2UserService;
+import com.carhub.service.oauth2.Oauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -20,18 +21,45 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
-    @Autowired
-    private Oauth2UserService oauth2UserService;
+    private final Oauth2UserService oauth2UserService;
+    private final ClientRegistrationRepository clientRegistrationRepository;
+
+    private static final String[] PUBLIC_RESOURCES = {
+            "/css/**", "/js/**", "/images/**", "/car-images/**", "/car_images/**",
+            "/car_images_sub/**", "/webjars/**"
+    };
+
+    private static final String[] PUBLIC_URLS = {
+            "/", "/index", "/register", "/login", "/forgot-password", "/ChatAI", "/chat", "/error","/static/**",
+            "/api/auth/**", "/api/password/**", "/api/users/check-username", "/api/users/check-email", "/upload/**"
+    };
+
+    private static final String[] AUTHENTICATED_URLS = {
+            "/api/cars/purchased", // Phải đặt riêng ra đây để check trước
+            "/api/users/**", "/api/users/me/profile", "/api/users/me/change-password",
+            "/api/favorites/**", "/my-profile"
+    };
+
+    private static final String[] ADMIN_URLS = {
+            "/api/users/**", "/admin/**"
+    };
+
+    private static final String[] CUSTOMER_URLS = {
+            "/customer-view", "/car/save"
+    };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**","/js/**", "/images/**","/car-images/**", "/webjars/**","/upload/**").permitAll()
-                        .requestMatchers("/", "/index", "/register", "/login", "/ChatAI","/chat", "/error").permitAll()
-                        .requestMatchers("/api/auth/**", "/api/cars/**").permitAll()
-                        .requestMatchers("/api/password/**").authenticated()
-                        .requestMatchers("/api/favorites/**").authenticated()
-                        .requestMatchers("/customer-view").hasRole("CUSTOMER")
+                        .requestMatchers(PUBLIC_RESOURCES).permitAll()
+                        .requestMatchers(PUBLIC_URLS).permitAll()
+
+                        .requestMatchers(AUTHENTICATED_URLS).authenticated()
+                        .requestMatchers("/api/cars/**").permitAll()
+
+                        .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
+                        .requestMatchers(CUSTOMER_URLS).hasRole("CUSTOMER")
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

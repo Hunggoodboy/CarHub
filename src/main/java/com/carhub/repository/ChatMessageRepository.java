@@ -13,6 +13,8 @@ import java.util.List;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
     List<ChatMessage> findAllBySenderIdAndReceiverIdOrSenderIdAndReceiverIdOrderBySentAtAsc(Long senderId1, Long receiverId1, Long senderId2, Long SenderId2);
 
+    boolean existsBySenderIdOrReceiverId(Long senderId, Long receiverId);
+
     @Query("SELECT c FROM ChatMessage c WHERE c.id IN " +
             "(SELECT MAX(c2.id) FROM ChatMessage c2 " +
             "WHERE c2.sender.id = :userId OR c2.receiver.id = :userId " +

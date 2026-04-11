@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập CarHub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/auth.css}">
     <link rel="stylesheet" href="../static/css/auth.css" th:href="@{/css/auth.css}">
 </head>
 
@@ -15,8 +14,8 @@
         <div class="auth-card">
 
             <div class="auth-card__left">
-                <a href="login.html" th:href="@{/login}" class="auth-card__tab active">ĐĂNG NHẬP</a>
-                <a href="register.html" th:href="@{/register}" class="auth-card__tab">ĐĂNG KÍ</a>
+                <a href="/login" class="auth-card__tab active">ĐĂNG NHẬP</a>
+                <a href="/register" class="auth-card__tab">ĐĂNG KÍ</a>
             </div>
 
             <div class="auth-card__right">
@@ -27,16 +26,20 @@
                         <DIV></DIV>
                     </h3>
                 </div>
-                <div th:if="${param.error}" class="alert alert-danger"
-                    style="color: red; text-align: center; margin-bottom: 10px;">
+                <div id="login-error" class="alert alert-danger"
+                    style="display:none; color: red; text-align: center; margin-bottom: 10px;">
                     Tài khoản hoặc mật khẩu không đúng!
                 </div>
 
-                <div th:if="${param.logout}" class="alert alert-success"
-                    style="color: green; text-align: center; margin-bottom: 10px;">
+                <div id="login-logout" class="alert alert-success"
+                    style="display:none; color: green; text-align: center; margin-bottom: 10px;">
                     Bạn đã đăng xuất thành công.
                 </div>
-                <form action="#" th:action="@{/login}" method="post" class="auth-card__form">
+                <div id="login-success" class="alert alert-success"
+                    style="display:none; color: green; text-align: center; margin-bottom: 10px;">
+                    Đăng ký thành công. Vui lòng đăng nhập.
+                </div>
+                <form action="/login" method="post" class="auth-card__form">
 
                     <div class="auth-card__group">
                         <i class="fa-solid fa-user auth-card__icon"></i>
@@ -49,7 +52,7 @@
                     </div>
 
                     <div class="auth-card__actions">
-                        <a href="#" class="auth-card__forgot">Quên mật khẩu?</a>
+                        <a href="/forgot-password" class="auth-card__forgot">Quên mật khẩu?</a>
                         <button type="submit" class="btn btn--gradient">ĐĂNG NHẬP</button>
                     </div>
                 </form>
@@ -57,7 +60,7 @@
                 <div class="auth-card__social-footer">
                     <span class="auth-card__social-text">Hoặc đăng nhập với</span>
                     <div class="auth-card__social-icons">
-                        <a href="#" class="social-link"><i class="fa-brands fa-google" style="color: #db4437;"></i>
+                        <a href="/oauth2/authorization/google" class="social-link"><i class="fa-brands fa-google" style="color: #db4437;"></i>
                             Google</a>
                         <a href="#" class="social-link"><i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i>
                             Facebook</a>
@@ -66,6 +69,12 @@
             </div>
         </div>
     </div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('error')) document.getElementById('login-error').style.display = 'block';
+        if (params.has('logout')) document.getElementById('login-logout').style.display = 'block';
+        if (params.has('success')) document.getElementById('login-success').style.display = 'block';
+    </script>
 </body>
 
 </html>

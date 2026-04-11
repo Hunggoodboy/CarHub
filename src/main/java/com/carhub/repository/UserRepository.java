@@ -21,6 +21,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByFullNameContainingIgnoreCase(String fullName);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
+
+    @Query("""
+            SELECT u
+            FROM User u
+            WHERE (:keyword IS NULL OR :keyword = ''
+                OR LOWER(COALESCE(u.username, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                OR LOWER(COALESCE(u.fullName, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                OR LOWER(COALESCE(u.email, '')) LIKE LOWER(CONCAT('%', :keyword, '%')))
+            ORDER BY u.id DESC
+            """)
+    List<User> searchForAdmin(@Param("keyword") String keyword);
+
     @Query("SELECT u.id from User u where u.email = :email")
     Optional<Long> findIdByEmail(@Param("email") String email);
     @Query("SELECT u.id from User u where u.username = :username")

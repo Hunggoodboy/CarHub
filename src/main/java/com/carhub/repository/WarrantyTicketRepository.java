@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface WarrantyTicketRepository extends JpaRepository<WarrantyTicket, Long> {
     List<WarrantyTicket> findByCustomer(Customer customer);
     List<WarrantyTicket> findByCustomerId(Long customerId);
+    boolean existsByCustomerId(Long customerId);
     List<WarrantyTicket> findByAdmin(Admin admin);
     List<WarrantyTicket> findByAdminId(Long adminId);
     List<WarrantyTicket> findByStatus(String status);

@@ -1,7 +1,7 @@
 package com.carhub.controller;
 
 import com.carhub.dto.CarDTO;
-import com.carhub.service.FavoriteCarService;
+import com.carhub.service.Car.FavoriteCarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,11 +1,7 @@
-package com.carhub.service;
+package com.carhub.service.Car;
 
-import com.carhub.controller.UserController;
-import com.carhub.dto.CarDTO;
 import com.carhub.dto.ReviewsDTO;
-import com.carhub.dto.UserDTO;
 import com.carhub.entity.Car;
-import com.carhub.entity.OrderDetail;
 import com.carhub.entity.Reviews;
 import com.carhub.entity.User;
 import com.carhub.exception.NotPurchasedException;
@@ -13,6 +9,7 @@ import com.carhub.repository.CarRepository;
 import com.carhub.repository.OrderDetailRepository;
 import com.carhub.repository.ReviewsRepository;
 import com.carhub.repository.UserRepository;
+import com.carhub.service.authentication.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +41,7 @@ public class ReviewService {
 
     public void createReview(ReviewsDTO reviewsDTO, Long CarId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(true || userBuyThisCarId(CarId)) {
+        if(userBuyThisCarId(CarId)) {
             Car car = carRepository.findById(CarId).orElseThrow(() -> new RuntimeException("Car not found"));
             User user = userRepository.findById(userService.getId(authentication)).orElseThrow(() -> new RuntimeException("User not found"));
             Reviews reviews = new Reviews();
