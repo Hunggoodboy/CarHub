@@ -4,6 +4,7 @@ import com.carhub.dto.SellerOrderDTO;
 import com.carhub.dto.Request.OrderRequest;
 import com.carhub.service.Car.OrderService;
 import com.carhub.entity.Order;
+import com.carhub.entity.Payment;
 import com.carhub.entity.User;
 import com.carhub.repository.OrderRepository;
 
@@ -18,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -136,5 +138,26 @@ public class OrderController {
     public ResponseEntity<?> confirmSeller(@PathVariable Long id) {
         orderService.confirmSeller(id);
         return ResponseEntity.ok("Seller confirmed");
+    }
+
+    @GetMapping("/{id}/qr")
+    public ResponseEntity<?> getQr(@PathVariable Long id) {
+
+        Order order = orderRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        Payment payment = order.getPayment();
+
+        if (payment == null) {
+            return ResponseEntity.badRequest().body("No payment");
+        }
+
+       //  trả QR từ DB
+        return ResponseEntity.ok(
+            Map.of(
+                    "qrUrl", payment.getQrUrl(),
+                    "amount", payment.getAmount()
+            )
+       );
     }
 }

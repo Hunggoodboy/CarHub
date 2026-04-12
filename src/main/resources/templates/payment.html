@@ -30,6 +30,7 @@
         <p>Tìm những chiếc xe phù hợp với bạn</p>
     </div>
 </section>
+<input type="hidden" id="username" th:value="${#authentication.name}">
 
 <section class="payment_section">
     <div class="payment_container">
@@ -89,6 +90,7 @@
                 <span><b>Tổng thanh toán:</b></span>
                 <span id="finalPrice" style="font-size: 1.2em; color: #2c3e50;"><b>--</b></span>
             </div>
+            <p><b>Tên xe:</b> <span id="car-name"></span></p>
         </div>
 
         <div class="payment-box">
@@ -101,7 +103,7 @@
             </label>
         </div>
 
-        <button class="payment-btn">Xác nhận thanh toán</button>
+        <button id="confirm-payment-btn" class="payment-btn" >Xác nhận thanh toán</button>
     </div>
 </section>
 <div id="deposit-overlay"></div>
@@ -115,8 +117,9 @@
         ⚠ Vui lòng chuyển khoản trước 10% để đặt cọc
     </p>
 
-    <img src="/car-images/qr_bank.jpg" width="180" 
-         style="margin:10px 0; border:1px solid #ddd; padding:5px;">
+    <img id="qr-image" src="" width="180"
+     style="border:1px solid #ddd; padding:5px;">
+     <p id="deposit-info" style="font-size:12px; margin-top:5px;"></p>
 
     <button id="confirm-deposit-btn" class="payment-btn" 
             style="width:100%; margin-top:15px;">
@@ -133,9 +136,12 @@
     <p><b>Phương thức:</b> <span id="bill-method"></span></p>
 
     <div id="qr-box" style="display:none; text-align: center; margin-top: 15px;">
-        <p><b>Quét mã QR để thanh toán</b></p>
-        <img src="/car-images/qr_bank.jpg" width="180" style="border: 1px solid #ddd; padding: 5px;">
-    </div>
+    <p><b>Quét mã QR để thanh toán</b></p>
+
+    <div id="qr-image-container"></div>
+
+    <p id="qr-info" style="font-size:12px; margin-top:5px;"></p>
+</div>
     <button id="submit-order-btn" class="payment-btn" style="margin-top: 20px; width: 100%;">Gửi yêu cầu</button>
 </div>
 

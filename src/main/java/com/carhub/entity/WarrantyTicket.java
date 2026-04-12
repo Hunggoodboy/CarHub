@@ -12,8 +12,16 @@ public class WarrantyTicket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String licensePlate,  status;
+    private String licensePlate;
     private Date receivedDate, returnedDate;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    public enum Status {
+        PENDING,
+        PROCESSING,
+        COMPLETED,
+        CANCELLED
+    }
     private Double repairCost;
     private String street; 
     private String ward;

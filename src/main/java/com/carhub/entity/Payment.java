@@ -16,6 +16,8 @@ public class Payment {
     private String status;
     private Double amount;
     private LocalDateTime paymentDate;
+    private String qrUrl;              // FIX HERE
+    private String transactionCode;    
     public enum TypePayment {
         CAST, TRANSFER
     }

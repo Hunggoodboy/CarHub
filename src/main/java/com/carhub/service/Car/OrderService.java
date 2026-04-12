@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+// FIX HERE: thêm import
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @AllArgsConstructor
@@ -121,11 +124,15 @@ public class OrderService {
     }
 
     public Payment convertOrderRequestToPayment(OrderRequest orderRequest, Order order, double amount) {
+
         Payment payment = new Payment();
+
         payment.setStatus("PENDING");
         payment.setAmount(amount);
+        payment.setPaymentDate(LocalDateTime.now());
 
         String method = normalize(orderRequest.getPaymentMethod());
+
         Payment.TypePayment type;
         if ("COD".equalsIgnoreCase(method) || "CASH".equalsIgnoreCase(method)) {
             type = Payment.TypePayment.CAST;
@@ -135,9 +142,27 @@ public class OrderService {
             throw new IllegalArgumentException("Phuong thuc thanh toan khong hop le.");
         }
 
-        payment.setOrder(order);
         payment.setTypePayment(type);
-        payment.setPaymentDate(LocalDateTime.now());
+        payment.setOrder(order);
+
+        String bank = "BIDV";
+        String account = "8860036029";
+
+        String carName = order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()
+            ? order.getOrderDetails().get(0).getCar().getModel()
+            : "CarShop";
+        String methodLabel = method;
+
+        String addInfo = URLEncoder.encode(carName + " - " + methodLabel, StandardCharsets.UTF_8);
+
+        String qrUrl = "https://img.vietqr.io/image/"
+                + bank + "-" + account + "-compact.png"
+                + "?amount=" + amount
+                + "&addInfo=" + addInfo;
+
+        payment.setQrUrl(qrUrl); 
+    
+
         return payment;
     }
 

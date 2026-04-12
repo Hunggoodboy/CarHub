@@ -83,12 +83,20 @@ public class WarrantyController {
 
         return warrantyService.getSellerWarranty(sellerId);
     }
+    @PutMapping("/{id}/accept")
+    @ResponseBody
+    public ResponseEntity<?> acceptWarranty(@PathVariable Long id) {
+        warrantyService.acceptWarranty(id);
+        return ResponseEntity.ok("Accepted");
+    }
+
     @PutMapping("/{id}/confirm-seller")
     @ResponseBody
     public ResponseEntity<?> confirmSeller(@PathVariable Long id) {
         warrantyService.confirmSeller(id);
         return ResponseEntity.ok("Seller confirmed");
     }
+    
     @PutMapping("/{id}/confirm-customer")
     @ResponseBody
     public ResponseEntity<?> confirmCustomer(@PathVariable Long id) {

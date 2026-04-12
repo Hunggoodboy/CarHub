@@ -500,6 +500,12 @@ function loadWarranty() {
             container.innerHTML = "";
 
             data.forEach(w => {
+                let actions = "";
+
+                if (w.status === "PROCESSING" && !w.customerConfirmed) {
+                    actions = `<button onclick="confirmCustomerWarranty(${w.id})">Xác nhận đã sửa</button>`;
+                }
+
                 const div = document.createElement("div");
                 div.className = "warranty-card";
 
@@ -508,6 +514,7 @@ function loadWarranty() {
                     <p>Lỗi: ${w.defectDescription}</p>
                     <p>Ngày gửi: ${new Date(w.receivedDate).toLocaleDateString()}</p>
                     <p>Trạng thái: ${w.status}</p>
+                    ${actions}
                 `;
 
                 container.appendChild(div);
@@ -522,6 +529,15 @@ function loadWarrantySeller() {
             container.innerHTML = "";
 
             data.forEach(w => {
+                let actions = "";
+
+                if (w.status === "PENDING") {
+                    actions = `<button onclick="acceptWarranty(${w.id})">Nhận</button>`;
+                }
+                else if (w.status === "PROCESSING") {
+                    actions = `<button onclick="confirmSellerWarranty(${w.id})">Đã sửa xong</button>`;
+                }
+
                 const div = document.createElement("div");
                 div.className = "warranty-card";
 
@@ -532,6 +548,7 @@ function loadWarrantySeller() {
                     <p>SĐT: ${w.phone}</p>
                     <p>Địa chỉ: ${w.street}, ${w.ward}, ${w.city}</p>
                     <p>Trạng thái: ${w.status}</p>
+                    ${actions}
                 `;
 
                 container.appendChild(div);
@@ -539,6 +556,15 @@ function loadWarrantySeller() {
         });
 }
 
+function acceptWarranty(id) {
+    fetch(`/api/warranty/${id}/accept`, {
+        method: "PUT"
+    })
+    .then(() => {
+        showToast("Đã nhận bảo hành");
+        loadWarrantySeller();
+    });
+}
 function confirmSellerWarranty(id) {
     fetch(`/api/warranty/${id}/confirm-seller`, {
         method: "PUT"

@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(result => {
             alert("Gửi yêu cầu bảo hành xe thành công!");
-            window.location.href = "/my-cars";
+            window.location.href = "/index";
         })
         .catch(err => {
             console.error(err);
