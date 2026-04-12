@@ -37,16 +37,13 @@ public class SecurityConfig {
     private static final String[] AUTHENTICATED_URLS = {
             "/api/cars/purchased", // Phải đặt riêng ra đây để check trước
             "/api/users/**", "/api/users/me/profile", "/api/users/me/change-password",
-            "/api/favorites/**", "/my-profile"
+            "/api/favorites/**", "/my-profile", "/customer-view", "/car/save"
     };
 
     private static final String[] ADMIN_URLS = {
             "/api/users/**", "/admin/**"
     };
 
-    private static final String[] CUSTOMER_URLS = {
-            "/customer-view", "/car/save"
-    };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -58,7 +55,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/cars/**").permitAll()
 
                         .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
-                        .requestMatchers(CUSTOMER_URLS).hasRole("CUSTOMER")
 
                         .anyRequest().authenticated()
                 )

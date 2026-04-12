@@ -270,23 +270,85 @@ class ChatApplication {
 
     renderMessage(msg, isPrepend) {
         const isMe = msg.senderId === this.currentUserId;
-
         const timeStr = new Date(msg.sentAt || Date.now())
             .toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 
         const wrapper = document.createElement('div');
         wrapper.className = `msg-wrapper ${isMe ? 'me' : 'them'}`;
 
-        wrapper.innerHTML = `
-            <div class="msg-bubble">${this.escapeHtml(msg.content)}</div>
-            <div class="msg-time">${timeStr}</div>
-        `;
+        // Kiểm tra xem tin nhắn này có phải là thẻ xe không
+        const carCardData = this.parseCarCardMessage(msg.content);
+
+        if (carCardData) {
+            // Nếu là thẻ xe -> Render giao diện Card
+            wrapper.innerHTML = `
+                <div class="msg-bubble" style="padding: 0; background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; max-width: 280px;">
+                    ${this.renderCarCardHtml(carCardData)}
+                </div>
+                <div class="msg-time">${timeStr}</div>
+            `;
+        } else {
+            // Nếu là tin nhắn text bình thường -> Render text
+            wrapper.innerHTML = `
+                <div class="msg-bubble">${this.escapeHtml(msg.content)}</div>
+                <div class="msg-time">${timeStr}</div>
+            `;
+        }
 
         if (isPrepend) {
             this.ui.chatMessages.prepend(wrapper);
         } else {
             this.ui.chatMessages.appendChild(wrapper);
         }
+    }
+
+    // === CÁC HÀM XỬ LÝ THẺ XE BỔ SUNG === //
+    parseCarCardMessage(content) {
+        const prefix = '__CAR_CARD__';
+        if (typeof content !== 'string' || !content.startsWith(prefix)) return null;
+
+        try {
+            const encoded = content.slice(prefix.length);
+            return JSON.parse(decodeURIComponent(encoded));
+        } catch (error) {
+            console.error('Không parse được card xe:', error);
+            return null;
+        }
+    }
+
+    formatCurrency(value) {
+        return Number(value || 0).toLocaleString('vi-VN') + ' đ';
+    }
+
+    buildImagePath(imageUrl) {
+        if (!imageUrl) return 'https://via.placeholder.com/160x90?text=Car';
+        if (imageUrl.startsWith('http')) return imageUrl;
+        return `/${imageUrl.replace('car_images', 'car-images')}`;
+    }
+
+    renderCarCardHtml(cardData) {
+        const detailUrl = `/product_detail?id=${encodeURIComponent(cardData.carId)}`;
+        const safeModel = this.escapeHtml(cardData.carModel || 'Xe quan tâm');
+        const safeImage = this.escapeHtml(this.buildImagePath(cardData.carImageUrl));
+
+        const metaParts = [
+            `Mã xe: #${cardData.carId}`,
+            `Giá: ${this.formatCurrency(cardData.carPrice)}`
+        ];
+        if (cardData.carYear) metaParts.push(`Năm: ${this.escapeHtml(String(cardData.carYear))}`);
+        if (cardData.carColor) metaParts.push(`Màu: ${this.escapeHtml(String(cardData.carColor))}`);
+
+        // Giao diện Card thiết kế trực tiếp
+        return `
+            <div style="display: flex; flex-direction: column;">
+                <img src="${safeImage}" alt="${safeModel}" style="width: 100%; height: 160px; object-fit: cover;">
+                <div style="padding: 12px;">
+                    <h4 style="margin: 0 0 8px 0; font-size: 15px; color: #0f172a;">${safeModel}</h4>
+                    <p style="margin: 0 0 12px 0; font-size: 12px; color: #64748b; line-height: 1.5;">${metaParts.join(' • ')}</p>
+                    <a href="${detailUrl}" target="_blank" style="color: #ef4444; font-weight: bold; font-size: 14px; text-decoration: none;">Xem chi tiết xe</a>
+                </div>
+            </div>
+        `;
     }
 
     scrollToBottom() {
