@@ -2,6 +2,7 @@ package com.carhub.controller;
 
 import com.carhub.dto.SellerOrderDTO;
 import com.carhub.dto.Request.OrderRequest;
+import com.carhub.dto.UserDTO;
 import com.carhub.service.Car.OrderService;
 import com.carhub.entity.Order;
 import com.carhub.entity.Payment;
@@ -62,8 +63,7 @@ public class OrderController {
             @RequestParam String status,
             Authentication auth
     ) {
-        String username = auth.getName();
-        User user = userService.findByUsername(username);
+        UserDTO user = userService.getCurrentUser(auth);
 
         Long sellerId = user.getId();
 
@@ -79,8 +79,7 @@ public class OrderController {
 
     @GetMapping("/my")
     public List<Order> getMyOrder(@RequestParam Order.Status status, Authentication auth){
-        String username = auth.getName();
-        User user = userService.findByUsername(username);
+        UserDTO user = userService.getCurrentUser(auth);
 
         return orderRepository.findByBuyerIdAndStatus(user.getId(), status);
     }

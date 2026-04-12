@@ -24,10 +24,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByStockQuantityGreaterThan(int quantity);
     Optional<Car> findById(Long id);
     List<Car> findBySellerId(Long sellerId);
-    List<Car> findBySellerIdNot(Long sellerId);
 
-    @Query("SELECT c.seller FROM Car c WHERE c.id = :carId")
-    User findSellerById(@Param("carId") Long carId);
     @Query("SELECT c FROM Car c WHERE c.seller.id <> :sellerId")
     List<Car> findCarsExcludeSeller(@Param("sellerId") Long sellerId);
     @Lock(LockModeType.PESSIMISTIC_WRITE)
