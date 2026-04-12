@@ -1,452 +1,165 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" >
-    <head>
-        <meta charset="UTF-8">
-        <title>Các xe đã mua</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="stylesheet" th:href="@{/css/style.css}">
-        <link rel="stylesheet" th:href="@{/css/purchased_cars.css}">
-        <link rel="stylesheet" th:href="@{/css/toast.css}">
-        <script th:src="@{/js/toast.js}"></script>
-    </head>
-    
-    <body>
-        <header>
-            <div class="logo">CarShop</div>
-            <nav>
-                <a th:href="@{/index}">Trang chủ</a>
-            </nav>
-        </header>
-        <section class="hero">
-            <div>
-                <h1>Khám Phá Những Chiếc Xe Của Bạn</h1>
-                <p>Tìm những chiếc xe phù hợp với bạn</p>
-            </div>
-        </section>
-        <main class="purchased-main">
-=======
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
->>>>>>> origin/feature/revenue-tab
-
 <head>
     <meta charset="UTF-8">
     <title>Các xe đã mua</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/purchased_cars.css}">
+    <link rel="stylesheet" th:href="@{/css/toast.css}">
+    <script th:src="@{/js/toast.js}"></script>
 </head>
 
-<<<<<<< HEAD
-    <div class="dashboard">
-        <div id="sidebar" class="sidebar">
-            <h3>Hồ Sơ</h3>
-            <ul>
-                <li onclick="handleMenuClick(this, 'profile')">Thông tin cá nhân</li>
-                <li onclick="handleMenuClick(this, 'purchased')">Xe đã mua</li>
-                <li onclick="handleMenuClick(this, 'selling')">Xe đang bán</li>
-                <li onclick="handleMenuClick(this, 'orders')" class="menu-item">
-                    Đơn hàng 
-                   <span id="order-badge" class="badge" style="display:none;">0</span>
-                </li>
-                <li onclick="handleMenuClick(this, 'warranty')">Phiếu bảo hành</li>
-                <li onclick="handleMenuClick(this, 'warrantySeller')">Xem yêu cầu bảo hành</li>
-                <li onclick="handleMenuClick(this,'customer-request')" class="menu-item">
-                    Nhận yêu cầu từ khách hàng
-                    <span id="customer-request-badge" class="badge" style="display:none;">0</span>
-                </li>
-            </ul>
-        </div>
-        <div id="content" class="content">
-            <div id="profile-section">
-                <div class="user-infor">
-                    <div class="avatar-box">
-                        <img id="avatar-img" src="/img/default-avatar.png">
-                        <input type="file" id="avatar-input" hidden>
-                        <button onclick="document.getElementById('avatar-input').click()">
-                            Tải ảnh
-                        </button>
-                    </div>
-                    <p>Tên đăng nhập: <span id="username"></span></p>
-                    <p>Email: <span id="email"></span></p>
-                    <p>Số điện thoại: <span id="phone"></span></p>
-                    <button id="edit-btn">Chỉnh sửa</button>
-                </div>
-            </div>
-
-            <div id="purchased-section">
-                <h2>Danh sách xe đã mua</h2>
-                <div class="order-tabs">
-                    <button onclick="handleTabClick(this, 'PENDING')">Đã đặt</button>
-                    <button onclick="handleTabClick(this, 'DELIVERING')">Đang giao</button>
-                    <button onclick="handleTabClick(this, 'DELIVERED')">Chờ xác nhận</button>
-                    <button onclick="handleTabClick(this, 'COMPLETED')">Đã nhận</button>
-                </div>
-                <div id="purchased-car-list" class="product-grid"></div>
-            </div>
-
-            <!-- SELLING -->
-            <div id="selling-section">
-                <h2>Các xe bạn đang bán </h2>
-                <div id="loading-selling">Đang tải danh sách xe</div>
-                <div id="passed-car-list" class="product-grid"></div>
-            </div>
-
-            <div id="orders-section" style="display: none;">
-                <h2>Đơn hàng của bạn</h2>
-                <div class="order-tabs">
-                    <button onclick="handleTabClick(this, 'PENDING')">Đơn mới</button>
-                    <button onclick="handleTabClick(this, 'DELIVERING')">Đang giao</button>
-                    <button onclick="handleTabClick(this, 'DELIVERED')">Đã giao</button>
-                    <button onclick="handleTabClick(this, 'COMPLETED')">Hoàn tất</button>
-
-                </div>
-                <div id="order-list"></div>
-            </div>
-
-            <div id="customer-request-section" style="display: none;">
-                <h2>Yêu cầu từ khách hàng</h2>
-                <p class="customer-request-subtitle">Danh sách tin nhắn/yêu cầu gần đây từ khách hàng của bạn.</p>
-                <div id="customer-request-list"></div>
-            </div>
-
-            <div id="warranty-section" style="display:none;">
-                <h2>Phiếu bảo hành của bạn</h2>
-                <div id="warranty-list"></div>
-            </div>
-            <div id="warranty-seller-section" style="display: none;">
-                <h2>Yêu cầu bảo hành từ khách </h2>
-                <div id="warranty-seller-list"></div>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="edit-profile-modal" class="modal" style="display:none">
-        <div class="modal-content">
-            <h3>Chỉnh sửa thông tin cá nhân </h3>
-            <input id="edit-email" placeholder="Email">
-            <input id="edit-phone" placeholder="Số điện thoại">
-
-            <button onclick="saveProfile()">Lưu</button>
-            <button onclick="closeEditProfile()">Hủy</button>
-        </div>
-    </div>
-
-    <div id="edit-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Chỉnh sửa thông tin xe</h3>
-
-            <div class="form-row">
-                <input id="edit-model" placeholder="Tên xe">
-                <input id="edit-price" placeholder="Giá">
-            </div>
-
-            <div class="form-row">
-                <input id="edit-color" placeholder="Màu">
-                <input id="edit-year" placeholder="Năm">
-            </div>
-
-            <textarea id="edit-description" placeholder="Mô tả"></textarea>
-
-            <button onclick="saveEdit()">Lưu</button>
-            <button onclick="closeEdit()">Hủy</button>
-        </div>
-    </div>
-    <div id="detail-modal" class="modal" style="display:none;">
-        <div class="modal-content detail-box">
-            <span class="close-btn" onclick="closeDetail()">×</span>
-
-            <img id="detail-image" src="" alt="car">
-
-            <div class="form-row1">
-                <p><b>Tên xe</b> <span id="detail-model"></span></p>
-                <p><b>Giá</b> <span id="detail-price"></span></p>
-            </div>
-
-            <div class="form-row1">
-                <p><b>Màu</b> <span id="detail-color"></span></p>
-                <p><b>Năm</b> <span id="detail-year"></span></p>
-            </div>
-
-            <p><b>Mô tả:</b></p>
-            <p id="detail-description"></p>
-
-            <button onclick="openEditFromDetail()">Chỉnh sửa</button>
-        </div>
-    </div>
-
-</main>
-        <footer class="site-footer">
-            <div class="footer-container">
-
-                <div class="footer-col">
-                    <h3>CarShop</h3>
-                    <p>
-                        Nền tảng mua bán xe uy tín,
-                        mang đến những mẫu xe chất lượng
-                        và trải nghiệm mua sắm an toàn.
-                    </p>
-                </div>
-
-                <div class="footer-col">
-                    <h4>Liên kết</h4>
-                    <ul>
-                        <li><a th:href="@{/index}">Trang chủ</a></li>
-                        <li><a href="#">Xe mới</a></li>
-                        <li><a href="#">Giỏ hàng</a></li>
-                        <li><a href="#">Tài khoản</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h4>Liên hệ</h4>
-                    <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
-                    <p>Hotline: 0999 999 999</p>
-                </div>
-
-                <div class="footer-col">
-                    <h4>Theo dõi chúng tôi</h4>
-                    <div class="social-icons">
-                        <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
-                        <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
-=======
 <body>
-    <header>
-        <div class="logo">CarShop</div>
-        <nav>
-            <a th:href="@{/index}">Trang chủ</a>
-        </nav>
-    </header>
-    <section class="hero">
-        <div>
-            <h1>Khám Phá Những Chiếc Xe Của Bạn</h1>
-            <p>Tìm những chiếc xe phù hợp với bạn</p>
-        </div>
-    </section>
-    <main class="purchased-main">
+<header>
+    <div class="logo">CarShop</div>
+    <nav>
+        <a th:href="@{/index}">Trang chủ</a>
+    </nav>
+</header>
 
+<section class="hero">
+    <div>
+        <h1>Khám Phá Những Chiếc Xe Của Bạn</h1>
+        <p>Tìm những chiếc xe phù hợp với bạn</p>
+    </div>
+</section>
 
-        <div class="dashboard">
+<main class="purchased-main">
+<div class="dashboard">
 
-            <!-- SIDEBAR -->
-            <div id="sidebar" class="sidebar">
-                <h3>Hồ Sơ</h3>
-                <ul>
-                    <li onclick="showSection('profile')">Thông tin cá nhân</li>
-                    <li onclick="showSection('purchased')">Xe đã mua</li>
-                    <li onclick="showSection('selling')">Xe đang bán</li>
-                    <li onclick="showSection('revenue')">Doanh thu</li>
-                    <li onclick="showSection('orders')" class="menu-item">
-                        Đơn hàng
-                        <span id="order-badge" class="badge" style="display:none;">0</span>
-                    </li>
-                    <li onclick="showCustomerRequests()" class="menu-item">
-                        Nhận yêu cầu từ khách hàng
-                        <span id="customer-request-badge" class="badge" style="display:none;">0</span>
-                    </li>
-                    <li href="#" onclick="showWarranty()">Phiếu bảo hành</li>
-                    <li href="#" onclick="showWarrantySeller()">Xem yêu cầu bảo hành</li>
-                </ul>
-            </div>
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="sidebar">
+        <h3>Hồ Sơ</h3>
+        <ul>
+            <li onclick="handleMenuClick(this, 'profile')">Thông tin cá nhân</li>
+            <li onclick="handleMenuClick(this, 'purchased')">Xe đã mua</li>
+            <li onclick="handleMenuClick(this, 'selling')">Xe đang bán</li>
+            <li onclick="handleMenuClick(this, 'revenue')">Doanh thu</li>
+            <li onclick="handleMenuClick(this, 'orders')" class="menu-item">
+                Đơn hàng 
+                <span id="order-badge" class="badge" style="display:none;">0</span>
+            </li>
+            <li onclick="handleMenuClick(this, 'warranty')">Phiếu bảo hành</li>
+            <li onclick="handleMenuClick(this, 'warrantySeller')">Xem yêu cầu bảo hành</li>
+            <li onclick="handleMenuClick(this,'customer-request')" class="menu-item">
+                Nhận yêu cầu từ khách hàng
+                <span id="customer-request-badge" class="badge" style="display:none;">0</span>
+            </li>
+        </ul>
+    </div>
 
-            <!-- CONTENT -->
-            <div id="content" class="content">
+    <!-- CONTENT -->
+    <div id="content" class="content">
 
-                <!-- PROFILE -->
-                <div id="profile-section">
-                    <div class="user-infor">
-                        <p>Tên đăng nhập: <span id="username"></span></p>
-                        <p>Email: <span id="email"></span></p>
-                        <p>Số điện thoại: <span id="phone"></span></p>
-                        <button id="edit-btn">Chỉnh sửa</button>
->>>>>>> origin/feature/revenue-tab
-                    </div>
+        <!-- PROFILE -->
+        <div id="profile-section">
+            <div class="user-infor">
+                <div class="avatar-box">
+                    <img id="avatar-img" src="/img/default-avatar.png">
+                    <input type="file" id="avatar-input" hidden>
+                    <button onclick="document.getElementById('avatar-input').click()">Tải ảnh</button>
                 </div>
-
-                <!-- PURCHASED -->
-                <div id="purchased-section">
-                    <h2>Danh sách xe đã mua</h2>
-                    <div class="order-tabs">
-                        <button onclick="loadPurchasedCars('PENDING')">Đã đặt</button>
-                        <button onclick="loadPurchasedCars('DELIVERING')">Đang giao</button>
-                        <button onclick="loadPurchasedCars('DELIVERED')">Chờ xác nhận</button>
-                        <button onclick="loadPurchasedCars('COMPLETED')">Đã nhận</button>
-                    </div>
-                    <div id="purchased-car-list" class="product-grid"></div>
-                </div>
-
-                <!-- SELLING -->
-                <div id="selling-section">
-                    <h2>Các xe bạn đang bán </h2>
-                    <div id="loading-selling">Đang tải danh sách xe</div>
-                    <div id="passed-car-list" class="product-grid"></div>
-                </div>
-
-                <div id="revenue-section" style="display: none;">
-                    <h2>Doanh thu bán xe</h2>
-                    <p class="customer-request-subtitle">Tổng hợp doanh thu từ các đơn hàng đã hoàn tất.</p>
-
-                    <div class="revenue-toolbar">
-                        <button type="button" id="refresh-revenue">Làm mới dữ liệu</button>
-                    </div>
-
-                    <div class="revenue-grid">
-                        <div class="revenue-card">
-                            <h4>Tổng doanh thu</h4>
-                            <p id="revenue-total">0 ₫</p>
-                        </div>
-                        <div class="revenue-card">
-                            <h4>Số đơn hoàn tất</h4>
-                            <p id="revenue-orders">0</p>
-                        </div>
-                        <div class="revenue-card">
-                            <h4>Trung bình / đơn</h4>
-                            <p id="revenue-average">0 ₫</p>
-                        </div>
-                        <div class="revenue-card">
-                            <h4>Tổng số xe đã bán</h4>
-                            <p id="revenue-quantity">0</p>
-                        </div>
-                    </div>
-
-                    <div id="revenue-top-cars" class="revenue-list"></div>
-                    <div id="revenue-orders-list" class="revenue-list"></div>
-                </div>
-
-                <div id="orders-section" style="display: none;">
-                    <h2>Đơn hàng của bạn</h2>
-                    <div class="order-tabs">
-                        <button onclick="loadOrders('PENDING')">Đơn mới</button>
-                        <button onclick="loadOrders('DELIVERING')">Đang giao</button>
-                        <button onclick="loadOrders('DELIVERED')">Đã giao</button>
-                        <button onclick="loadOrders('COMPLETED')">Hoàn tất</button>
-
-                    </div>
-                    <div id="order-list"></div>
-                </div>
-
-                <div id="customer-request-section" style="display: none;">
-                    <h2>Yêu cầu từ khách hàng</h2>
-                    <p class="customer-request-subtitle">Danh sách tin nhắn/yêu cầu gần đây từ khách hàng của bạn.</p>
-                    <div id="customer-request-list"></div>
-                </div>
-
-                <div id="warranty-section" style="display:none;">
-                    <h2>Phiếu bảo hành của bạn</h2>
-                    <div id="warranty-list"></div>
-                </div>
-                <div id="warranty-seller-section" style="display: none;">
-                    <h2>Yêu cầu bảo hành từ khách </h2>
-                    <div id="warranty-seller-list"></div>
-                </div>
-
+                <p>Tên đăng nhập: <span id="username"></span></p>
+                <p>Email: <span id="email"></span></p>
+                <p>Số điện thoại: <span id="phone"></span></p>
+                <button id="edit-btn">Chỉnh sửa</button>
             </div>
         </div>
 
-        <!-- MODAL EDIT -->
-        <div id="edit-modal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <h3>Chỉnh sửa thông tin xe</h3>
-
-                <div class="form-row">
-                    <input id="edit-model" placeholder="Tên xe">
-                    <input id="edit-price" placeholder="Giá">
-                </div>
-
-                <div class="form-row">
-                    <input id="edit-color" placeholder="Màu">
-                    <input id="edit-year" placeholder="Năm">
-                </div>
-
-                <textarea id="edit-description" placeholder="Mô tả"></textarea>
-
-                <button onclick="saveEdit()">Lưu</button>
-                <button onclick="closeEdit()">Hủy</button>
+        <!-- PURCHASED -->
+        <div id="purchased-section">
+            <h2>Danh sách xe đã mua</h2>
+            <div class="order-tabs">
+                <button onclick="handleTabClick(this, 'PENDING')">Đã đặt</button>
+                <button onclick="handleTabClick(this, 'DELIVERING')">Đang giao</button>
+                <button onclick="handleTabClick(this, 'DELIVERED')">Chờ xác nhận</button>
+                <button onclick="handleTabClick(this, 'COMPLETED')">Đã nhận</button>
             </div>
+            <div id="purchased-car-list" class="product-grid"></div>
         </div>
 
-        <!-- MODAL DETAIL -->
-        <div id="detail-modal" class="modal" style="display:none;">
-            <div class="modal-content detail-box">
-                <span class="close-btn" onclick="closeDetail()">×</span>
-
-                <img id="detail-image" src="" alt="car">
-
-                <div class="form-row1">
-                    <p><b>Tên xe</b> <span id="detail-model"></span></p>
-                    <p><b>Giá</b> <span id="detail-price"></span></p>
-                </div>
-
-                <div class="form-row1">
-                    <p><b>Màu</b> <span id="detail-color"></span></p>
-                    <p><b>Năm</b> <span id="detail-year"></span></p>
-                </div>
-
-                <p><b>Mô tả:</b></p>
-                <p id="detail-description"></p>
-
-                <button onclick="openEditFromDetail()">Chỉnh sửa</button>
-            </div>
+        <!-- SELLING -->
+        <div id="selling-section">
+            <h2>Các xe bạn đang bán</h2>
+            <div id="loading-selling">Đang tải danh sách xe</div>
+            <div id="passed-car-list" class="product-grid"></div>
         </div>
 
-    </main>
-    <footer class="site-footer">
-        <div class="footer-container">
+        <!-- REVENUE -->
+        <div id="revenue-section" style="display: none;">
+            <h2>Doanh thu bán xe</h2>
 
-            <div class="footer-col">
-                <h3>CarShop</h3>
-                <p>
-                    Nền tảng mua bán xe uy tín,
-                    mang đến những mẫu xe chất lượng
-                    và trải nghiệm mua sắm an toàn.
-                </p>
+            <div class="revenue-toolbar">
+                <button type="button" id="refresh-revenue">Làm mới dữ liệu</button>
             </div>
 
-            <div class="footer-col">
-                <h4>Liên kết</h4>
-                <ul>
-                    <li><a th:href="@{/index}">Trang chủ</a></li>
-                    <li><a href="#">Xe mới</a></li>
-                    <li><a href="#">Giỏ hàng</a></li>
-                    <li><a href="#">Tài khoản</a></li>
-                </ul>
-            </div>
-<<<<<<< HEAD
-        </footer>
-        <script th:src="@{/js/purchased_car.js}"></script>
-        <div th:replace="toast :: toast"></div>
-    </body>
-=======
-
-            <div class="footer-col">
-                <h4>Liên hệ</h4>
-                <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
-                <p>Hotline: 0999 999 999</p>
-            </div>
-
-            <div class="footer-col">
-                <h4>Theo dõi chúng tôi</h4>
-                <div class="social-icons">
-                    <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
-                    <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
+            <div class="revenue-grid">
+                <div class="revenue-card">
+                    <h4>Tổng doanh thu</h4>
+                    <p id="revenue-total">0 ₫</p>
+                </div>
+                <div class="revenue-card">
+                    <h4>Số đơn hoàn tất</h4>
+                    <p id="revenue-orders">0</p>
+                </div>
+                <div class="revenue-card">
+                    <h4>Trung bình / đơn</h4>
+                    <p id="revenue-average">0 ₫</p>
+                </div>
+                <div class="revenue-card">
+                    <h4>Tổng số xe đã bán</h4>
+                    <p id="revenue-quantity">0</p>
                 </div>
             </div>
 
+            <div id="revenue-top-cars"></div>
+            <div id="revenue-orders-list"></div>
         </div>
 
-        <div class="footer-bottom">
-            © 2026 CarShop. All rights reserved.
+        <!-- ORDERS -->
+        <div id="orders-section" style="display: none;">
+            <h2>Đơn hàng của bạn</h2>
+            <div class="order-tabs">
+                <button onclick="handleTabClick(this, 'PENDING')">Đơn mới</button>
+                <button onclick="handleTabClick(this, 'DELIVERING')">Đang giao</button>
+                <button onclick="handleTabClick(this, 'DELIVERED')">Đã giao</button>
+                <button onclick="handleTabClick(this, 'COMPLETED')">Hoàn tất</button>
+            </div>
+            <div id="order-list"></div>
         </div>
-    </footer>
-    <script th:src="@{/js/purchased_car.js}"></script>
+
+        <!-- CUSTOMER REQUEST -->
+        <div id="customer-request-section" style="display: none;">
+            <h2>Yêu cầu từ khách hàng</h2>
+            <div id="customer-request-list"></div>
+        </div>
+
+        <!-- WARRANTY -->
+        <div id="warranty-section" style="display:none;">
+            <h2>Phiếu bảo hành của bạn</h2>
+            <div id="warranty-list"></div>
+        </div>
+
+        <div id="warranty-seller-section" style="display: none;">
+            <h2>Yêu cầu bảo hành từ khách</h2>
+            <div id="warranty-seller-list"></div>
+        </div>
+
+    </div>
+</div>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>CarShop</h3>
+            <p>Nền tảng mua bán xe uy tín</p>
+        </div>
+    </div>
+    <div class="footer-bottom">© 2026 CarShop</div>
+</footer>
+
+<script th:src="@{/js/purchased_car.js}"></script>
 </body>
-
->>>>>>> origin/feature/revenue-tab
 </html>
