@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Car Shop</title>
-    <link rel="stylesheet"
-          th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
-        <link rel="stylesheet" th:href="@{/css/ChatAI.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css}">
+    <a th:if="${isAdmin}" th:href="@{/admin/users}">Admin</a>
+    <link rel="stylesheet" th:href="@{/css/ChatAI.css}">
     <link rel="stylesheet" th:href="@{/css/stylecus.css}">
-     <link rel="stylesheet" th:href="@{/css/style.css}">
-    
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
 
 </head>
 
@@ -20,53 +21,52 @@
             <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
             <a th:href="@{/login}">Đăng nhập</a>
         </nav>
-        <div id="welcome-message"
-            th:if="${session.justLoggedIn}"
-            class="welcome-message">
-     
-             Xin chào  👋
+        <div id="welcome-message" th:if="${session.justLoggedIn}" class="welcome-message">
+
+            Xin chào 👋
         </div>
     </header>
-     <div class="Line"> Nhập thông tin xe cần bán</div>
+    <div class="Line"> Nhập thông tin xe cần bán</div>
     <form th:action="@{/car/save}" method="post" enctype="multipart/form-data" th:object="${car}">
         <div class="form-grid">
-            <div class="form-group" >
-                    <label>Model xe<span class="required">*</span></label>
-                    <input type="text" th:field="*{model}" placeholder="Camry" required>
+            <div class="form-group">
+                <label>Model xe<span class="required">*</span></label>
+                <input type="text" th:field="*{model}" placeholder="Camry" required>
             </div>
             <div class="form-group">
-                    <label>Giá xe <span class="required">*</span></label>
-                    <input type = "number" step="1000" th:field="*{price}" placeholder="1000000000" required>
+                <label>Giá xe <span class="required">*</span></label>
+                <input type="number" step="1000" th:field="*{price}" placeholder="1000000000" required>
             </div>
             <div class="form-group">
-                    <label>Năm sản xuất <span class="required">*</span></label>
-                    <input type="number" th:field="*{manufactureYear}" placeholder="2020" required>
+                <label>Năm sản xuất <span class="required">*</span></label>
+                <input type="number" th:field="*{manufactureYear}" placeholder="2020" required>
             </div>
             <div class="form-group">
-                    <label>Màu Sắc <span class="required">*</span></label>
-                    <input type="text" th:field="*{color}" placeholder="50000" required>
+                <label>Màu Sắc <span class="required">*</span></label>
+                <input type="text" th:field="*{color}" placeholder="50000" required>
             </div>
             <div class="form-group">
-                    <label>Mô tả chi tiết <span class="required">*</span></label>
-                    <input type="text" th:field="*{description}" placeholder="15000" required>
+                <label>Mô tả chi tiết <span class="required">*</span></label>
+                <input type="text" th:field="*{description}" placeholder="15000" required>
             </div>
             <div class="form-group">
-                    <label>Hình ảnh (URL) <span class="required">*</span></label>
-                    <input type="file" th:field="*{imageFile}" name="imageFile" accept="image/*" class="file-input" required>
+                <label>Hình ảnh (URL) <span class="required">*</span></label>
+                <input type="file" th:field="*{imageFile}" name="imageFile" accept="image/*" class="file-input"
+                    required>
             </div>
             <button type="submit" class="btn-submit">Lưu thông tin xe</button>
         </div>
-     </form>
-     
+    </form>
+
     <script src="/js/chatbot-init.js"></script>
     <footer class="site-footer">
         <div class="footer-container">
 
             <div class="footer-col">
-                 <h3>CarShop</h3>
+                <h3>CarShop</h3>
                 <p>
-                    Nền tảng mua bán xe uy tín,  
-                    mang đến những mẫu xe chất lượng  
+                    Nền tảng mua bán xe uy tín,
+                    mang đến những mẫu xe chất lượng
                     và trải nghiệm mua sắm an toàn.
                 </p>
             </div>
@@ -88,8 +88,8 @@
             </div>
 
             <div class="footer-col">
-                 <h4>Theo dõi chúng tôi</h4>
-                 <div class="social-icons">
+                <h4>Theo dõi chúng tôi</h4>
+                <div class="social-icons">
                     <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
                         <i class="fab fa-facebook-f"></i>
                     </a>
@@ -103,7 +103,8 @@
         <div class="footer-bottom">
             © 2026 CarShop. All rights reserved.
         </div>
-</footer>
-<script th:src="@{/js/welcome.js}"></script>
+    </footer>
+    <script th:src="@{/js/welcome.js}"></script>
 </body>
+
 </html>

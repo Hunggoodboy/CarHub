@@ -18,6 +18,7 @@
             <a href="index.html" th:href="@{/index}">Trang chủ</a>
             <a href="product_detail.html" th:href="@{/product_detail}">Chi tiết xe</a>
             <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
+            <a th:if="${isAdmin}" th:href="@{/admin/users}">Admin</a>
             <a href="login.html" th:href="@{/login}">Đăng nhập</a>
         </nav>
     </header>

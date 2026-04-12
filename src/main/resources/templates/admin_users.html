@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý người dùng | Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/admin_users.css}">
+</head>
+
+<body>
+    <header>
+        <div class="logo">CarShop Admin</div>
+        <nav>
+            <a th:href="@{/index}">Trang chủ</a>
+            <a th:href="@{/admin/users}">Quản lý user</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div>
+            <h1>Quản Lý Toàn Bộ Người Dùng</h1>
+            <p>Kiểm soát thông tin, vai trò và quyền truy cập của user</p>
+        </div>
+    </section>
+
+    <main class="admin-main">
+        <div class="toolbar">
+            <input type="text" id="search-input" placeholder="Tìm theo username, tên, email...">
+            <button type="button" id="reload-btn">Làm mới</button>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>SĐT</th>
+                        <th>Địa chỉ</th>
+                        <th>Vai trò</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="edit-modal" class="modal" style="display:none;">
+        <div class="modal-card">
+            <h3>Chỉnh sửa người dùng</h3>
+            <input id="edit-fullName" placeholder="Họ tên">
+            <input id="edit-email" placeholder="Email">
+            <input id="edit-phone" placeholder="Số điện thoại">
+            <input id="edit-address" placeholder="Địa chỉ">
+            <select id="edit-role">
+                <option value="CUSTOMER">CUSTOMER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select>
+            <div class="modal-actions">
+                <button type="button" id="save-btn">Lưu</button>
+                <button type="button" id="cancel-btn" class="btn-secondary">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin_users.js}" src="/js/admin_users.js"></script>
+</body>
+
+</html>

@@ -36,6 +36,13 @@ public class WebController {
     private final AuthService authService;
     private final UserService userService;
 
+    private boolean isAdmin(Authentication authentication) {
+        return authentication != null
+                && authentication.isAuthenticated()
+                && authentication.getAuthorities().stream()
+                        .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+    }
+
     // Trang chủ
     @GetMapping({ "/", "/index" })
     public String index(Model model, Authentication authentication) {
@@ -54,18 +61,22 @@ public class WebController {
             }
         }
 
+        model.addAttribute("isAdmin", isAdmin(authentication));
+
         return "index";
     }
 
     // Trang chi tiết xe
     // Trang chi tiết xe
     @GetMapping("/product_detail")
-    public String productDetail() {
+    public String productDetail(Model model, Authentication authentication) {
+        model.addAttribute("isAdmin", isAdmin(authentication));
         return "product_detail";
     }
 
     @GetMapping("/cart")
-    public String cart() {
+    public String cart(Model model, Authentication authentication) {
+        model.addAttribute("isAdmin", isAdmin(authentication));
         return "cart";
     }
 
@@ -77,19 +88,27 @@ public class WebController {
 
     // Trang thanh toán
     @GetMapping("/payment")
-    public String payment() {
+    public String payment(Model model, Authentication authentication) {
+        model.addAttribute("isAdmin", isAdmin(authentication));
         return "payment";
     }
 
     // Trang bao hành
     @GetMapping("/warranty")
-    public String warranty() {
+    public String warranty(Model model, Authentication authentication) {
+        model.addAttribute("isAdmin", isAdmin(authentication));
         return "warranty";
     }
 
     // Trang xe đã mua
     @GetMapping("/my-cars")
-    public String myCarsPage() {
+    public String myCarsPage(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null
+                && authentication.isAuthenticated()
+                && authentication.getAuthorities().stream()
+                        .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+
+        model.addAttribute("isAdmin", isAdmin);
         return "purchased_cars";
     }
 
@@ -105,14 +124,21 @@ public class WebController {
     }
 
     @GetMapping("/customer-view")
-    public String showCustomerView(Model model) {
+    public String showCustomerView(Model model, Authentication authentication) {
+        model.addAttribute("isAdmin", isAdmin(authentication));
         model.addAttribute("car", new CarDTO());
         return "customer-view";
     }
 
     @GetMapping("/chat")
-    public String chat() {
+    public String chat(Model model, Authentication authentication) {
+        model.addAttribute("isAdmin", isAdmin(authentication));
         return "chat";
+    }
+
+    @GetMapping("/admin/users")
+    public String adminUsersPage() {
+        return "admin_users";
     }
 
     @PostMapping("/car/save")

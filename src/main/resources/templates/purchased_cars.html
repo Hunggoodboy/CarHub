@@ -35,6 +35,7 @@
                     <li onclick="showSection('purchased')">Xe đã mua</li>
                     <li onclick="showSection('selling')">Xe đang bán</li>
                     <li onclick="showSection('revenue')">Doanh thu</li>
+                    <li th:if="${isAdmin}"><a th:href="@{/admin/users}" class="menu-link">Quản lý người dùng</a></li>
                     <li onclick="showSection('orders')" class="menu-item">
                         Đơn hàng
                         <span id="order-badge" class="badge" style="display:none;">0</span>

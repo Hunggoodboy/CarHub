@@ -26,16 +26,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CustomerRepository customerRepository;
 
-    //Lấy id của người dùng hiện tại
+    // Lấy id của người dùng hiện tại
     public UserDTO getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new RuntimeException("Bạn chưa đăng nhập!");
         }
-        if(authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
+        if (authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
             String email = oAuth2User.getAttribute("email");
             return getUserByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ email"));
-        }
-        else if(authentication.getPrincipal() instanceof UserDetails) {
+        } else if (authentication.getPrincipal() instanceof UserDetails) {
             String username = authentication.getName();
             return getUserByUsername(username).orElseThrow(() -> new RuntimeException("Bạn chưa đăng nhập!"));
         }
@@ -45,15 +44,23 @@ public class UserService {
     public Long getId(Authentication authentication) {
         return getCurrentUser(authentication).getId();
     }
+
     public User findByUsername(String username) {
-    return userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     // Lấy thông tin user theo ID
     public Optional<UserDTO> getUserById(Long id) {
         return userRepository.findById(id)
                 .map(UserDTO::fromEntity);
+    }
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     // Lấy thông tin user theo username
@@ -80,7 +87,6 @@ public class UserService {
                 .map(UserDTO::fromEntity)
                 .collect(Collectors.toList());
     }
-
 
     // Tìm kiếm user theo tên
     public List<UserDTO> searchUserByName(String name) {
@@ -116,6 +122,35 @@ public class UserService {
         return Optional.empty();
     }
 
+    @Transactional
+    public Optional<UserDTO> updateUserByAdmin(Long id, UserDTO userDTO) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        User user = userOpt.get();
+
+        if (userDTO.getFullName() != null) {
+            user.setFullName(userDTO.getFullName());
+        }
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail());
+        }
+        if (userDTO.getPhoneNumber() != null) {
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+        }
+        if (userDTO.getAddress() != null) {
+            user.setAddress(userDTO.getAddress());
+        }
+        if (userDTO.getRole() != null && !userDTO.getRole().isBlank()) {
+            user.setRole(User.Role.valueOf(userDTO.getRole().toUpperCase()));
+        }
+
+        User updatedUser = userRepository.save(user);
+        return Optional.of(UserDTO.fromEntity(updatedUser));
+    }
+
     // Đổi mật khẩu
     @Transactional
     public boolean changePassword(Long userId, String oldPassword, String newPassword) {
@@ -143,6 +178,20 @@ public class UserService {
         return false;
     }
 
+    @Transactional
+    public boolean deleteUserAsAdmin(Long id, Authentication authentication) {
+        Long currentUserId = getId(authentication);
+        if (currentUserId != null && currentUserId.equals(id)) {
+            throw new RuntimeException("Bạn không thể xóa chính tài khoản của mình");
+        }
+
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     // Kiểm tra username có tồn tại không
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
@@ -152,11 +201,12 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
-    public Customer getCurrentCustomer() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = authentication.getName();
 
-    return customerRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
-}
+    public Customer getCurrentCustomer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        return customerRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
+    }
 }
