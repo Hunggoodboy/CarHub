@@ -425,3 +425,85 @@
     margin-bottom: 12px;
     color: #222;
 }
+<<<<<<< HEAD
+=======
+
+.warranty-card {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.revenue-main {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 16px 24px;
+}
+
+.revenue-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 14px;
+}
+
+#refresh-revenue {
+    border: none;
+    border-radius: 8px;
+    background: #0b6bcb;
+    color: #fff;
+    padding: 9px 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.revenue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.revenue-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.revenue-card h4 {
+    margin: 0 0 8px;
+    color: #475569;
+    font-size: 14px;
+}
+
+.revenue-card p {
+    margin: 0;
+    color: #0f172a;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.revenue-list {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.revenue-list h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+}
+
+.revenue-list ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.revenue-list li {
+    margin-bottom: 8px;
+}
+>>>>>>> origin/feature/revenue-tab

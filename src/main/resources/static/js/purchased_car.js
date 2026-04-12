@@ -77,6 +77,7 @@ function showSection(section) {
     document.getElementById("profile-section").style.display = "none";
     document.getElementById("purchased-section").style.display = "none";
     document.getElementById("selling-section").style.display = "none";
+    document.getElementById("revenue-section").style.display = "none";
     document.getElementById("orders-section").style.display = "none";
     document.getElementById("customer-request-section").style.display = "none";
     document.getElementById("warranty-section").style.display = "none";
@@ -99,6 +100,104 @@ function showSection(section) {
         const requestBadge = document.getElementById("customer-request-badge");
         if (requestBadge) requestBadge.style.display = "none";
     }
+
+    if (section === 'revenue' && typeof loadRevenueData === 'function') {
+        loadRevenueData();
+    }
+}
+
+function loadRevenueData() {
+    fetch('/api/orders/seller/orders?status=COMPLETED')
+        .then(res => res.json())
+        .then(data => renderRevenueData(data))
+        .catch(err => {
+            console.error('Lỗi tải doanh thu:', err);
+            renderRevenueData([]);
+        });
+}
+
+function renderRevenueData(orders) {
+    const safeOrders = Array.isArray(orders) ? orders : [];
+    const formatter = new Intl.NumberFormat('vi-VN');
+
+    const totalRevenue = safeOrders.reduce((sum, item) => {
+        const price = Number(item.price || 0);
+        const qty = Number(item.quantity || 1);
+        return sum + (price * qty);
+    }, 0);
+
+    const totalOrders = safeOrders.length;
+    const totalQuantity = safeOrders.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+    const averageRevenue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+    const totalEl = document.getElementById('revenue-total');
+    const ordersEl = document.getElementById('revenue-orders');
+    const avgEl = document.getElementById('revenue-average');
+    const qtyEl = document.getElementById('revenue-quantity');
+
+    if (totalEl) totalEl.textContent = formatter.format(totalRevenue) + ' ₫';
+    if (ordersEl) ordersEl.textContent = String(totalOrders);
+    if (avgEl) avgEl.textContent = formatter.format(Math.round(averageRevenue)) + ' ₫';
+    if (qtyEl) qtyEl.textContent = String(totalQuantity);
+
+    renderTopCarsByRevenue(safeOrders, formatter);
+    renderRevenueOrderList(safeOrders, formatter);
+}
+
+function renderTopCarsByRevenue(orders, formatter) {
+    const container = document.getElementById('revenue-top-cars');
+    if (!container) return;
+
+    if (!orders.length) {
+        container.innerHTML = '<h3>Top xe mang lại doanh thu</h3><p>Chưa có đơn hàng hoàn tất.</p>';
+        return;
+    }
+
+    const grouped = {};
+    orders.forEach(item => {
+        const key = item.carName || 'Xe không tên';
+        const amount = Number(item.price || 0) * Number(item.quantity || 1);
+
+        if (!grouped[key]) {
+            grouped[key] = { revenue: 0, quantity: 0 };
+        }
+
+        grouped[key].revenue += amount;
+        grouped[key].quantity += Number(item.quantity || 1);
+    });
+
+    const topCars = Object.entries(grouped)
+        .map(([name, val]) => ({ name, revenue: val.revenue, quantity: val.quantity }))
+        .sort((a, b) => b.revenue - a.revenue)
+        .slice(0, 5);
+
+    const listHtml = topCars.map(car =>
+        '<li><b>' + car.name + '</b> - ' + car.quantity + ' xe - ' + formatter.format(car.revenue) + ' ₫</li>'
+    ).join('');
+
+    container.innerHTML = '<h3>Top xe mang lại doanh thu</h3><ul>' + listHtml + '</ul>';
+}
+
+function renderRevenueOrderList(orders, formatter) {
+    const container = document.getElementById('revenue-orders-list');
+    if (!container) return;
+
+    if (!orders.length) {
+        container.innerHTML = '<h3>Đơn hàng hoàn tất gần đây</h3><p>Chưa có dữ liệu.</p>';
+        return;
+    }
+
+    const sorted = [...orders]
+        .sort((a, b) => Number(b.orderId || 0) - Number(a.orderId || 0))
+        .slice(0, 8);
+
+    const listHtml = sorted.map(item => {
+        const qty = Number(item.quantity || 1);
+        const lineTotal = Number(item.price || 0) * qty;
+        return '<li>Đơn #' + item.orderId + ' - ' + (item.carName || 'Xe không tên') + ' - ' + qty + ' xe - ' + formatter.format(lineTotal) + ' ₫</li>';
+    }).join('');
+
+    container.innerHTML = '<h3>Đơn hàng hoàn tất gần đây</h3><ul>' + listHtml + '</ul>';
 }
 
 function showCustomerRequests() {

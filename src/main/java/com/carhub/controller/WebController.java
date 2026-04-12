@@ -69,12 +69,15 @@ public class WebController {
         return "login";
     }
 
+<<<<<<< HEAD
     // Trang quên mật khẩu
     @GetMapping("/forgot-password")
     public String forgotPassword() {
         return "forgot-password";
     }
 
+=======
+>>>>>>> origin/feature/revenue-tab
     // Trang thanh toán
     @GetMapping("/payment")
     public String payment() {
