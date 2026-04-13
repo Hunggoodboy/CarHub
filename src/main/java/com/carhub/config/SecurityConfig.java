@@ -41,7 +41,7 @@ public class SecurityConfig {
     };
 
     private static final String[] ADMIN_URLS = {
-            "/api/users/**", "/admin/**"
+            "/admin/**"
     };
 
     @Bean

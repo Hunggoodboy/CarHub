@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List; 
 @Controller
@@ -34,16 +36,9 @@ public class AdminController {
 
     @GetMapping
     public String adminRoot() {
-        return "redirect:/admin/users";
+        return "redirect:/admin/manage";
     }
 
-    @GetMapping("/users")
-    public String adminUsers(@RequestParam(required = false) String keyword, Model model) {
-        model.addAttribute("activePage", "users");
-        model.addAttribute("keyword", keyword == null ? "" : keyword);
-        model.addAttribute("users", userService.getUsersForAdmin(keyword));
-        return "admin-users";
-    }
     @GetMapping("/manage")
     public String adminManage() {
         return "admin-manage"; 
@@ -69,7 +64,7 @@ public class AdminController {
             return "redirect:/admin/users/" + id + "/edit";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/admin/users";
+            return "redirect:/admin/manage";
         } catch (IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/admin/users/" + id + "/edit";
@@ -83,24 +78,14 @@ public class AdminController {
         try {
             Long adminId = userService.getId(authentication);
             userService.deleteCustomerByAdmin(adminId, id);
-            redirectAttributes.addFlashAttribute("successMessage", "XÃ³a user thÃ nh cÃ´ng.");
+            redirectAttributes.addFlashAttribute("successMessage", "Xóa user thành công.");
         } catch (IllegalArgumentException | IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/admin/users";
+        return "redirect:/admin/manage";
     }
 
-    @GetMapping("/cars")
-    public String adminCars(@RequestParam(required = false) String keyword,
-                            @RequestParam(required = false) Long brandId,
-                            Model model) {
-        model.addAttribute("activePage", "cars");
-        model.addAttribute("keyword", keyword == null ? "" : keyword);
-        model.addAttribute("selectedBrandId", brandId);
-        model.addAttribute("brands", carService.getBrandsForAdmin());
-        model.addAttribute("cars", carService.getCarsForAdmin(keyword, brandId));
-        return "admin-cars";
-    }
+
 
     @GetMapping("/cars/{id}/edit")
     public String editCar(@PathVariable Long id, Model model) {
@@ -126,7 +111,7 @@ public class AdminController {
             return "redirect:/admin/cars/" + id + "/edit";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/admin/cars";
+            return "redirect:/admin/manage#products";
         } catch (IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/admin/cars/" + id + "/edit";
@@ -141,7 +126,7 @@ public class AdminController {
         } catch (IllegalArgumentException | IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/admin/cars";
+        return "redirect:/admin/manage#products";
     }
     @GetMapping("/orders")
     @ResponseBody
@@ -150,8 +135,58 @@ public class AdminController {
     }
     @PutMapping("/orders/{id}/confirm")
     @ResponseBody
-    public String confirmOrder(@PathVariable Long id) {
-        orderService.confirmPaymentByAdmin(id);
-        return "OK";
+    public ResponseEntity<String> confirmOrder(@PathVariable Long id) {
+        try {
+            orderService.confirmPaymentByAdmin(id);
+            return ResponseEntity.ok("OK");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/orders/{id}/cancel")
+    @ResponseBody
+    public ResponseEntity<String> cancelOrder(@PathVariable Long id) {
+        try {
+            orderService.cancelOrderByAdmin(id);
+            return ResponseEntity.ok("OK");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/api/users")
+    @ResponseBody
+    public List<UserDTO> getAdminUsersApi(@RequestParam(required = false) String keyword) {
+        return userService.getUsersForAdmin(keyword);
+    }
+
+    @DeleteMapping("/api/users/{id}")
+    @ResponseBody
+    public ResponseEntity<String> deleteUserApi(@PathVariable Long id, Authentication authentication) {
+        try {
+            Long adminId = userService.getId(authentication);
+            userService.deleteCustomerByAdmin(adminId, id);
+            return ResponseEntity.ok("Deleted");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/api/cars")
+    @ResponseBody
+    public List<CarDTO> getAdminCarsApi(@RequestParam(required = false) String keyword, @RequestParam(required = false) Long brandId) {
+        return carService.getCarsForAdmin(keyword, brandId);
+    }
+
+    @DeleteMapping("/api/cars/{id}")
+    @ResponseBody
+    public ResponseEntity<String> deleteCarApi(@PathVariable Long id) {
+        try {
+            carService.deleteCarForAdmin(id);
+            return ResponseEntity.ok("Deleted");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

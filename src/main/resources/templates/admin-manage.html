@@ -1,59 +1,80 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" th:href="@{/css/admin-manage.css}">
+    <title>Admin Dashboard - CarHub</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}">
 </head>
-
 <body>
 
-    <div id="sidebar" class="sidebar">
-        <h2>Quản lý</h2>
-        <ul>
-            <li class="menu-item active" data-section="users">Quản lý người dùng</li>
-            <li class="menu-item" data-section="products">Quản lý sản phẩm</li>
-            <li class="menu-item" data-section="orders">Quản lý đơn hàng</li>
-        </ul>
-    </div>
-
-    <div id="main" class="main">
-
-    
-        <div class="navbar">
-            <span id="toggleBtn" class="toggle-btn">☰</span>
-            <span>Trang quản lý</span>
+<div class="dashboard-container">
+    <!-- SIDEBAR -->
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo">
+            CarShop
         </div>
-        <div class="header">
-            <h1>Quản lý hệ thống</h1>
+        
+        <div class="dash-nav">
+            <div class="dash-nav-item tab-btn active" data-target="users">
+                <i class="fa-solid fa-users"></i> Người dùng
+            </div>
+            <div class="dash-nav-item tab-btn" data-target="products">
+                <i class="fa-solid fa-car"></i> Sản phẩm
+            </div>
+            <div class="dash-nav-item tab-btn" data-target="orders">
+                <i class="fa-solid fa-file-invoice-dollar"></i> Đơn hàng
+            </div>
         </div>
+        
+        <div class="dash-sidebar-footer">
+            <a href="/"><i class="fa-solid fa-arrow-left"></i> Về cửa hàng</a>
+            <a href="/logout" style="margin-top: 16px;"><i class="fa-solid fa-sign-out-alt"></i> Đăng xuất</a>
+        </div>
+    </aside>
 
-        <div class="content">
-            <div id="users" class="section active-section">
-                <h2>Quản lý người dùng</h2>
-            </div>
-
-            <div id="products" class="section">
-                <h2>Quản lý sản phẩm</h2>
-            </div>
-
-            <div id="orders" class="section">
-                <h2>Quản lý đơn hàng</h2>
-
-                <div class="order-tabs">
-                    <button class="tab-btn active" onclick="switchTab(event, 'ALL')">Tất cả</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'PENDING')">Chưa thanh toán</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'SUCCESS')">Đã thanh toán</button>
+    <!-- MAIN CONTENT -->
+    <main class="dash-content">
+        <header class="dash-topbar">
+            <h1 class="dash-page-title" id="page-title">Quản lý người dùng</h1>
+            
+            <div class="dash-topbar-actions">
+                <div class="dash-user-profile">
+                    <span th:text="${#authentication.name}">Admin</span>
+                    <div class="dash-user-avatar">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
                 </div>
-
-                <div id="admin-order-list"></div>
             </div>
-
+        </header>
+        
+        <div class="dash-workspace">
+            <div class="dash-card">
+                <div class="dash-card-header">
+                    <h2 class="dash-card-title" id="page-desc">Danh sách tài khoản hệ thống</h2>
+                </div>
+                
+                <div class="dash-card-body">
+                    <!-- Khu vực lọc tìm kiếm (Chỉ hiện cho Người dùng và Xe) -->
+                    <div class="dash-search-wrap" id="search-section">
+                        <input type="text" id="searchInput" class="dash-input" placeholder="Tìm kiếm...">
+                        <button class="dash-btn dash-btn-primary" id="btn-search"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
+                    </div>
+                    
+                    <div class="dash-table-wrap" id="table-container">
+                        <!-- Ajax data here -->
+                        <div class="dash-empty">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            <p>Đang tải dữ liệu...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
+</div>
 
-    <script th:src="@{/js/admin-manage.js}"></script>
+<script th:src="@{/js/admin-manage.js}"></script>
 </body>
 </html>

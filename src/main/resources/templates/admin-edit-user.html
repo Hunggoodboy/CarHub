@@ -1,127 +1,119 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinh sua nguoi dung | CarShop</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
-    <link rel="stylesheet" th:href="@{/css/admin-panel.css}" href="../static/css/admin-panel.css">
+    <title>Chỉnh sửa Người dùng - Admin Dashboard</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}">
 </head>
-<body class="admin-page">
-<header>
-    <div class="logo">CarShop</div>
-    <nav>
-        <a sec:authorize="hasRole('ADMIN')"
-           th:href="@{/admin/users}"
-           class="active">Admin</a>
-        <a th:href="@{/index}">Trang chu</a>
-        <a th:href="@{/customer-view}">Ban xe</a>
-        <a th:href="@{/my-profile}">Ho so</a>
-        <a th:href="@{/logout}">Dang xuat</a>
-    </nav>
-</header>
+<body>
 
-<main class="admin-main">
-    <section class="admin-shell">
-        <div class="admin-page-head">
-            <div>
-                <p class="admin-eyebrow">Khu vuc quan tri</p>
-                <h1>Chinh sua nguoi dung</h1>
-                <p class="admin-lead">Cap nhat cac truong thong tin cho phep ma van giu cam giac thong nhat voi giao dien cong khai.</p>
+<div class="dashboard-container">
+    <!-- SIDEBAR -->
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo">
+            CarShop
+        </div>
+        
+        <div class="dash-nav">
+            <a th:href="@{/admin/manage}" class="dash-nav-item tab-btn active" style="text-decoration: none;">
+                <i class="fa-solid fa-users"></i> Người dùng
+            </a>
+            <a th:href="@{/admin/manage}" class="dash-nav-item tab-btn" style="text-decoration: none;">
+                <i class="fa-solid fa-car"></i> Sản phẩm
+            </a>
+            <a th:href="@{/admin/manage}" class="dash-nav-item tab-btn" style="text-decoration: none;">
+                <i class="fa-solid fa-file-invoice-dollar"></i> Đơn hàng
+            </a>
+        </div>
+        
+        <div class="dash-sidebar-footer">
+            <a href="/"><i class="fa-solid fa-arrow-left"></i> Về cửa hàng</a>
+            <a href="/logout" style="margin-top: 16px;"><i class="fa-solid fa-sign-out-alt"></i> Đăng xuất</a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dash-content">
+        <header class="dash-topbar">
+            <h1 class="dash-page-title">Sửa thông tin Người dùng</h1>
+            
+            <div class="dash-topbar-actions">
+                <div class="dash-user-profile">
+                    <span th:text="${#authentication.name}">Admin</span>
+                    <div class="dash-user-avatar">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                </div>
             </div>
-            <nav class="admin-section-nav" aria-label="Dieu huong admin">
-                <a th:href="@{/admin/users}" class="active">Nguoi dung</a>
-                <a th:href="@{/admin/cars}">Xe</a>
-            </nav>
-        </div>
+        </header>
 
-        <section class="admin-card">
-            <div th:if="${successMessage}" class="admin-alert success" th:text="${successMessage}"></div>
-            <div th:if="${errorMessage}" class="admin-alert error" th:text="${errorMessage}"></div>
-
-            <div class="admin-toolbar">
-                <div>
-                    <h2>Nguoi dung #<span th:text="${user.id}"></span></h2>
-                    <p>Username va vai tro chi dung de tham chieu, khong chinh sua trong phien ban nay.</p>
-                </div>
-                <div class="admin-actions">
-                    <a th:href="@{/admin/users}" class="btn-admin-secondary">Quay lai danh sach</a>
-                </div>
+        <div class="dash-workspace">
+            <div th:if="${successMessage}" class="dash-card" style="background-color: #dcfce7; border-color: #86efac; color: #166534; padding: 16px 24px; font-weight: 500; display: flex; align-items: center; gap: 12px;">
+                <i class="fa-solid fa-check-circle" style="font-size: 20px;"></i>
+                <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="dash-card" style="background-color: #fee2e2; border-color: #fca5a5; color: #991b1b; padding: 16px 24px; font-weight: 500; display: flex; align-items: center; gap: 12px;">
+                <i class="fa-solid fa-exclamation-circle" style="font-size: 20px;"></i>
+                <span th:text="${errorMessage}"></span>
             </div>
 
-            <form th:action="@{|/admin/users/${user.id}/update|}" th:object="${user}" method="post">
-                <div class="admin-form-grid">
+            <div class="dash-card">
+                <div class="dash-card-header">
                     <div>
-                        <label>Username</label>
-                        <div class="readonly-field" th:text="*{username} ?: '-'"></div>
+                        <h2 class="dash-card-title">Tài khoản #<span th:text="${user.id}"></span></h2>
+                        <p style="font-size: 13px; color: var(--dash-text-muted); margin: 4px 0 0 0;">Thiết lập lại các thông tin cá nhân của người dùng này</p>
                     </div>
-                    <div>
-                        <label>Vai tro</label>
-                        <div class="readonly-field" th:text="*{role} ?: '-'"></div>
-                    </div>
-                    <div>
-                        <label for="fullName">Ho ten</label>
-                        <input id="fullName" type="text" th:field="*{fullName}" required>
-                    </div>
-                    <div>
-                        <label for="email">Email</label>
-                        <input id="email" type="email" th:field="*{email}" required>
-                    </div>
-                    <div>
-                        <label for="phoneNumber">So dien thoai</label>
-                        <input id="phoneNumber" type="text" th:field="*{phoneNumber}">
-                    </div>
-                    <div>
-                        <label for="address">Dia chi</label>
-                        <input id="address" type="text" th:field="*{address}">
-                    </div>
+                    <a th:href="@{/admin/manage}" class="dash-btn dash-btn-outline"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
                 </div>
 
-                <div class="admin-actions admin-form-actions">
-                    <button type="submit" class="btn-admin">Luu thay doi</button>
-                    <a th:href="@{/admin/users}" class="btn-admin-secondary">Huy</a>
+                <div class="dash-card-body">
+                    <form th:action="@{|/admin/users/${user.id}/update|}" th:object="${user}" method="post">
+                        <div class="dash-form-grid">
+                            
+                            <div class="dash-form-group">
+                                <label class="dash-form-label">Username</label>
+                                <div class="dash-input" style="background-color: #f3f4f6; color: #6b7280; font-weight: 500; cursor: not-allowed;" th:text="*{username} ?: '-'"></div>
+                            </div>
+                            
+                            <div class="dash-form-group">
+                                <label class="dash-form-label">Vai trò hệ thống</label>
+                                <div class="dash-input" style="background-color: #f3f4f6; font-weight: 600; cursor: not-allowed;" th:text="${user.roles[0].name}"></div>
+                            </div>
+                            
+                            <div class="dash-form-group">
+                                <label class="dash-form-label" for="fullName">Họ và tên</label>
+                                <input id="fullName" type="text" th:field="*{fullName}" class="dash-input" required>
+                            </div>
+                            
+                            <div class="dash-form-group">
+                                <label class="dash-form-label" for="email">Địa chỉ Email</label>
+                                <input id="email" type="email" th:field="*{email}" class="dash-input" required>
+                            </div>
+                            
+                            <div class="dash-form-group">
+                                <label class="dash-form-label" for="phoneNumber">Số điện thoại</label>
+                                <input id="phoneNumber" type="text" th:field="*{phoneNumber}" class="dash-input">
+                            </div>
+                            
+                            <div class="dash-form-group">
+                                <label class="dash-form-label" for="address">Địa chỉ thường trú</label>
+                                <input id="address" type="text" th:field="*{address}" class="dash-input">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 32px; display: flex; gap: 16px; border-top: 1px solid var(--dash-border); padding-top: 24px;">
+                            <button type="submit" class="dash-btn dash-btn-primary"><i class="fa-solid fa-save"></i> Lưu cập nhật</button>
+                            <a th:href="@{/admin/manage}" class="dash-btn dash-btn-outline">Hủy bỏ</a>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </section>
-    </section>
-</main>
-
-<footer class="site-footer">
-    <div class="footer-container">
-        <div class="footer-col">
-            <h3>CarShop</h3>
-            <p>
-                Nen tang mua ban xe uy tin,
-                mang den nhung mau xe chat luong
-                va trai nghiem mua sam an toan.
-            </p>
+            </div>
         </div>
+    </main>
+</div>
 
-        <div class="footer-col">
-            <h4>Dieu huong</h4>
-            <ul>
-                <li><a th:href="@{/index}">Trang chu</a></li>
-                <li><a th:href="@{/admin/users}">Quan ly nguoi dung</a></li>
-                <li><a th:href="@{/admin/cars}">Quan ly xe</a></li>
-                <li><a th:href="@{/my-cars}">Ho so</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4>Lien he</h4>
-            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
-            <p>Hotline: 0999 999 999</p>
-        </div>
-
-        <div class="footer-col">
-            <h4>Ghi chu</h4>
-            <p>Admin va frontend cong khai nay dung chung nhan dien de han che cam giac tach biet giua hai khu vuc.</p>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        © 2026 CarShop. All rights reserved.
-    </div>
-</footer>
 </body>
 </html>
