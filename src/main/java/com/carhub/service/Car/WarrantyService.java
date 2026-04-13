@@ -25,10 +25,17 @@ public class WarrantyService {
 
     @Transactional
     public void createWarrantyTicket(WarrantyRequest request, Long userId, Customer customer) {
-
-        OrderDetail orderDetail = orderDetailRepository
-                .findCompletedOrderDetailByCarIdAndUserId(userId, request.getCarId())
-                .orElseThrow(() -> new RuntimeException("Điều kiện bảo hành không thỏa mãn."));
+ 
+        OrderDetail orderDetail;
+        if (request.getOrderId() != null) {
+            orderDetail = orderDetailRepository
+                    .findOrderDetailByCarIdAndOrderIdAndUserId(request.getCarId(), request.getOrderId(), userId)
+                    .orElseThrow(() -> new RuntimeException("Điều kiện bảo hành không thỏa mãn cho đơn hàng này."));
+        } else {
+            orderDetail = orderDetailRepository
+                    .findCompletedOrderDetailByCarIdAndUserId(userId, request.getCarId())
+                    .orElseThrow(() -> new RuntimeException("Điều kiện bảo hành không thỏa mãn."));
+        }
 
         WarrantyTicket ticket = new WarrantyTicket();
         ticket.setCar(orderDetail.getCar());

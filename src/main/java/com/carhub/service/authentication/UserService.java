@@ -58,8 +58,8 @@ public class UserService {
 
     public Customer getCurrentCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return customerRepository.findByUsername(username)
+        Long userId = getId(authentication);
+        return customerRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy customer"));
     }
 

@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const phoneInput = document.getElementById('phone-input');
     const errCarInput = document.getElementById('err_car');
     const carIdField = document.getElementById("car_id");
+    const orderIdField = document.getElementById("order_id");
     const suggestionsBox = document.getElementById('address-suggestions');
     const submitBtn = document.getElementById("submit-warranty-btn");
 
@@ -106,7 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const data = {
-            carId: parseInt(carIdField.value), // 🔥 FIX
+            carId: parseInt(carIdField.value),
+            orderId: orderIdField && orderIdField.value ? parseInt(orderIdField.value) : null,
             street: streetInput.value.trim(),
             ward: wardInput.value.trim(),
             city: cityInput.value.trim(),
@@ -124,18 +126,28 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(data)
         })
         .then(async res => {
-            const text = await res.text();
-            console.log("RESPONSE:", text); // DEBUG
-
-            if (!res.ok) throw new Error(text);
-            return JSON.parse(text);
+            const contentType = res.headers.get("content-type");
+            if (!res.ok) {
+                const errorText = await res.text();
+                // Nếu là lỗi 500 HTML từ server, ta chỉ cần thông báo chung
+                if (contentType && contentType.includes("text/html")) {
+                    throw new Error("Lỗi máy chủ hệ thống. Vui lòng thử lại sau.");
+                }
+                throw new Error(errorText);
+            }
+            
+            if (contentType && contentType.includes("application/json")) {
+                return await res.json();
+            } else {
+                return { message: await res.text() };
+            }
         })
         .then(result => {
-            alert("Gửi yêu cầu bảo hành xe thành công!");
+            alert(result.message || "Gửi yêu cầu bảo hành xe thành công!");
             window.location.href = "/index";
         })
         .catch(err => {
-            console.error(err);
+            console.error("Lỗi gửi bảo hành:", err);
             alert("Lỗi: " + err.message);
         });
     });

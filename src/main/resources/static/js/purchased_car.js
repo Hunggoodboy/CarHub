@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showSection("profile");
     const firstMenu = document.querySelector('.sidebar ul li');
     if (firstMenu) firstMenu.classList.add('active');
-    document.getElementById("edit-btn")?.addEventListener("click",openEditProfile);
+    document.getElementById("edit-btn")?.addEventListener("click", openEditProfile);
     const avatarInput = document.getElementById("avatar-input");
     const avatarImg = document.getElementById("avatar-img");
 
@@ -28,17 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
             method: "POST",
             body: formData
         })
-        .then(res => {
-            if (!res.ok) throw new Error("Upload fail");
-            return res.text();
-        })
-        .then(fileName => {
-            avatarImg.src = "/uploads/" + fileName;
-            showToast("Cập nhật avatar thành công");
-        })
-        .catch(() => {
-            showToast("Cập nhật thất bại");
-        });
+            .then(res => {
+                if (!res.ok) throw new Error("Upload fail");
+                return res.text();
+            })
+            .then(fileName => {
+                avatarImg.src = "/uploads/" + fileName;
+                showToast("Cập nhật avatar thành công");
+            })
+            .catch(() => {
+                showToast("Cập nhật thất bại");
+            });
     });
 
 });
@@ -323,26 +323,26 @@ function renderSellerOrders(orders) {
         let actionButtons = "";
 
         if (o.status === 'CONFIRMED') {
-    actionButtons = `
+            actionButtons = `
         <button onclick="startDelivery(${o.orderId})">
             🚚 Bắt đầu giao
         </button>
     `;
-}
-else if (o.status === 'DELIVERING') {
-    actionButtons = `
+        }
+        else if (o.status === 'DELIVERING') {
+            actionButtons = `
         <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERED')">
             📦 Đã giao
         </button>
     `;
-}
-else if (o.status === 'DELIVERED') {
-    actionButtons = `
+        }
+        else if (o.status === 'DELIVERED') {
+            actionButtons = `
         <button onclick="confirmSeller(${o.orderId})">
             ✔ Xác nhận đã giao
         </button>
     `;
-}
+        }
 
         html += `
             <div class="order-card">
@@ -395,7 +395,7 @@ function loadUserProfile() {
             document.getElementById("email").innerText = data.email || "";
             document.getElementById("phone").innerText = data.phoneNumber || "";
             const avatarImg = document.getElementById("avatar-img");
-            if(data.avatar){
+            if (data.avatar) {
                 avatarImg.src = "/uploads/" + data.avatar;
             } else {
                 avatarImg.src = "/img/default-avatar.png";
@@ -436,11 +436,15 @@ function renderPurchasedCars(cars) {
             statusLabel = `<span class="status completed">Đã nhận</span>`;
         }
 
+        const purchaseDate = car.orderDate
+            ? new Date(car.orderDate).toLocaleDateString("vi-VN")
+            : "N/A";
+
         let button = "";
         if (car.status === "DELIVERED") {
             button = `<button class="btn-confirm" onclick="confirmBuyerOrder(${car.orderId})">Xác nhận đã nhận xe</button>`;
         } else if (car.status === "COMPLETED") {
-            button = `<a href="/api/warranty/request?carId=${car.carId}" class="btn">Yêu cầu bảo hành</a>`;
+            button = `<a href="/api/warranty/request?carId=${car.carId}&orderId=${car.orderId}" class="btn">Yêu cầu bảo hành</a>`;
         }
 
         html += `
@@ -449,6 +453,7 @@ function renderPurchasedCars(cars) {
             <div class="info">
                 <h4>${car.model}</h4>
                 <p class="price">${formatter.format(car.price)} ₫</p>
+                <p class="order-date">Mua ngày: ${purchaseDate}</p>
                 <p>${statusLabel}</p>
                 ${button}
             </div>
@@ -664,29 +669,29 @@ function acceptWarranty(id) {
     fetch(`/api/warranty/${id}/accept`, {
         method: "PUT"
     })
-    .then(() => {
-        showToast("Đã nhận bảo hành");
-        loadWarrantySeller();
-    });
+        .then(() => {
+            showToast("Đã nhận bảo hành");
+            loadWarrantySeller();
+        });
 }
 function confirmSellerWarranty(id) {
     fetch(`/api/warranty/${id}/confirm-seller`, {
         method: "PUT"
     })
-    .then(() => {
-        showToast("Đã xác nhận bảo hành!");
-        loadWarrantySeller();
-    });
+        .then(() => {
+            showToast("Đã xác nhận bảo hành!");
+            loadWarrantySeller();
+        });
 }
 
 function confirmCustomerWarranty(id) {
     fetch(`/api/warranty/${id}/confirm-customer`, {
         method: "PUT"
     })
-    .then(() => {
-        showToast("Hoàn tất bảo hành!");
-        loadWarranty();
-    });
+        .then(() => {
+            showToast("Hoàn tất bảo hành!");
+            loadWarranty();
+        });
 }
 
 function openEditProfile() {
@@ -712,16 +717,16 @@ function saveProfile() {
         },
         body: JSON.stringify(data)
     })
-    .then(res => {
-        if (res.ok) {
-            showToast("Cập nhật thành công");
-            closeEditProfile();
-            loadUserProfile(); // reload lại info
-        } else {
-            showToast("Cập nhật thất bại");
-        }
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            if (res.ok) {
+                showToast("Cập nhật thành công");
+                closeEditProfile();
+                loadUserProfile(); // reload lại info
+            } else {
+                showToast("Cập nhật thất bại");
+            }
+        })
+        .catch(err => console.error(err));
 }
 function closeEditProfile() {
     document.getElementById("edit-profile-modal").style.display = "none";
@@ -730,8 +735,8 @@ function startDelivery(orderId) {
     fetch(`/api/orders/${orderId}/start-delivery`, {
         method: "PUT"
     })
-    .then(() => {
-        showToast("Bắt đầu giao hàng!");
-        loadOrders(currentTabStatus);
-    });
+        .then(() => {
+            showToast("Bắt đầu giao hàng!");
+            loadOrders(currentTabStatus);
+        });
 }

@@ -38,16 +38,26 @@ public class WarrantyController {
     private final WarrantyService warrantyService;
     // Trang tạo yêu cầu bảo hành cho 1 xe cụ thể (chỉ cho xe đã mua và đơn đã hoàn tất)
     @GetMapping("/request")
-    public String warrantyRequestPage(@RequestParam("carId") Long carId, Model model) {
+    public String warrantyRequestPage(@RequestParam("carId") Long carId,
+                                      @RequestParam(value = "orderId", required = false) Long orderId,
+                                      Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = userService.getId(authentication);
-
-        OrderDetail orderDetail = orderDetailRepository
-                .findCompletedOrderDetailByCarIdAndUserId(userId, carId)
-                .orElseThrow(() -> new RuntimeException("Bạn chưa mua xe này hoặc đơn hàng chưa được hoàn tất, không thể bảo hành."));
+ 
+        OrderDetail orderDetail;
+        if (orderId != null) {
+            orderDetail = orderDetailRepository
+                    .findOrderDetailByCarIdAndOrderIdAndUserId(carId, orderId, userId)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng hoàn tất tương ứng."));
+        } else {
+            orderDetail = orderDetailRepository
+                    .findCompletedOrderDetailByCarIdAndUserId(userId, carId)
+                    .orElseThrow(() -> new RuntimeException("Bạn chưa mua xe này hoặc đơn hàng chưa được hoàn tất, không thể bảo hành."));
+        }
 
         // Truyền thông tin cơ bản của xe sang view (nếu cần hiển thị)
         model.addAttribute("carId", carId);
+        model.addAttribute("orderId", orderDetail.getOrder().getId()); // Đảm bảo luôn có orderId trong view
         model.addAttribute("carModel", orderDetail.getCar().getModel());
         model.addAttribute("carBrand", orderDetail.getCar().getBrand().getName());
         model.addAttribute("carYear", orderDetail.getCar().getManufactureYear());
