@@ -67,7 +67,7 @@ public class SecurityConfig {
                             var savedRequest = new org.springframework.security.web.savedrequest.HttpSessionRequestCache()
                             .getRequest(request, response);
 
-                            if (savedRequest != null) {
+                            if (savedRequest != null && !savedRequest.getRedirectUrl().contains("/api/")) {
                                response.sendRedirect(savedRequest.getRedirectUrl());
                             } else {
                                 response.sendRedirect("/");
