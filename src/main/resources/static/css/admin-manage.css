@@ -1,0 +1,169 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #2c3e50;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(0);
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar h2 {
+    padding: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.sidebar ul li:hover {
+    background: #34495e;
+}
+
+.sidebar ul li.active {
+    background: #1abc9c;
+    color: white;
+}
+
+.main {
+    margin-left: 250px;
+    transition: 0.3s;
+}
+
+.main.full {
+    margin-left: 0;
+}
+
+.navbar {
+    background: black;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-btn {
+    font-size: 22px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.header {
+    height: 250px;
+    background: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+    color: white;
+}
+
+.content {
+    padding: 20px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active-section {
+    display: block;
+}
+.order-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.order-box h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.order-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.order-detail-table th {
+    text-align: left;
+    width: 150px;
+    padding: 8px;
+    background-color: #f4f6f8;
+}
+
+.order-detail-table td {
+    padding: 8px;
+}
+
+.status-pending { color: orange; font-weight: bold; }
+.status-delivering { color: blue; font-weight: bold; }
+.status-delivered { color: purple; font-weight: bold; }
+.status-completed { color: green; font-weight: bold; }
+.status-cancelled { color: red; font-weight: bold; }
+
+.confirm-btn {
+    padding: 6px 12px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.confirm-btn:hover {
+    background-color: #219150;
+}
+.order-tabs {
+    margin-bottom: 15px;
+}
+
+.tab-btn {
+    padding: 8px 15px;
+    margin-right: 10px;
+    border: none;
+    cursor: pointer;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.tab-btn.active {
+    background: #2c3e50;
+    color: white;
+}
+
+.confirm-btn {
+    padding: 6px 12px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.status-pending { color: orange; font-weight: bold; }
+.status-delivering { color: blue; font-weight: bold; }
+.status-delivered { color: purple; font-weight: bold; }
+.status-completed { color: green; font-weight: bold; }
+.status-cancelled { color: red; font-weight: bold; }

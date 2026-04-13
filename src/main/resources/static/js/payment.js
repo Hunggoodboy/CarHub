@@ -148,9 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
                                     streetInput.value = res.name + ", " + res.formatted_address;
                                     suggestionsBox.innerHTML = '';
                                     if (res.compound) {
-                                        cityInput.value = res.compound.province || "";
-                                        wardInput.value = res.compound.commune || "";
-                                    }
+    cityInput.value = res.compound.province || "";
+
+    wardInput.value =
+        res.compound.district ||
+        res.compound.commune ||
+        res.compound.ward ||
+        "";
+}
                                 });
                         };
                         suggestionsBox.appendChild(div);
@@ -260,22 +265,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     submitBtn?.addEventListener("click", () => {
-        const data = {
-            carId: parseInt(carId),
-            street: streetInput.value.trim(),
-            ward: wardInput.value.trim(),
-            city: cityInput.value.trim(),
-            phone: phoneInput.value.trim(),
-            paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
-            quantity: parseInt(quantityInput.value)
-        };
-       //console.log("DATA SEND:", data);
+    const methodSelected = document.querySelector('input[name="paymentMethod"]:checked');
 
-        fetch("/api/orders", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
+    if (!methodSelected) {
+        alert("Vui lòng chọn phương thức thanh toán");
+        return;
+    }
+
+    const total = parseInt(finalPriceTotalEl.textContent.replace(/[^\d]/g, ""));
+
+    const data = {
+        carId: parseInt(carId),
+        street: streetInput.value.trim(),
+        ward: wardInput.value.trim(),
+        city: cityInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        paymentMethod: methodSelected.value,
+        quantity: parseInt(quantityInput.value),
+
+        totalAmountFinal: total,
+        totalAmountOriginal: total,
+        pricePaid: total,
+        discount: 0
+    };
+
+
+    fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
             .then(res => {
                 if (!res.ok) throw new Error("Thất bại");
                 return res.json();
