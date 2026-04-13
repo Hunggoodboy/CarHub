@@ -80,7 +80,7 @@
                             
                             <div class="dash-form-group">
                                 <label class="dash-form-label">Vai trò hệ thống</label>
-                                <div class="dash-input" style="background-color: #f3f4f6; font-weight: 600; cursor: not-allowed;" th:text="${user.roles[0].name}"></div>
+                                <div class="dash-input" style="background-color: #f3f4f6; font-weight: 600; cursor: not-allowed;" th:text="*{role}"></div>
                             </div>
                             
                             <div class="dash-form-group">
