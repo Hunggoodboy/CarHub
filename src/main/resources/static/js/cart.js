@@ -38,7 +38,7 @@ function normalizeItem(item) {
     };
 }
 
-function addItemToCart(item) {
+async function addItemToCart(item) {
     const normalized = normalizeItem(item);
     if (!Number.isFinite(normalized.id) || normalized.quantity <= 0) {
         return;
@@ -54,10 +54,18 @@ function addItemToCart(item) {
     }
 
     saveCartItems(items);
+
+    try {
+        // Đồng bộ lên backend API trước (chờ xong mới lấy dữ liệu update URL)
+        await fetch(`/api/favorites/${normalized.id}`, { method: 'POST' });
+    } catch (err) {
+        console.error("Lỗi đồng bộ Favorite:", err);
+    }
+
     updateCartUI();
 }
 
-function removeItemFromCart(id) {
+async function removeItemFromCart(id) {
     const itemId = Number(id);
     if (!Number.isFinite(itemId)) {
         return;
@@ -65,6 +73,14 @@ function removeItemFromCart(id) {
 
     const filtered = readCartItems().filter(item => item.id !== itemId);
     saveCartItems(filtered);
+
+    try {
+        // Đồng bộ xóa trên backend API trước
+        await fetch(`/api/favorites/${itemId}`, { method: 'DELETE' });
+    } catch (err) {
+        console.error("Lỗi đồng bộ Favorite:", err);
+    }
+
     updateCartUI();
 }
 
@@ -267,6 +283,27 @@ function closeCart() {
 
 async function updateCartUI() {
     try {
+        const response = await fetch('/api/favorites');
+        if (response.ok) {
+            // Đã đăng nhập -> Dùng ONLY data từ DB
+            const dbCars = await response.json();
+            const items = dbCars.map(car => ({
+                id: car.id,
+                model: car.model || "Xe không tên",
+                imageUrl: car.imageUrl || "",
+                finalPrice: Number(car.finalPrice || car.price || 0),
+                sellerId: Number(car.sellerId || car.SellerId || 0),
+                quantity: 1
+            }));
+            renderCartItems(items);
+            return;
+        }
+    } catch (err) {
+        console.error("Lỗi lấy dữ liệu DB:", err);
+    }
+
+    // Nếu chưa đăng nhập hoặc có lỗi mạng -> Fallback về LocalStorage thưường lệ
+    try {
         const hydratedItems = await hydrateCartItems();
         renderCartItems(hydratedItems);
     } catch (error) {
@@ -346,6 +383,8 @@ function bindCartEvents() {
         openCart();
     });
 }
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
     ensureCartShell();
