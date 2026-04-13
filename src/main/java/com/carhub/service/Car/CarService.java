@@ -230,7 +230,7 @@ public class CarService {
     @Transactional
     public void deleteCarForAdmin(Long carId) {
         Car car = carRepository.findById(carId)
-                .orElseThrow(() -> new IllegalArgumentException("KhÃ´ng tÃ¬m tháº¥y xe."));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy xe"));
 
         if (orderDetailRepository.existsByCarId(carId)
                 || cartItemRepository.existsByCarId(carId)

@@ -1,5 +1,6 @@
 package com.carhub.controller;
 
+import com.carhub.dto.UserDTO;
 import com.carhub.entity.User;
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.Response.CarDetailResponse;
@@ -12,9 +13,11 @@ import com.carhub.service.authentication.UserService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,21 +27,16 @@ public class CarController {
 
     private final CarService carService;
     private final ReviewService reviewService;
-    private final OrderService orderService;
     private final UserService userService;
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {
-
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        List<CarDTO> cars;
+        List<CarDTO> cars = new ArrayList<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName().equals("anonymousUser")) {
             cars = carService.getAllCars();
         } else {
-            String username = authentication.getName();
-
-            User user = userService.findByUsername(username);
+            UserDTO user = userService.getCurrentUser(authentication);
             Long userId = user.getId();
 
             cars = carService.getCarsExcludeSeller(userId);

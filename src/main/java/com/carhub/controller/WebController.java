@@ -141,8 +141,11 @@ public class WebController {
             // Đăng ký thành công -> Chuyển hướng sang login
             return "redirect:/login?success";
         } else {
-            // Đăng ký thất bại
-            return "redirect:/register?error=true";
+            // Đăng ký thất bại -> Truyền error message
+            String errorMessage = response.getMessage() != null ? 
+                response.getMessage() : "Đăng ký thất bại. Vui lòng thử lại";
+            return "redirect:/register?error=true&errorMessage=" + 
+                java.net.URLEncoder.encode(errorMessage, java.nio.charset.StandardCharsets.UTF_8);
         }
     }
 

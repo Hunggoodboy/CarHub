@@ -122,7 +122,7 @@ public class AdminController {
                             RedirectAttributes redirectAttributes) {
         try {
             carService.updateCarForAdmin(id, carDTO);
-            redirectAttributes.addFlashAttribute("successMessage", "Cáº­p nháº­t xe thÃ nh cÃ´ng.");
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật xe thành công.");
             return "redirect:/admin/cars/" + id + "/edit";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -137,7 +137,7 @@ public class AdminController {
     public String deleteCar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             carService.deleteCarForAdmin(id);
-            redirectAttributes.addFlashAttribute("successMessage", "XÃ³a xe thÃ nh cÃ´ng.");
+            redirectAttributes.addFlashAttribute("successMessage", "Xoá xe thành công");
         } catch (IllegalArgumentException | IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }

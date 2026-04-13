@@ -79,6 +79,9 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
+                        .authorizationEndpoint(endpoint -> endpoint.authorizationRequestResolver(
+                                new CustomAuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization")
+                        ))
                         .userInfoEndpoint(info -> info.userService(oauth2UserService))
                         .defaultSuccessUrl("/", false))
                 .logout(logout -> logout

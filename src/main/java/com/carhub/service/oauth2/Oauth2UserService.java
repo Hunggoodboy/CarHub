@@ -20,14 +20,14 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
 
         String email = oAuth2User.getAttribute("email");
         String name  = oAuth2User.getAttribute("name");
-
         userRepository.findByEmail(email).orElseGet(() -> {
             User user = new User();
             user.setFullName(name);
             user.setEmail(email);
             user.setUsername(email);
+
             user.setPassword("");
-            user.setRole(User.Role.CUSTOMER);      // ✅ gán role mặc định
+            user.setRole(User.Role.CUSTOMER);
             return userRepository.save(user);
         });
 
