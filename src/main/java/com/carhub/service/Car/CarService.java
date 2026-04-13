@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CarService {
 
     private final CarRepository carRepository;
@@ -165,6 +166,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<CarDTO> getCarsForAdmin(String keyword, Long brandId) {
         return carRepository.searchForAdmin(normalize(keyword), brandId)
                 .stream()
@@ -262,6 +264,7 @@ public class CarService {
         }
         return false;
     }
+    @Transactional
     public void saveCarService(String model, Long price, int manufactureYear, String color, String description, MultipartFile imageFile) throws IOException {
         String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
         String filePath = Paths.get("src/main/resources/static/car-images/", fileName).toString();

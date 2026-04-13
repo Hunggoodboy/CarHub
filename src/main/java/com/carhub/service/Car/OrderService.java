@@ -285,19 +285,35 @@ public class OrderService {
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
     }
+    @Transactional(readOnly = true)
     public List<OrderAdminDTO> getAllOrdersForAdmin() {
-    List<Order> orders = orderRepository.findAll();
+        List<Order> orders = orderRepository.findAll();
 
-    return orders.stream().map(o -> new OrderAdminDTO(
-            o.getId(),
-            o.getCustomer() != null ? o.getCustomer().getFullName() : "N/A",
-            o.getOrderDetails() != null && !o.getOrderDetails().isEmpty()
-                    ? o.getOrderDetails().get(0).getCar().getModel()
-                    : "N/A",
-            o.getStatus().name(),
-            o.getPayment() != null ? o.getPayment().getStatus() : "PENDING"
-    )).toList();
-}
+        return orders.stream().map(o -> {
+            OrderAdminDTO dto = new OrderAdminDTO();
+            dto.setId(o.getId());
+            dto.setCustomerName(o.getCustomer() != null ? o.getCustomer().getFullName() : "N/A");
+            dto.setStatus(o.getStatus().name());
+            dto.setOrderDate(o.getOrderDate());
+            dto.setTotalPrice(o.getTotalAmountFinal());
+            dto.setShippingAddress(o.getDeliveryAddress());
+            dto.setPhone(o.getPhone());
+            dto.setPaymentStatus(o.getPayment() != null ? o.getPayment().getStatus() : "PENDING");
+            dto.setPaymentMethod(o.getPayment() != null && o.getPayment().getTypePayment() != null
+                    ? o.getPayment().getTypePayment().name() : "N/A");
+
+            if (o.getOrderDetails() != null && !o.getOrderDetails().isEmpty()) {
+                OrderDetail firstDetail = o.getOrderDetails().get(0);
+                dto.setCarName(firstDetail.getCar() != null ? firstDetail.getCar().getModel() : "N/A");
+                dto.setQuantity(firstDetail.getQuantity());
+            } else {
+                dto.setCarName("N/A");
+                dto.setQuantity(0L);
+            }
+
+            return dto;
+        }).toList();
+    }
     @Transactional
     public void confirmPaymentByAdmin(Long orderId) {
         Order order = orderRepository.findById(orderId)
@@ -319,4 +335,34 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-}
+    @Transactional
+    public void cancelOrderByAdmin(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+
+        if (order.getStatus() == Order.Status.COMPLETED) {
+            throw new IllegalStateException("Không thể hủy đơn hàng đã hoàn tất.");
+        }
+        if (order.getStatus() == Order.Status.CANCELLED) {
+            throw new IllegalStateException("Đơn hàng đã bị hủy trước đó.");
+        }
+
+        // Hoàn lại tồn kho
+        if (order.getOrderDetails() != null) {
+            for (OrderDetail detail : order.getOrderDetails()) {
+                Car car = detail.getCar();
+                if (car != null) {
+                    car.setStockQuantity(car.getStockQuantity() + detail.getQuantity().intValue());
+                    carRepository.save(car);
+                }
+            }
+        }
+
+        order.setStatus(Order.Status.CANCELLED);
+        if (order.getPayment() != null) {
+            order.getPayment().setStatus("CANCELLED");
+        }
+        orderRepository.save(order);
+    }
+
+}

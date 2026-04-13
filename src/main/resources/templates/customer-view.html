@@ -16,7 +16,7 @@
     <header>
         <div class="logo">CarShop</div>
         <nav>
-            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}">Admin</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/manage}">Admin</a>
             <a th:href="@{/index}">Trang chủ</a>
             <a href="mailto:thanhdn.0306@gmail.com">Liên hệ</a>
             <a th:href="@{/login}">Đăng nhập</a>
