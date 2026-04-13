@@ -14,33 +14,29 @@
 </head>
 
 <body>
-<header>
-    <div class="logo">CarShop</div>
-    <nav>
-        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/manage}">Admin</a>
-        <a href="#">Trang chủ</a>
-        <a th:href="@{/customer-view}">Bán xe</a>
-        <a th:href="@{/my-profile}">Hồ Sơ</a>
-        <a th:if="${#authentication.name == 'anonymousUser'}"
-         th:href="@{/login}">
-            Đăng nhập
-        </a>
-        <a th:if="${#authentication.name != 'anonymousUser'}"
-        href="/logout">
-           Đăng xuất
-        </a>
-        <a th:href="@{/chat}" title="Tin nhắn">
-            <i class="fa-solid fa-comment-dots"></i>
-            <span class="nav-badge"></span> </a>
-    </nav>
-    <div id="welcome-message"
-        th:if="${session.justLoggedIn}"
-        class="welcome-message">
-     
-        Xin chào <span th:text="${fullName}"></span> 👋
-    </div>
-    
-</header>
+    <header>
+        <div class="logo">CarShop</div>
+        <nav>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/manage}">Admin</a>
+            <a href="#">Trang chủ</a>
+            <a th:href="@{/customer-view}">Bán xe</a>
+            <a th:href="@{/my-profile}">Hồ Sơ</a>
+            <a th:if="${#authentication.name == 'anonymousUser'}" th:href="@{/login}">
+                Đăng nhập
+            </a>
+            <a th:if="${#authentication.name != 'anonymousUser'}" href="/logout">
+                Đăng xuất
+            </a>
+            <a th:href="@{/chat}" title="Tin nhắn">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span class="nav-badge">3</span> </a>
+        </nav>
+        <div id="welcome-message" th:if="${session.justLoggedIn}" class="welcome-message">
+
+            Xin chào <span th:text="${fullName}"></span> 👋
+        </div>
+
+    </header>
 
     <section class="hero">
         <div>
@@ -48,11 +44,10 @@
             <p>Tìm chiếc xe phù hợp với bạn</p>
         </div>
     </section>
-    <div th:if="${#authentication.name == 'anonymousUser'}"
-     class="login-suggestion">
+    <div th:if="${#authentication.name == 'anonymousUser'}" class="login-suggestion">
 
         <p>Hãy đăng nhập để có trải nghiệm tốt nhất 🚀</p>
-    
+
         <a href="/login" class="login-btn">Đăng nhập ngay</a>
     </div>
 
@@ -93,7 +88,7 @@
         <button type="submit">Tìm kiếm</button>
     </form>
 
-    
+
     <section id="cars" class="products">
         <h2>Danh sách xe đang bán</h2>
 
@@ -103,69 +98,72 @@
     <script src="../static/js/cart.js" th:src="@{/js/cart.js}"></script>
 
 
-<div class="floating-container">
-    <a href="tel:096688888" class="floating-item phone-icon">
-        <i class="fa fa-phone"></i>
-    </a>
+    <div class="floating-container">
+        <a href="tel:096688888" class="floating-item phone-icon">
+            <i class="fa fa-phone"></i>
+        </a>
 
-    <a href="https://zalo.me/096688888" target="_blank" class="floating-item zalo-icon">
-        <i class="fa fa-comment"></i>
-    </a>
+        <div class="floating-item admin-chat-icon" onclick="toggleAdminChat()" title="Chat với Admin">
+            <i class="fa fa-comment"></i>
+        </div>
 
-    <div class="floating-item chat-ai-icon" onclick="toggleChat()">
-        <i class="fas fa-comments"></i>
+        <div class="floating-item chat-ai-icon" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+        </div>
     </div>
-</div>
 
-<script th:src="@{/js/chatbot-init.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script th:src="@{/js/chatbot-init.js}"></script>
+    <script th:src="@{/js/admin-chat-widget.js}"></script>
 
-<footer class="site-footer">
-    <div class="footer-container">
+    <footer class="site-footer">
+        <div class="footer-container">
 
-        <div class="footer-col">
-            <h3>CarShop</h3>
-            <p>
-                Nền tảng mua bán xe uy tín,  
-                mang đến những mẫu xe chất lượng  
-                và trải nghiệm mua sắm an toàn.
-            </p>
-        </div>
-
-        <div class="footer-col">
-            <h4>Liên kết</h4>
-            <ul>
-                <li><a th:href="@{/index}">Trang chủ</a></li>
-                <li><a href="#">Xe mới</a></li>
-                <li><a href="#">Giỏ hàng</a></li>
-                <li><a href="#">Tài khoản</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4>Liên hệ</h4>
-            <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
-            <p>Hotline: 0999 999 999</p>
-        </div>
-
-        <div class="footer-col">
-            <h4>Theo dõi chúng tôi</h4>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
-                <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
+            <div class="footer-col">
+                <h3>CarShop</h3>
+                <p>
+                    Nền tảng mua bán xe uy tín,
+                    mang đến những mẫu xe chất lượng
+                    và trải nghiệm mua sắm an toàn.
+                </p>
             </div>
+
+            <div class="footer-col">
+                <h4>Liên kết</h4>
+                <ul>
+                    <li><a th:href="@{/index}">Trang chủ</a></li>
+                    <li><a href="#">Xe mới</a></li>
+                    <li><a href="#">Giỏ hàng</a></li>
+                    <li><a href="#">Tài khoản</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Liên hệ</h4>
+                <p>Email: <a href="mailto:thanhdn.0306@gmail.com">thanhdn.0306@gmail.com</a></p>
+                <p>Hotline: 0999 999 999</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Theo dõi chúng tôi</h4>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/HocvienPTIT" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
+                    <a href="https://tiktok.com"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
         </div>
 
-    </div>
-
-    <div class="footer-bottom">
-        © 2026 CarShop. All rights reserved.
-    </div>
-</footer>
-<script th:src="@{/js/car_list.js}"></script>
-<script th:src="@{/js/welcome.js}"></script>
+        <div class="footer-bottom">
+            © 2026 CarShop. All rights reserved.
+        </div>
+    </footer>
+    <script th:src="@{/js/car_list.js}"></script>
+    <script th:src="@{/js/welcome.js}"></script>
 </body>
 
 </html>
