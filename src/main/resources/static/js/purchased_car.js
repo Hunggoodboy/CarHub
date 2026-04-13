@@ -322,22 +322,27 @@ function renderSellerOrders(orders) {
 
         let actionButtons = "";
 
-        if (o.status === 'PENDING') {
-            actionButtons = `
-                <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERING')">🚚 Bắt đầu giao</button>
-                <button onclick="updateOrderStatus(${o.orderId}, 'CANCELLED')">❌ Hủy</button>
-            `;
-        }
-        else if (o.status === 'DELIVERING') {
-            actionButtons = `
-                <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERED')">📦 Đã giao</button>
-            `;
-        }
-        else if (o.status === 'DELIVERED') {
-            actionButtons = `
-                <button onclick="confirmSeller(${o.orderId})">✔ Xác nhận đã giao</button>
-            `;
-        }
+        if (o.status === 'CONFIRMED') {
+    actionButtons = `
+        <button onclick="startDelivery(${o.orderId})">
+            🚚 Bắt đầu giao
+        </button>
+    `;
+}
+else if (o.status === 'DELIVERING') {
+    actionButtons = `
+        <button onclick="updateOrderStatus(${o.orderId}, 'DELIVERED')">
+            📦 Đã giao
+        </button>
+    `;
+}
+else if (o.status === 'DELIVERED') {
+    actionButtons = `
+        <button onclick="confirmSeller(${o.orderId})">
+            ✔ Xác nhận đã giao
+        </button>
+    `;
+}
 
         html += `
             <div class="order-card">
@@ -720,4 +725,13 @@ function saveProfile() {
 }
 function closeEditProfile() {
     document.getElementById("edit-profile-modal").style.display = "none";
+}
+function startDelivery(orderId) {
+    fetch(`/api/orders/${orderId}/start-delivery`, {
+        method: "PUT"
+    })
+    .then(() => {
+        showToast("Bắt đầu giao hàng!");
+        loadOrders(currentTabStatus);
+    });
 }

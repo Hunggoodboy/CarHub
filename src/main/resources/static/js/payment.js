@@ -148,9 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
                                     streetInput.value = res.name + ", " + res.formatted_address;
                                     suggestionsBox.innerHTML = '';
                                     if (res.compound) {
-                                        cityInput.value = res.compound.province || "";
-                                        wardInput.value = res.compound.commune || "";
-                                    }
+    cityInput.value = res.compound.province || "";
+
+    wardInput.value =
+        res.compound.district ||
+        res.compound.commune ||
+        res.compound.ward ||
+        "";
+}
                                 });
                         };
                         suggestionsBox.appendChild(div);
@@ -284,7 +289,6 @@ document.addEventListener("DOMContentLoaded", () => {
         discount: 0
     };
 
-    console.log("DATA SEND:", data); // 👈 bật lại dòng này để debug
 
     fetch("/api/orders", {
         method: "POST",

@@ -24,6 +24,7 @@ public class Order {
     private String phone;
     public enum Status{
         PENDING,
+        CONFIRMED,
         DELIVERING,
         DELIVERED,
         COMPLETED,

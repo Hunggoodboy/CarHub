@@ -2,6 +2,7 @@ package com.carhub.service.Car;
 
 import com.carhub.dto.PurchasedCarDTO;
 import com.carhub.dto.Request.OrderRequest;
+import com.carhub.dto.Response.OrderAdminDTO;
 import com.carhub.dto.SellerOrderDTO;
 import com.carhub.entity.*;
 import com.carhub.repository.*;
@@ -283,6 +284,39 @@ public class OrderService {
         }
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
+    }
+    public List<OrderAdminDTO> getAllOrdersForAdmin() {
+    List<Order> orders = orderRepository.findAll();
+
+    return orders.stream().map(o -> new OrderAdminDTO(
+            o.getId(),
+            o.getCustomer() != null ? o.getCustomer().getFullName() : "N/A",
+            o.getOrderDetails() != null && !o.getOrderDetails().isEmpty()
+                    ? o.getOrderDetails().get(0).getCar().getModel()
+                    : "N/A",
+            o.getStatus().name(),
+            o.getPayment() != null ? o.getPayment().getStatus() : "PENDING"
+    )).toList();
+}
+    @Transactional
+    public void confirmPaymentByAdmin(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        // chỉ cho confirm khi đang PENDING
+        if (order.getStatus() != Order.Status.PENDING) {
+            throw new IllegalStateException("Chỉ xác nhận đơn PENDING");
+        }
+
+        // update trạng thái đơn
+        order.setStatus(Order.Status.DELIVERING);
+
+        // update payment
+        if (order.getPayment() != null) {
+            order.getPayment().setStatus("SUCCESS");
+        }
+
+        orderRepository.save(order);
     }
 
 }

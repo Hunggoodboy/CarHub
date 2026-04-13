@@ -2,7 +2,9 @@ package com.carhub.controller;
 
 import com.carhub.dto.CarDTO;
 import com.carhub.dto.UserDTO;
+import com.carhub.dto.Response.OrderAdminDTO;
 import com.carhub.service.Car.CarService;
+import com.carhub.service.Car.OrderService;
 import com.carhub.service.authentication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,11 +15,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List; 
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -25,6 +30,7 @@ public class AdminController {
 
     private final UserService userService;
     private final CarService carService;
+    private final OrderService orderService;
 
     @GetMapping
     public String adminRoot() {
@@ -37,6 +43,10 @@ public class AdminController {
         model.addAttribute("keyword", keyword == null ? "" : keyword);
         model.addAttribute("users", userService.getUsersForAdmin(keyword));
         return "admin-users";
+    }
+    @GetMapping("/manage")
+    public String adminManage() {
+        return "admin-manage"; 
     }
 
     @GetMapping("/users/{id}/edit")
@@ -133,5 +143,15 @@ public class AdminController {
         }
         return "redirect:/admin/cars";
     }
-    
+    @GetMapping("/orders")
+    @ResponseBody
+    public List<OrderAdminDTO> getAllOrders() {
+        return orderService.getAllOrdersForAdmin();
+    }
+    @PutMapping("/orders/{id}/confirm")
+    @ResponseBody
+    public String confirmOrder(@PathVariable Long id) {
+        orderService.confirmPaymentByAdmin(id);
+        return "OK";
+    }
 }
