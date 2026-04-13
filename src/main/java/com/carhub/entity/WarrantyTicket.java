@@ -32,7 +32,7 @@ public class WarrantyTicket {
     @Column(columnDefinition = "TEXT")
     private String defectDescription;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
