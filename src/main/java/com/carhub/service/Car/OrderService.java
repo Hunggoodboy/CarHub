@@ -228,7 +228,8 @@ public class OrderService {
                             car.getModel(),
                             car.getPrice(),
                             car.getImageUrl(),
-                            o.getStatus().name()
+                            o.getStatus().name(),
+                            o.getOrderDate()
                     );
                 }))
                 .toList();

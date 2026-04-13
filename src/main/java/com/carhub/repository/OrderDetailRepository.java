@@ -33,6 +33,18 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
         @Param("userId") Long userId,
         @Param("carId") Long carId
     );
+ 
+    @Query("SELECT od FROM OrderDetail od " +
+           "JOIN od.order o " +
+           "WHERE od.car.id = :carId " +
+           "AND o.id = :orderId " +
+           "AND o.customer.id = :userId " +
+           "AND o.status = 'COMPLETED'")
+    Optional<OrderDetail> findOrderDetailByCarIdAndOrderIdAndUserId(
+        @Param("carId") Long carId,
+        @Param("orderId") Long orderId,
+        @Param("userId") Long userId
+    );
 
     // Lấy tất cả xe mà người dùng đã mua (không phụ thuộc trạng thái đơn hàng)
     @Query("SELECT DISTINCT od.car FROM OrderDetail od WHERE od.order.customer.id = :user_id")
